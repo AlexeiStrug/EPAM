@@ -23,8 +23,13 @@ import com.sav.autobase.datamodel.Request;
 @Repository
 public class RequestDaoImpl implements IRequestDao {
 
-	final String FIND_REQUEST_BY_ID = "SELECT * FROM request WHERE id = ?";
-	final String GET_ALL_REQUEST = "SELECT * FROM request ";
+	final String FIND_REQUEST_BY_ID = "SELECT * FROM request "
+			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
+			+ "INNER JOIN place ON place.id = request.place_id "
+			+ " WHERE request.id = ?";
+	final String GET_ALL_REQUEST = "SELECT * FROM request "
+			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
+			+ "INNER JOIN place ON place.id = request.place_id ";
 	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, dispatcher_id) VALUES(?,?,?,?,?,?)";
 	final String UPDATE_REQUEST = "UPDATE request SET first_name = ?, last_name = ?, login = ?, password = ?, email = ?, date_birth = ?, type = ? where id = ?";
 	final String DELETE_REQUEST = "DELETE FROM request WHERE id = ?";

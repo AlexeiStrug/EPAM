@@ -21,8 +21,23 @@ import com.sav.autobase.datamodel.Trip;
 @Repository
 public class TripDaoImpl implements ITripDao {
 
-	final String FIND_TRIP_BY_ID = "SELECT * FROM trip WHERE id = ?";
-	final String GET_ALL_TRIP = "SELECT * FROM trip ";
+	final String FIND_TRIP_BY_ID = "SELECT * FROM trip "
+			+ "INNER JOIN request ON request.id = trip.request_id "
+			+ "INNER JOIN place ON place.id = request.place_id "
+			+ "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
+			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
+			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
+			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
+			+ "INNER JOIN users ON users.id = vehicle.driver_id & request.client_id & request.dispatcher_id "
+			+ "WHERE trip.id = ?";
+	final String GET_ALL_TRIP = "SELECT * FROM trip "
+			+ "INNER JOIN request ON request.id = trip.request_id "
+			+ "INNER JOIN place ON place.id = request.place_id "
+			+ "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
+			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
+			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
+			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
+			+ "INNER JOIN users ON users.id = vehicle.driver_id & request.client_id & request.dispatcher_id ";
 	final String INSERT_TRIP = "INSERT INTO trip (request_id, vehicle_id, end_trip) VALUES(?,?,?)";
 	final String UPDATE_TRIP = "UPDATE trip SET request_id = ?, vehicle_id = ?, end_trip = ? where id = ?";
 	final String DELETE_TRIP = "DELETE FROM trip WHERE id = ?";
