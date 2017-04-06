@@ -64,7 +64,7 @@ public class VehicleDaoImpl implements IVehicleDao{
 				PreparedStatement ps = connection.prepareStatement(UPDATE_VEHICLE);
 				ps.setObject(1, vehicle.getDriver().getId());
 				ps.setObject(2, vehicle.getModel().getId());
-				ps.setBoolean(3, vehicle.getReadyCrashCar());
+				ps.setBoolean(3, vehicle.isReadyCrashCar());
 				return ps;
 			}
 		});
@@ -81,7 +81,7 @@ public class VehicleDaoImpl implements IVehicleDao{
 				PreparedStatement ps = connection.prepareStatement(INSERT_VEHICLE, new String[] { "id" });
 				ps.setObject(1, vehicle.getDriver().getId());
 				ps.setObject(2, vehicle.getModel().getId());
-				ps.setBoolean(3, vehicle.getReadyCrashCar());
+				ps.setBoolean(3, vehicle.isReadyCrashCar());
 				return ps;
 			}
 		}, keyHolder);

@@ -59,6 +59,7 @@ public class RequestDaoImpl implements IRequestDao {
 				ps.setInt(4, request.getPlace().getId());
 				ps.setInt(5, request.getCountOfPassenger());
 				ps.setInt(6, request.getDispatcher().getId());
+				ps.setBoolean(7, request.isProcessed());
 				return ps;
 			}
 		}, keyHolder);
@@ -80,6 +81,7 @@ public class RequestDaoImpl implements IRequestDao {
 				ps.setInt(4, request.getPlace().getId());
 				ps.setInt(5, request.getCountOfPassenger());
 				ps.setInt(6, request.getDispatcher().getId());
+				ps.setBoolean(7, request.isProcessed());
 				return ps;
 			}
 		});

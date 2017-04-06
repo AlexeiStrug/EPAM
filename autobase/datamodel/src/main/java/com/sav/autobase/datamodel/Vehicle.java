@@ -4,7 +4,7 @@ public class Vehicle extends AbstractModel{
 
 	private Users driver;
 	private ModelVehicle model;
-	private Boolean readyCrashCar;
+	private boolean readyCrashCar;
 
 	public Users getDriver() {
 		return driver;
@@ -22,11 +22,11 @@ public class Vehicle extends AbstractModel{
 		this.model = model;
 	}
 
-	public Boolean getReadyCrashCar() {
+	public boolean isReadyCrashCar() {
 		return readyCrashCar;
 	}
 
-	public void setReadyCrashCar(Boolean readyCrashCar) {
+	public void setReadyCrashCar(boolean readyCrashCar) {
 		this.readyCrashCar = readyCrashCar;
 	}
 

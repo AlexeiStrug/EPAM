@@ -2,7 +2,7 @@ package com.sav.autobase.datamodel;
 
 import java.sql.Timestamp;
 
-public class Request extends AbstractModel{
+public class Request extends AbstractModel {
 
 	private Users client;
 	private Timestamp startDate;
@@ -10,6 +10,7 @@ public class Request extends AbstractModel{
 	private Place place;
 	private Integer countOfPassenger;
 	private Users dispatcher;
+	private boolean processed;
 
 	public Users getClient() {
 		return client;
@@ -59,14 +60,18 @@ public class Request extends AbstractModel{
 		this.dispatcher = dispatcher;
 	}
 
-	@Override
-	public String toString() {
-		return "Request id=" + getId() + " [client=" + client + ", startDate=" + startDate + ", endDate=" + endDate + ", place=" + place
-				+ ", countOfPassenger=" + countOfPassenger + ", dispatcher=" + dispatcher + "]";
+	public boolean isProcessed() {
+		return processed;
 	}
 
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
+	}
 
-	
-	
+	@Override
+	public String toString() {
+		return "Request id=" + getId() + " [client=" + client + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", place=" + place + ", countOfPassenger=" + countOfPassenger + ", dispatcher=" + dispatcher + ", processed =" + processed + "]";
+	}
 
 }

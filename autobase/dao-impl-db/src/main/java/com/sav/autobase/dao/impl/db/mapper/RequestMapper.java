@@ -37,6 +37,7 @@ public class RequestMapper implements RowMapper<Request> {
 		Timestamp startDate = rs.getTimestamp("start_date");
 		Timestamp endDate = rs.getTimestamp("end_date");
 		Integer countOfPassenger = rs.getInt("count_of_passenger");
+		boolean processed = rs.getBoolean("processed");
 
 		Request request = new Request();
 		request.setId(id);
@@ -46,6 +47,7 @@ public class RequestMapper implements RowMapper<Request> {
 		request.setPlace(place);
 		request.setCountOfPassenger(countOfPassenger);
 		request.setDispatcher(dispatcher);
+		request.setProcessed(processed);
 
 		return request;
 	}
