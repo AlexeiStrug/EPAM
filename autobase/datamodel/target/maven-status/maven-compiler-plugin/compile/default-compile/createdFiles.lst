@@ -1,0 +1,8 @@
+com\sav\autobase\datamodel\Users.class
+com\sav\autobase\datamodel\Request.class
+com\sav\autobase\datamodel\Trip.class
+com\sav\autobase\datamodel\TypeUsers.class
+com\sav\autobase\datamodel\Vehicle.class
+com\sav\autobase\datamodel\ModelVehicle.class
+com\sav\autobase\datamodel\BrandVehicle.class
+com\sav\autobase\datamodel\TypeVehicle.class

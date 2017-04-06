@@ -1,0 +1,111 @@
+package com.sav.autobase.dao.impl.db.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
+import com.sav.autobase.dao.impl.db.IRequestDao;
+import com.sav.autobase.dao.impl.db.mapper.RequestMapper;
+import com.sav.autobase.datamodel.Request;
+
+@Repository
+public class RequestDaoImpl implements IRequestDao {
+
+	final String FIND_REQUEST_BY_ID = "SELECT * FROM request WHERE id = ?";
+	final String GET_ALL_REQUEST = "SELECT * FROM request ";
+	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, dispatcher_id) VALUES(?,?,?,?,?,?)";
+	final String UPDATE_REQUEST = "UPDATE request SET first_name = ?, last_name = ?, login = ?, password = ?, email = ?, date_birth = ?, type = ? where id = ?";
+	final String DELETE_REQUEST = "DELETE FROM request WHERE id = ?";
+	String FIND_BY_CRITERIA = "SELECT * FROM request WHERE true";
+
+	@Inject
+	private JdbcTemplate jdbcTemplate;
+	@Inject
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	@Override
+	public Request getById(Integer id) {
+		try {
+			return jdbcTemplate.queryForObject(FIND_REQUEST_BY_ID, new Object[] { id },
+					new RequestMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Request insert(Request request) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(INSERT_REQUEST, new String[] { "id" });
+				ps.setInt(1, request.getClient().getId());
+				ps.setTimestamp(2, request.getStartDate());
+				ps.setTimestamp(3, request.getEndDate());
+				ps.setInt(4, request.getPlace().getId());
+				ps.setInt(5, request.getCountOfPassenger());
+				ps.setInt(6, request.getDispatcher().getId());
+				return ps;
+			}
+		}, keyHolder);
+
+		Number key = keyHolder.getKey();
+		request.setId(key.intValue());
+		return request;
+	}
+
+	@Override
+	public Request update(Request request) {
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(UPDATE_REQUEST);
+				ps.setInt(1, request.getClient().getId());
+				ps.setTimestamp(2, request.getStartDate());
+				ps.setTimestamp(3, request.getEndDate());
+				ps.setInt(4, request.getPlace().getId());
+				ps.setInt(5, request.getCountOfPassenger());
+				ps.setInt(6, request.getDispatcher().getId());
+				return ps;
+			}
+		});
+		return request;
+	}
+
+	@Override
+	public void delete(Integer id) {
+		jdbcTemplate.update(DELETE_REQUEST + id);
+
+	}
+
+	@Override
+	public List<Request> getAll() {
+		try {
+			List<Request> rs = jdbcTemplate.query(GET_ALL_REQUEST, new RequestMapper());
+			return rs;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Request> findByCriteria() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
