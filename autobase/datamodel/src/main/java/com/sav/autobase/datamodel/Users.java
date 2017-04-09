@@ -96,11 +96,4 @@ public class Users extends AbstractModel {
 
 	}
 
-	// @Override
-	// public String toString() {
-	// return "User " + type + " [id=" + getId() + ", firstName=" + firstName +
-	// ", lastName=" + lastName + ", dateBirth=" + dateBirth + ", login="
-	// + login + ", email=" + email + "]";
-	// }
-
 }

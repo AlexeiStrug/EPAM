@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -15,6 +17,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.ITripDao;
+import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.dao.impl.db.mapper.TripMapper;
 import com.sav.autobase.datamodel.Trip;
 
@@ -42,20 +45,23 @@ public class TripDaoImpl implements ITripDao {
 	final String UPDATE_TRIP = "UPDATE trip SET request_id = ?, vehicle_id = ?, end_trip = ? where id = ?";
 	final String DELETE_TRIP = "DELETE FROM trip WHERE id = ?";
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(TripDaoImpl.class);
+
 	@Inject
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Trip getById(Integer id) {
+	public Trip getById(Integer id) throws DaoException {
 		try {
 			return jdbcTemplate.queryForObject(FIND_TRIP_BY_ID, new Object[] { id }, new TripMapper());
 		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
 			return null;
 		}
 	}
 
 	@Override
-	public Trip insert(Trip trip) {
+	public Trip insert(Trip trip) throws DaoException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -70,12 +76,12 @@ public class TripDaoImpl implements ITripDao {
 		}, keyHolder);
 
 		Number key = keyHolder.getKey();
-		trip.setId(key.intValue());
+		trip.setId(key.intValue());	
 		return trip;
 	}
 
 	@Override
-	public Trip update(Trip trip) {
+	public Trip update(Trip trip) throws DaoException {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -90,23 +96,24 @@ public class TripDaoImpl implements ITripDao {
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(Integer id) throws DaoException {
 		jdbcTemplate.update(DELETE_TRIP + id);
 
 	}
 
 	@Override
-	public List<Trip> getAll() {
+	public List<Trip> getAll() throws DaoException {
 		try {
 			List<Trip> rs = jdbcTemplate.query(GET_ALL_TRIP, new TripMapper());
 			return rs;
 		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
 			return null;
 		}
 	}
 
 	@Override
-	public List<Trip> findByCriteria() {
+	public List<Trip> findByCriteria() throws DaoException {
 		// TODO Auto-generated method stub
 		return null;
 	}

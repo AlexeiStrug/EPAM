@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -15,6 +17,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.IModelVehicleDao;
+import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.dao.impl.db.mapper.ModelMapper;
 import com.sav.autobase.datamodel.ModelVehicle;
 
@@ -31,21 +34,23 @@ public class ModelVehicleDaoImpl implements IModelVehicleDao {
 			+ "INNER JOIN type_vehicle ON model_vehicle.type_id=type_vehicle.id";
 	final String UPDATE_MODEL = "UPDATE model_vehicle SET brand_id = ?, name_model = ?, register_number = ?, type_id = ?, count_of_passenger = ? WHERE model_vehicle.id = ? ";
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(ModelVehicleDaoImpl.class);
+
 	@Inject
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public ModelVehicle getById(Integer id) {
+	public ModelVehicle getById(Integer id) throws DaoException {
 		try {
-			return jdbcTemplate.queryForObject(FIND_MODEL_BY_ID, new Object[] { id },
-					new ModelMapper());
+			return jdbcTemplate.queryForObject(FIND_MODEL_BY_ID, new Object[] { id }, new ModelMapper());
 		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
 			return null;
 		}
 	}
 
 	@Override
-	public ModelVehicle insert(ModelVehicle model) {
+	public ModelVehicle insert(ModelVehicle model) throws DaoException {
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -66,9 +71,9 @@ public class ModelVehicleDaoImpl implements IModelVehicleDao {
 		model.setId(key.intValue());
 		return model;
 	}
-	
+
 	@Override
-	public ModelVehicle update(ModelVehicle model) {
+	public ModelVehicle update(ModelVehicle model) throws DaoException {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -86,17 +91,18 @@ public class ModelVehicleDaoImpl implements IModelVehicleDao {
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(Integer id) throws DaoException {
 		jdbcTemplate.update(DELETE_MODEL + id);
 
 	}
 
 	@Override
-	public List<ModelVehicle> getAll() {
+	public List<ModelVehicle> getAll() throws DaoException {
 		try {
 			List<ModelVehicle> rs = jdbcTemplate.query(GET_ALL_MODEL, new ModelMapper());
 			return rs;
 		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
 			return null;
 		}
 	}

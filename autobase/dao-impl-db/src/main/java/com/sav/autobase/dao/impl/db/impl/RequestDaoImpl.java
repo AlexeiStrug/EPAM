@@ -7,16 +7,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.IRequestDao;
+import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.dao.impl.db.mapper.RequestMapper;
 import com.sav.autobase.datamodel.Request;
 
@@ -35,23 +36,24 @@ public class RequestDaoImpl implements IRequestDao {
 	final String DELETE_REQUEST = "DELETE FROM request WHERE id = ?";
 	String FIND_BY_CRITERIA = "SELECT * FROM request WHERE true";
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(RequestDaoImpl.class);
+
 	@Inject
 	private JdbcTemplate jdbcTemplate;
-	@Inject
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Override
-	public Request getById(Integer id) {
+	public Request getById(Integer id) throws DaoException {
 		try {
 			return jdbcTemplate.queryForObject(FIND_REQUEST_BY_ID, new Object[] { id },
 					new RequestMapper());
 		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
 			return null;
 		}
 	}
 
 	@Override
-	public Request insert(Request request) {
+	public Request insert(Request request) throws DaoException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -75,7 +77,7 @@ public class RequestDaoImpl implements IRequestDao {
 	}
 
 	@Override
-	public Request update(Request request) {
+	public Request update(Request request) throws DaoException {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -94,23 +96,24 @@ public class RequestDaoImpl implements IRequestDao {
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(Integer id) throws DaoException {
 		jdbcTemplate.update(DELETE_REQUEST + id);
 
 	}
 
 	@Override
-	public List<Request> getAll() {
+	public List<Request> getAll() throws DaoException {
 		try {
 			List<Request> rs = jdbcTemplate.query(GET_ALL_REQUEST, new RequestMapper());
 			return rs;
 		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
 			return null;
 		}
 	}
 
 	@Override
-	public List<Request> findByCriteria() {
+	public List<Request> findByCriteria() throws DaoException {
 		// TODO Auto-generated method stub
 		return null;
 	}

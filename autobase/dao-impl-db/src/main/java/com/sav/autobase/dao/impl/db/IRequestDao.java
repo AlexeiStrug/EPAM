@@ -2,20 +2,13 @@ package com.sav.autobase.dao.impl.db;
 
 import java.util.List;
 
+import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.datamodel.Request;
 
-public interface IRequestDao {
-	
-	Request getById(Integer id);
-	
-	Request insert(Request request);
-	
-	Request update(Request request);
-	
-	void delete(Integer id);
-	
-	List<Request> getAll();
-	
-	List<Request> findByCriteria();
+public interface IRequestDao extends IAbstractModelDao<Request> {
+
+	List<Request> getAll() throws DaoException;
+
+	List<Request> findByCriteria() throws DaoException;
 
 }

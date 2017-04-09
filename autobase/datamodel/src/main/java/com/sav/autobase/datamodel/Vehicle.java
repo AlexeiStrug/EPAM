@@ -1,5 +1,10 @@
 package com.sav.autobase.datamodel;
 
+import java.lang.reflect.Field;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class Vehicle extends AbstractModel{
 
 	private Users driver;
@@ -32,7 +37,26 @@ public class Vehicle extends AbstractModel{
 
 	@Override
 	public String toString() {
-		return "Vehicle [" + model + ", " + driver + ", readyCrashCar=" + readyCrashCar + "]";
+		return toStringWithAttributes();
+	}
+
+	public String toStringWithAttributes() {
+		Object myself = this;
+		ReflectionToStringBuilder builder = new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE) {
+
+			@Override
+			protected boolean accept(Field field) {
+				try {
+					return super.accept(field) && field.get(myself) != null;
+				} catch (IllegalAccessException e) {
+					return super.accept(field);
+				}
+			}
+
+		};
+
+		return builder.toString();
+
 	}
 
 }

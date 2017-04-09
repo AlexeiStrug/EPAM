@@ -17,7 +17,7 @@ public class ServicesTest {
 
 //		IModelVehicleService service = context.getBean(IModelVehicleService.class);
 //		IVehicleService service = context.getBean(IVehicleService.class);
-		IRequestDao service = context.getBean(IRequestDao.class);
+//		IRequestDao service = context.getBean(IRequestDao.class);
 //		IBookService service = context.getBean(IBookService.class);
 //		ModelVehicleDaoImpl model1 = new ModelVehicleDaoImpl();
 //		model1.getAll();
@@ -26,12 +26,12 @@ public class ServicesTest {
 		
 //		Vehicle vehicle = new Vehicle();
 //		System.out.println(service.getById(5));
+		IUsersService service =context.getBean(IUsersService.class);
+		UserSearchCriteria criteria = new UserSearchCriteria();
+		criteria.setLastName("struh");
+		System.out.println(service.findByCriteria(criteria));
 		
-//		UserSearchCriteria criteria = new UserSearchCriteria();
-//		criteria.setFirstName("alex");
-//		System.out.println(service.findByCriteria(criteria));
-		
-		System.out.println(service.getById(1));
+//		System.out.println(service.getById(1));
 		
 		
 //		model1.setBrand(new BrandVehicle());
