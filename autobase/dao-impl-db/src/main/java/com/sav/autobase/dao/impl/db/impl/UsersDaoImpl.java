@@ -32,6 +32,7 @@ public class UsersDaoImpl implements IUsersDao {
 	final String INSERT_USER = "INSERT INTO users (first_name, last_name, login, password, email, date_birth, type) VALUES(?,?,?,?,?,?,?)";
 	final String UPDATE_USER = "UPDATE users SET first_name = ?, last_name = ?, login = ?, password = ?, email = ?, date_birth = ?, type = ? where id = ?";
 	final String DELETE_USER = "DELETE FROM users WHERE id = ?";
+	final String FIND_LOGGIN_AND_PASSWORD = "SELECT * FROM users WHERE login = ? AND password = ?";
 	String FIND_BY_CRITERIA = "SELECT * FROM users WHERE true";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(UsersDaoImpl.class);
@@ -138,6 +139,17 @@ public class UsersDaoImpl implements IUsersDao {
 			}
 			BeanPropertySqlParameterSource namedParameters = new BeanPropertySqlParameterSource(criteria);
 			return namedParameterJdbcTemplate.query(FIND_BY_CRITERIA, namedParameters,
+					new BeanPropertyRowMapper<Users>(Users.class));
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+			return null;
+		}
+	}
+
+	@Override
+	public Users findByloginPassword(String login, String password) throws DaoException {
+		try {
+			return jdbcTemplate.queryForObject(FIND_LOGGIN_AND_PASSWORD, new Object[] { login, password },
 					new BeanPropertyRowMapper<Users>(Users.class));
 		} catch (EmptyResultDataAccessException e) {
 			LOGGER.debug("Exception thrown! ", e);
