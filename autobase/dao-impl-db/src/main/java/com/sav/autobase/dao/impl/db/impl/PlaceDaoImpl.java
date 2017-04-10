@@ -106,8 +106,8 @@ public class PlaceDaoImpl implements IPlaceDao {
 
 	@Override
 	public Place update(Place entity) throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
+		 LOGGER.debug("Used UnsupportedOperationException");
+		 throw new UnsupportedOperationException();
 	}
 
 }

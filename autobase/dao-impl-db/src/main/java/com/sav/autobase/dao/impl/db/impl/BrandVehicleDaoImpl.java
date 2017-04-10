@@ -1,5 +1,6 @@
 package com.sav.autobase.dao.impl.db.impl;
 
+import java.lang.UnsupportedOperationException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -84,8 +85,8 @@ public class BrandVehicleDaoImpl implements IBrandVehicleDao {
 
 	@Override
 	public BrandVehicle update(BrandVehicle entity) throws DaoException {
-		// throw new Unsupported();
-		return null;
+		 LOGGER.debug("Used UnsupportedOperationException");
+		 throw new UnsupportedOperationException();
 	}
 
 }

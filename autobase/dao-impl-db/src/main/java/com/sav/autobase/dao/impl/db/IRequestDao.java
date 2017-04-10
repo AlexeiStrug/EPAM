@@ -9,6 +9,4 @@ public interface IRequestDao extends IAbstractModelDao<Request> {
 
 	List<Request> getAll() throws DaoException;
 
-	List<Request> findByCriteria() throws DaoException;
-
 }

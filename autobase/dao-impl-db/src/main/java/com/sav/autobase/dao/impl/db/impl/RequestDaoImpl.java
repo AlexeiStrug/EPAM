@@ -34,7 +34,7 @@ public class RequestDaoImpl implements IRequestDao {
 	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, dispatcher_id) VALUES(?,?,?,?,?,?)";
 	final String UPDATE_REQUEST = "UPDATE request SET first_name = ?, last_name = ?, login = ?, password = ?, email = ?, date_birth = ?, type = ? where id = ?";
 	final String DELETE_REQUEST = "DELETE FROM request WHERE id = ?";
-	String FIND_BY_CRITERIA = "SELECT * FROM request WHERE true";
+//	String FIND_BY_CRITERIA = "SELECT * FROM request WHERE true";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(RequestDaoImpl.class);
 
@@ -110,12 +110,6 @@ public class RequestDaoImpl implements IRequestDao {
 			LOGGER.debug("Exception thrown! ", e);
 			return null;
 		}
-	}
-
-	@Override
-	public List<Request> findByCriteria() throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

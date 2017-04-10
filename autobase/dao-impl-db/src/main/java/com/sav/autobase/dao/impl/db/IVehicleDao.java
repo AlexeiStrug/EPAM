@@ -3,7 +3,6 @@ package com.sav.autobase.dao.impl.db;
 import java.util.List;
 
 import com.sav.autobase.dao.impl.db.exceptions.DaoException;
-import com.sav.autobase.dao.impl.db.filter.vehicle.IFilterVehicle;
 import com.sav.autobase.dao.impl.db.filters.VehicleSerachCriteria;
 import com.sav.autobase.datamodel.Vehicle;
 

@@ -9,5 +9,5 @@ public interface ITripDao extends IAbstractModelDao<Trip> {
 
 	List<Trip> getAll() throws DaoException;
 
-	List<Trip> findByCriteria() throws DaoException;
+//	List<Trip> findByCriteria() throws DaoException;
 }

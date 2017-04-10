@@ -112,10 +112,10 @@ public class TripDaoImpl implements ITripDao {
 		}
 	}
 
-	@Override
-	public List<Trip> findByCriteria() throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public List<Trip> findByCriteria() throws DaoException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }

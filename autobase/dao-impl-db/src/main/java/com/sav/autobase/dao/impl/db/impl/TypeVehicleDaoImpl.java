@@ -84,8 +84,8 @@ public class TypeVehicleDaoImpl implements ITypeVehicleDao {
 
 	@Override
 	public TypeVehicle update(TypeVehicle entity) throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
+		 LOGGER.debug("Used UnsupportedOperationException");
+		 throw new UnsupportedOperationException();
 	}
 
 }
