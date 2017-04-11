@@ -14,11 +14,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.IPlaceDao;
 import com.sav.autobase.datamodel.Place;
 
-public class PlaceDaoImpl extends AbstractModelDaoImpl<Place> implements IPlaceDao {
+@Repository
+public class PlaceDaoImpl extends GenericDaoImpl<Place> implements IPlaceDao {
 
 	final String FIND_PLACE_BY_STARTNAME = "SELECT * FROM place WHERE place_start = ?";
 	final String FIND_PLACE_BY_ENDNAME = "SELECT * FROM place WHERE place_end = ?";

@@ -21,7 +21,7 @@ import com.sav.autobase.dao.impl.db.mapper.TripMapper;
 import com.sav.autobase.datamodel.Trip;
 
 @Repository
-public class TripDaoImpl extends AbstractModelDaoImpl<Trip> implements ITripDao {
+public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 
 	final String FIND_TRIP_BY_ID = "SELECT * FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
 			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "

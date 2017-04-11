@@ -21,7 +21,7 @@ import com.sav.autobase.dao.impl.db.mapper.RequestMapper;
 import com.sav.autobase.datamodel.Request;
 
 @Repository
-public class RequestDaoImpl extends AbstractModelDaoImpl<Request> implements IRequestDao {
+public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestDao {
 
 	final String FIND_REQUEST_BY_ID = "SELECT * FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "

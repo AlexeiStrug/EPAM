@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sav.autobase.datamodel.ModelVehicle;
 
-public interface IModelVehicleDao extends IAbstractModelDao<ModelVehicle> {
+public interface IModelVehicleDao extends IGenericDao<ModelVehicle> {
 
 	ModelVehicle joinGetById(Integer id);
 

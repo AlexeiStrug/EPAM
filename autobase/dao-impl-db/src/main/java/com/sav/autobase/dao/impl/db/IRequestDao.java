@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sav.autobase.datamodel.Request;
 
-public interface IRequestDao extends IAbstractModelDao<Request> {
+public interface IRequestDao extends IGenericDao<Request> {
 
 	Request joinGetById(Integer id);
 

@@ -9,11 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-import com.sav.autobase.dao.impl.db.IAbstractModelDao;
+import com.sav.autobase.dao.impl.db.IGenericDao;
 
-public abstract class AbstractModelDaoImpl<T> implements IAbstractModelDao<T> {
+@Repository
+public abstract class GenericDaoImpl<T> implements IGenericDao<T> {
 
+	
 	@Inject
 	private JdbcTemplate jdbcTemplate;
 
@@ -26,7 +29,7 @@ public abstract class AbstractModelDaoImpl<T> implements IAbstractModelDao<T> {
 	private final static Logger LOGGER = LoggerFactory.getLogger(BrandVehicleDaoImpl.class);
 
 	@Override
-	public T getById(Integer id) {
+	public T getById(Object id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_BY_ID, new Object[] { id }, new BeanPropertyRowMapper<T>());
 		} catch (EmptyResultDataAccessException e) {
@@ -42,7 +45,7 @@ public abstract class AbstractModelDaoImpl<T> implements IAbstractModelDao<T> {
 	public abstract T update(T entity);
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(Object id) {
 		try {
 			jdbcTemplate.update(DELETE + id);
 		} catch (EmptyResultDataAccessException e) {

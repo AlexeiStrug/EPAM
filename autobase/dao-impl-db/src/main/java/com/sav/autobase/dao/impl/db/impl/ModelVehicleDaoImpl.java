@@ -21,7 +21,7 @@ import com.sav.autobase.dao.impl.db.mapper.ModelMapper;
 import com.sav.autobase.datamodel.ModelVehicle;
 
 @Repository
-public class ModelVehicleDaoImpl extends AbstractModelDaoImpl<ModelVehicle> implements IModelVehicleDao {
+public class ModelVehicleDaoImpl extends GenericDaoImpl<ModelVehicle> implements IModelVehicleDao {
 
 	final String FIND_MODEL_BY_ID = "SELECT * FROM model_vehicle "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "

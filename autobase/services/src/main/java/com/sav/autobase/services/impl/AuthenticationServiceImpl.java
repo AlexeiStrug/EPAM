@@ -35,7 +35,6 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 			LOGGER.info("Failed authenticate");
 
 		return authentication != null;
-
 	}
 
 	@Override

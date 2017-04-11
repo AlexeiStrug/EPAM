@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.sav.autobase.datamodel.BrandVehicle;
 
 @Repository
-public class BrandVehicleDaoImpl extends AbstractModelDaoImpl<BrandVehicle> {
+public class BrandVehicleDaoImpl extends GenericDaoImpl<BrandVehicle> {
 
 	private final String INSERT_SQL = "INSERT INTO brand_vehicle (brand_name) VALUES(?)";
 

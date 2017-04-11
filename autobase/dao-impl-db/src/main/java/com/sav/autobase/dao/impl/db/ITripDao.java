@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sav.autobase.datamodel.Trip;
 
-public interface ITripDao extends IAbstractModelDao<Trip> {
+public interface ITripDao extends IGenericDao<Trip> {
 
 	List<Trip> findByCriteria();
 

@@ -24,7 +24,7 @@ import com.sav.autobase.dao.impl.db.filters.UserSearchCriteria;
 import com.sav.autobase.datamodel.Users;
 
 @Repository
-public class UsersDaoImpl extends AbstractModelDaoImpl<Users> implements IUsersDao {
+public class UsersDaoImpl extends GenericDaoImpl<Users> implements IUsersDao {
 
 	final String INSERT_USER = "INSERT INTO users (first_name, last_name, login, password, email, date_birth, type) VALUES(?,?,?,?,?,?,?)";
 	final String UPDATE_USER = "UPDATE users SET first_name = ?, last_name = ?, login = ?, password = ?, email = ?, date_birth = ?, type = ? where id = ?";
