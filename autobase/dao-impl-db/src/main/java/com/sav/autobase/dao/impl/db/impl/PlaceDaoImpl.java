@@ -3,7 +3,6 @@ package com.sav.autobase.dao.impl.db.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -19,14 +18,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import com.sav.autobase.dao.impl.db.IPlaceDao;
 import com.sav.autobase.datamodel.Place;
 
-public class PlaceDaoImpl implements IPlaceDao {
+public class PlaceDaoImpl extends AbstractModelDaoImpl<Place> implements IPlaceDao {
 
-	final String FIND_PLACE_BY_ID = "SELECT * FROM place where id = ? ";
 	final String FIND_PLACE_BY_STARTNAME = "SELECT * FROM place WHERE place_start = ?";
 	final String FIND_PLACE_BY_ENDNAME = "SELECT * FROM place WHERE place_end = ?";
-	final String GET_ALL_PLACE = "SELECT * FROM place ";
 	final String INSERT_PLACE = "INSERT INTO place (start_place, end_place, distance) VALUES(?,?,?)";
-	final String DELELTE_PLACE = "DELETE FROM place WHERE id = ?";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(PlaceDaoImpl.class);
 
@@ -34,16 +30,10 @@ public class PlaceDaoImpl implements IPlaceDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Place getById(Integer id) {
-		try {
-			return jdbcTemplate.queryForObject(FIND_PLACE_BY_ID, new Object[] { id },
-					new BeanPropertyRowMapper<Place>(Place.class));
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-			return null;
-		}
+	protected String getTableName() {
+		return "place";
 	}
-
+	
 	@Override
 	public Place getByStartPlace(Place place) {
 		try {
@@ -84,26 +74,6 @@ public class PlaceDaoImpl implements IPlaceDao {
 		Number key = keyHolder.getKey();
 		place.setId(key.intValue());
 		return place;
-	}
-
-	@Override
-	public List<Place> getAll() {
-		try {
-			List<Place> rs = jdbcTemplate.query(GET_ALL_PLACE, new BeanPropertyRowMapper<Place>(Place.class));
-			return rs;
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-			return null;
-		}
-	}
-
-	@Override
-	public void delete(Integer id) {
-		try {
-			jdbcTemplate.update(DELELTE_PLACE + id);
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-		}
 	}
 
 	@Override

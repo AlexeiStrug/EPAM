@@ -21,10 +21,8 @@ import com.sav.autobase.dao.impl.db.mapper.ModelMapper;
 import com.sav.autobase.datamodel.ModelVehicle;
 
 @Repository
-public class ModelVehicleDaoImpl implements IModelVehicleDao {
+public class ModelVehicleDaoImpl extends AbstractModelDaoImpl<ModelVehicle> implements IModelVehicleDao {
 
-	final String INSERT_MODEL = "INSERT INTO model_vehicle (brand_id, name_model, register_number, type_id, count_of_passenger) VALUES(?,?,?,?,?)";
-	final String DELETE_MODEL = "DELETE FROM model_vehicle WHERE id= ?";
 	final String FIND_MODEL_BY_ID = "SELECT * FROM model_vehicle "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle ON model_vehicle.type_id=type_vehicle.id WHERE model_vehicle.id = ? ";
@@ -32,16 +30,33 @@ public class ModelVehicleDaoImpl implements IModelVehicleDao {
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle ON model_vehicle.type_id=type_vehicle.id";
 	final String UPDATE_MODEL = "UPDATE model_vehicle SET brand_id = ?, name_model = ?, register_number = ?, type_id = ?, count_of_passenger = ? WHERE model_vehicle.id = ? ";
-
+	final String INSERT_MODEL = "INSERT INTO model_vehicle (brand_id, name_model, register_number, type_id, count_of_passenger) VALUES(?,?,?,?,?)";
+	
 	private final static Logger LOGGER = LoggerFactory.getLogger(ModelVehicleDaoImpl.class);
 
 	@Inject
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public ModelVehicle getById(Integer id) {
+	protected String getTableName() {
+		return "model_vehicle";
+	}
+	
+	@Override
+	public ModelVehicle joinGetById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_MODEL_BY_ID, new Object[] { id }, new ModelMapper());
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+			return null;
+		}
+	}
+	
+	@Override
+	public List<ModelVehicle> joinGetAll() {
+		try {
+			List<ModelVehicle> rs = jdbcTemplate.query(GET_ALL_MODEL, new ModelMapper());
+			return rs;
 		} catch (EmptyResultDataAccessException e) {
 			LOGGER.debug("Exception thrown! ", e);
 			return null;
@@ -88,25 +103,4 @@ public class ModelVehicleDaoImpl implements IModelVehicleDao {
 		});
 		return model;
 	}
-
-	@Override
-	public void delete(Integer id) {
-		try {
-			jdbcTemplate.update(DELETE_MODEL + id);
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-		}
-	}
-
-	@Override
-	public List<ModelVehicle> getAll() {
-		try {
-			List<ModelVehicle> rs = jdbcTemplate.query(GET_ALL_MODEL, new ModelMapper());
-			return rs;
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-			return null;
-		}
-	}
-
 }

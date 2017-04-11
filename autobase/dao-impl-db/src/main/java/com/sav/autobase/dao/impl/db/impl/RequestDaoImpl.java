@@ -21,7 +21,7 @@ import com.sav.autobase.dao.impl.db.mapper.RequestMapper;
 import com.sav.autobase.datamodel.Request;
 
 @Repository
-public class RequestDaoImpl implements IRequestDao {
+public class RequestDaoImpl extends AbstractModelDaoImpl<Request> implements IRequestDao {
 
 	final String FIND_REQUEST_BY_ID = "SELECT * FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
@@ -31,7 +31,6 @@ public class RequestDaoImpl implements IRequestDao {
 			+ "INNER JOIN place ON place.id = request.place_id ";
 	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, dispatcher_id) VALUES(?,?,?,?,?,?)";
 	final String UPDATE_REQUEST = "UPDATE request SET first_name = ?, last_name = ?, login = ?, password = ?, email = ?, date_birth = ?, type = ? where id = ?";
-	final String DELETE_REQUEST = "DELETE FROM request WHERE id = ?";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(RequestDaoImpl.class);
 
@@ -39,7 +38,12 @@ public class RequestDaoImpl implements IRequestDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Request getById(Integer id) {
+	protected String getTableName() {
+		return "request";
+	}
+	
+	@Override
+	public Request joinGetById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_REQUEST_BY_ID, new Object[] { id }, new RequestMapper());
 		} catch (EmptyResultDataAccessException e) {
@@ -92,16 +96,7 @@ public class RequestDaoImpl implements IRequestDao {
 	}
 
 	@Override
-	public void delete(Integer id) {
-		try {
-			jdbcTemplate.update(DELETE_REQUEST + id);
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-		}
-	}
-
-	@Override
-	public List<Request> getAll() {
+	public List<Request> joinGetAll() {
 		try {
 			List<Request> rs = jdbcTemplate.query(GET_ALL_REQUEST, new RequestMapper());
 			return rs;

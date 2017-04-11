@@ -6,7 +6,9 @@ import com.sav.autobase.datamodel.Trip;
 
 public interface ITripDao extends IAbstractModelDao<Trip> {
 
-	List<Trip> getAll();
-
 	List<Trip> findByCriteria();
+
+	Trip joinGetById(Integer id);
+
+	List<Trip> joinGetAll();
 }

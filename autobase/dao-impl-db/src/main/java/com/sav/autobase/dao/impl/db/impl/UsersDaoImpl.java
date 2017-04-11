@@ -24,13 +24,10 @@ import com.sav.autobase.dao.impl.db.filters.UserSearchCriteria;
 import com.sav.autobase.datamodel.Users;
 
 @Repository
-public class UsersDaoImpl implements IUsersDao {
+public class UsersDaoImpl extends AbstractModelDaoImpl<Users> implements IUsersDao {
 
-	final String FIND_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
-	final String GET_ALL_USERS = "SELECT * FROM users ";
 	final String INSERT_USER = "INSERT INTO users (first_name, last_name, login, password, email, date_birth, type) VALUES(?,?,?,?,?,?,?)";
 	final String UPDATE_USER = "UPDATE users SET first_name = ?, last_name = ?, login = ?, password = ?, email = ?, date_birth = ?, type = ? where id = ?";
-	final String DELETE_USER = "DELETE FROM users WHERE id = ?";
 	final String FIND_LOGGIN_AND_PASSWORD = "SELECT * FROM users WHERE login = ? AND password = ?";
 	String FIND_BY_CRITERIA = "SELECT * FROM users WHERE true";
 
@@ -38,23 +35,18 @@ public class UsersDaoImpl implements IUsersDao {
 
 	@Inject
 	private JdbcTemplate jdbcTemplate;
+
 	@Inject
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Override
-	public Users getById(Integer id) {
-		try {
-			return jdbcTemplate.queryForObject(FIND_USER_BY_ID, new Object[] { id },
-					new BeanPropertyRowMapper<Users>(Users.class));
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-			return null;
-		}
+	protected String getTableName() {
+		return "users";
 	}
 
 	@Override
 	public Users insert(Users user) {
-		
+
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -97,28 +89,7 @@ public class UsersDaoImpl implements IUsersDao {
 	}
 
 	@Override
-	public void delete(Integer id) {
-		try{
-		jdbcTemplate.update(DELETE_USER + id);
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-		}
-
-	}
-
-	@Override
-	public List<Users> getAll() {
-		try {
-			List<Users> rs = jdbcTemplate.query(GET_ALL_USERS, new BeanPropertyRowMapper<Users>(Users.class));
-			return rs;
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-			return null;
-		}
-	}
-
-	@Override
-	public List<Users> findByCriteria(UserSearchCriteria criteria)  {
+	public List<Users> findByCriteria(UserSearchCriteria criteria) {
 		try {
 			if (criteria.isEmpty()) {
 				getAll();

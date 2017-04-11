@@ -3,30 +3,23 @@ package com.sav.autobase.dao.impl.db.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.sav.autobase.dao.impl.db.ITypeVehicleDao;
 import com.sav.autobase.datamodel.TypeVehicle;
 
 @Repository
-public class TypeVehicleDaoImpl implements ITypeVehicleDao {
+public class TypeVehicleDaoImpl extends AbstractModelDaoImpl<TypeVehicle> {
 
-	private final String FIND_TYPE_BY_ID = "SELECT * FROM type_vehicle WHERE id = ? ";
-	private final String GET_ALL_TYPE = "SELECT * FROM type_vehicle";
 	private final String INSERT_SQL = "INSERT INTO type_vehicle (type_name) VALUES(?)";
-	private final String DELETE_TYPE = "DELETE FROM type_vehicle WHERE id = ?";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(TypeVehicleDaoImpl.class);
 
@@ -34,26 +27,8 @@ public class TypeVehicleDaoImpl implements ITypeVehicleDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public TypeVehicle getById(Integer id) {
-		try {
-			return jdbcTemplate.queryForObject(FIND_TYPE_BY_ID, new Object[] { id },
-					new BeanPropertyRowMapper<TypeVehicle>(TypeVehicle.class));
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-			return null;
-		}
-	}
-
-	@Override
-	public List<TypeVehicle> getAll() {
-		try {
-			List<TypeVehicle> rs = jdbcTemplate.query(GET_ALL_TYPE,
-					new BeanPropertyRowMapper<TypeVehicle>(TypeVehicle.class));
-			return rs;
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-			return null;
-		}
+	protected String getTableName() {
+		return "type_vehicle";
 	}
 
 	@Override
@@ -76,16 +51,7 @@ public class TypeVehicleDaoImpl implements ITypeVehicleDao {
 	}
 
 	@Override
-	public void delete(Integer id) {
-		try {
-			jdbcTemplate.update(DELETE_TYPE + id);
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-		}
-	}
-
-	@Override
-	public TypeVehicle update(TypeVehicle entity) throws UnsupportedOperationException{
+	public TypeVehicle update(TypeVehicle entity) throws UnsupportedOperationException {
 		LOGGER.debug("Used UnsupportedOperationException");
 		throw new UnsupportedOperationException();
 	}

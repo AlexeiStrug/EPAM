@@ -24,7 +24,7 @@ import com.sav.autobase.dao.impl.db.mapper.VehicleMapper;
 import com.sav.autobase.datamodel.Vehicle;
 
 @Repository
-public class VehicleDaoImpl implements IVehicleDao {
+public class VehicleDaoImpl extends AbstractModelDaoImpl<Vehicle> implements IVehicleDao {
 
 	final String FIND_VEHICLE_BY_ID = "SELECT * FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
@@ -40,7 +40,6 @@ public class VehicleDaoImpl implements IVehicleDao {
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE true ";
 	final String UPDATE_VEHICLE = "UPDATE vehicle SET driver_id = ?, model_id = ?, ready_crash_car = ? WHERE vehicle.id = ? ";
 	final String INSERT_VEHICLE = "INSERT INTO vehicle (driver_id, model_id, ready_crash_car) VALUES(?,?,?)";
-	final String DELETE_VEHICLE = "DELETE FROM vehicle WHERE id = ? ";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(VehicleDaoImpl.class);
 
@@ -51,7 +50,12 @@ public class VehicleDaoImpl implements IVehicleDao {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Override
-	public Vehicle getById(Integer id) {
+	protected String getTableName() {
+		return "vehicle";
+	}
+	
+	@Override
+	public Vehicle joinGetById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_VEHICLE_BY_ID, new Object[] { id }, new VehicleMapper());
 		} catch (EmptyResultDataAccessException e) {
@@ -96,17 +100,7 @@ public class VehicleDaoImpl implements IVehicleDao {
 	}
 
 	@Override
-	public void delete(Integer id) {
-		try {
-			jdbcTemplate.update(DELETE_VEHICLE + id);
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-		}
-
-	}
-
-	@Override
-	public List<Vehicle> getAll() {
+	public List<Vehicle> joinGetAll() {
 		try {
 			List<Vehicle> rs = jdbcTemplate.query(GET_ALL_VEHICLE, new VehicleMapper());
 			return rs;
@@ -147,5 +141,4 @@ public class VehicleDaoImpl implements IVehicleDao {
 			return null;
 		}
 	}
-
 }

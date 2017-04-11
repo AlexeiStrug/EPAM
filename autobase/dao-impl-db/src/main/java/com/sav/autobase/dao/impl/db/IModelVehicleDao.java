@@ -6,6 +6,8 @@ import com.sav.autobase.datamodel.ModelVehicle;
 
 public interface IModelVehicleDao extends IAbstractModelDao<ModelVehicle> {
 
-	List<ModelVehicle> getAll();
+	ModelVehicle joinGetById(Integer id);
+
+	List<ModelVehicle> joinGetAll();
 
 }

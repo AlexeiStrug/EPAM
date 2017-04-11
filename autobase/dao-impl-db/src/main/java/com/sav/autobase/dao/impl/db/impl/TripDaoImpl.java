@@ -21,7 +21,7 @@ import com.sav.autobase.dao.impl.db.mapper.TripMapper;
 import com.sav.autobase.datamodel.Trip;
 
 @Repository
-public class TripDaoImpl implements ITripDao {
+public class TripDaoImpl extends AbstractModelDaoImpl<Trip> implements ITripDao {
 
 	final String FIND_TRIP_BY_ID = "SELECT * FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
 			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
@@ -38,7 +38,6 @@ public class TripDaoImpl implements ITripDao {
 			+ "INNER JOIN users ON users.id = vehicle.driver_id & request.client_id & request.dispatcher_id ";
 	final String INSERT_TRIP = "INSERT INTO trip (request_id, vehicle_id, end_trip) VALUES(?,?,?)";
 	final String UPDATE_TRIP = "UPDATE trip SET request_id = ?, vehicle_id = ?, end_trip = ? where id = ?";
-	final String DELETE_TRIP = "DELETE FROM trip WHERE id = ?";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(TripDaoImpl.class);
 
@@ -46,7 +45,12 @@ public class TripDaoImpl implements ITripDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Trip getById(Integer id) {
+	protected String getTableName() {
+		return "trip";
+	}
+	
+	@Override
+	public Trip joinGetById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_TRIP_BY_ID, new Object[] { id }, new TripMapper());
 		} catch (EmptyResultDataAccessException e) {
@@ -91,16 +95,7 @@ public class TripDaoImpl implements ITripDao {
 	}
 
 	@Override
-	public void delete(Integer id) {
-		try {
-			jdbcTemplate.update(DELETE_TRIP + id);
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-		}
-	}
-
-	@Override
-	public List<Trip> getAll() {
+	public List<Trip> joinGetAll() {
 		try {
 			List<Trip> rs = jdbcTemplate.query(GET_ALL_TRIP, new TripMapper());
 			return rs;

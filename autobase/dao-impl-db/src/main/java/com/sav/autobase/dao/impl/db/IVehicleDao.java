@@ -9,6 +9,8 @@ public interface IVehicleDao extends IAbstractModelDao<Vehicle> {
 
 	List<Vehicle> getFiltered(VehicleSerachCriteria criteria);
 
-	List<Vehicle> getAll();
+	Vehicle joinGetById(Integer id);
+
+	List<Vehicle> joinGetAll();
 
 }

@@ -6,6 +6,8 @@ import com.sav.autobase.datamodel.Request;
 
 public interface IRequestDao extends IAbstractModelDao<Request> {
 
-	List<Request> getAll();
+	Request joinGetById(Integer id);
+
+	List<Request> joinGetAll();
 
 }

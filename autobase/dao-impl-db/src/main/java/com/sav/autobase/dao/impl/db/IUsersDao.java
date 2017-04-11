@@ -9,8 +9,6 @@ public interface IUsersDao extends IAbstractModelDao<Users> {
 	
 	Users findByloginPassword (String login, String password);
 
-	List<Users> getAll();
-
 	List<Users> findByCriteria(UserSearchCriteria criteria);
 
 }
