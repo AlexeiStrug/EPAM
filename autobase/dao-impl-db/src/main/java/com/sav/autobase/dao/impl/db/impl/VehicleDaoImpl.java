@@ -19,7 +19,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.IVehicleDao;
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.dao.impl.db.filters.VehicleSerachCriteria;
 import com.sav.autobase.dao.impl.db.mapper.VehicleMapper;
 import com.sav.autobase.datamodel.Vehicle;
@@ -62,7 +61,7 @@ public class VehicleDaoImpl implements IVehicleDao {
 	}
 
 	@Override
-	public Vehicle update(Vehicle vehicle) throws DaoException {
+	public Vehicle update(Vehicle vehicle) {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -77,7 +76,7 @@ public class VehicleDaoImpl implements IVehicleDao {
 	}
 
 	@Override
-	public Vehicle insert(Vehicle vehicle) throws DaoException {
+	public Vehicle insert(Vehicle vehicle) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -97,13 +96,17 @@ public class VehicleDaoImpl implements IVehicleDao {
 	}
 
 	@Override
-	public void delete(Integer id) throws DaoException {
-		jdbcTemplate.update(DELETE_VEHICLE + id);
+	public void delete(Integer id) {
+		try {
+			jdbcTemplate.update(DELETE_VEHICLE + id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+		}
 
 	}
 
 	@Override
-	public List<Vehicle> getAll() throws DaoException {
+	public List<Vehicle> getAll() {
 		try {
 			List<Vehicle> rs = jdbcTemplate.query(GET_ALL_VEHICLE, new VehicleMapper());
 			return rs;
@@ -114,7 +117,7 @@ public class VehicleDaoImpl implements IVehicleDao {
 	}
 
 	@Override
-	public List<Vehicle> getFiltered(VehicleSerachCriteria criteria) throws DaoException {
+	public List<Vehicle> getFiltered(VehicleSerachCriteria criteria) {
 		try {
 			if (criteria.isEmpty()) {
 				getAll();

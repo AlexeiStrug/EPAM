@@ -17,7 +17,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.IRequestDao;
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.dao.impl.db.mapper.RequestMapper;
 import com.sav.autobase.datamodel.Request;
 
@@ -26,15 +25,13 @@ public class RequestDaoImpl implements IRequestDao {
 
 	final String FIND_REQUEST_BY_ID = "SELECT * FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
-			+ "INNER JOIN place ON place.id = request.place_id "
-			+ " WHERE request.id = ?";
+			+ "INNER JOIN place ON place.id = request.place_id " + " WHERE request.id = ?";
 	final String GET_ALL_REQUEST = "SELECT * FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
 			+ "INNER JOIN place ON place.id = request.place_id ";
 	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, dispatcher_id) VALUES(?,?,?,?,?,?)";
 	final String UPDATE_REQUEST = "UPDATE request SET first_name = ?, last_name = ?, login = ?, password = ?, email = ?, date_birth = ?, type = ? where id = ?";
 	final String DELETE_REQUEST = "DELETE FROM request WHERE id = ?";
-//	String FIND_BY_CRITERIA = "SELECT * FROM request WHERE true";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(RequestDaoImpl.class);
 
@@ -42,10 +39,9 @@ public class RequestDaoImpl implements IRequestDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Request getById(Integer id) throws DaoException {
+	public Request getById(Integer id) {
 		try {
-			return jdbcTemplate.queryForObject(FIND_REQUEST_BY_ID, new Object[] { id },
-					new RequestMapper());
+			return jdbcTemplate.queryForObject(FIND_REQUEST_BY_ID, new Object[] { id }, new RequestMapper());
 		} catch (EmptyResultDataAccessException e) {
 			LOGGER.debug("Exception thrown! ", e);
 			return null;
@@ -53,7 +49,7 @@ public class RequestDaoImpl implements IRequestDao {
 	}
 
 	@Override
-	public Request insert(Request request) throws DaoException {
+	public Request insert(Request request) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -77,7 +73,7 @@ public class RequestDaoImpl implements IRequestDao {
 	}
 
 	@Override
-	public Request update(Request request) throws DaoException {
+	public Request update(Request request) {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -96,13 +92,16 @@ public class RequestDaoImpl implements IRequestDao {
 	}
 
 	@Override
-	public void delete(Integer id) throws DaoException {
-		jdbcTemplate.update(DELETE_REQUEST + id);
-
+	public void delete(Integer id) {
+		try {
+			jdbcTemplate.update(DELETE_REQUEST + id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+		}
 	}
 
 	@Override
-	public List<Request> getAll() throws DaoException {
+	public List<Request> getAll() {
 		try {
 			List<Request> rs = jdbcTemplate.query(GET_ALL_REQUEST, new RequestMapper());
 			return rs;

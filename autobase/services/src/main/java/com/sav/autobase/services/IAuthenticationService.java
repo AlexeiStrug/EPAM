@@ -1,14 +1,12 @@
 package com.sav.autobase.services;
 
-import javax.naming.AuthenticationException;
-
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.datamodel.Users;
+import com.sav.autobase.services.exception.DAOexception;
 
 public interface IAuthenticationService {
 	
-	boolean authenticate(String login, String password) throws DaoException;
+	Boolean authenticate(String login, String password) throws DAOexception;
 	
-	void register(Users newUser) throws DaoException;
+	void register(Users newUser) throws DAOexception;
 
 }

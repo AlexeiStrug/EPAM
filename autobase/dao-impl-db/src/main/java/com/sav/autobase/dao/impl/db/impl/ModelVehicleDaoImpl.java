@@ -17,7 +17,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.IModelVehicleDao;
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.dao.impl.db.mapper.ModelMapper;
 import com.sav.autobase.datamodel.ModelVehicle;
 
@@ -40,7 +39,7 @@ public class ModelVehicleDaoImpl implements IModelVehicleDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public ModelVehicle getById(Integer id) throws DaoException {
+	public ModelVehicle getById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_MODEL_BY_ID, new Object[] { id }, new ModelMapper());
 		} catch (EmptyResultDataAccessException e) {
@@ -50,7 +49,7 @@ public class ModelVehicleDaoImpl implements IModelVehicleDao {
 	}
 
 	@Override
-	public ModelVehicle insert(ModelVehicle model) throws DaoException {
+	public ModelVehicle insert(ModelVehicle model) {
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -73,7 +72,7 @@ public class ModelVehicleDaoImpl implements IModelVehicleDao {
 	}
 
 	@Override
-	public ModelVehicle update(ModelVehicle model) throws DaoException {
+	public ModelVehicle update(ModelVehicle model) {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -91,13 +90,16 @@ public class ModelVehicleDaoImpl implements IModelVehicleDao {
 	}
 
 	@Override
-	public void delete(Integer id) throws DaoException {
-		jdbcTemplate.update(DELETE_MODEL + id);
-
+	public void delete(Integer id) {
+		try {
+			jdbcTemplate.update(DELETE_MODEL + id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+		}
 	}
 
 	@Override
-	public List<ModelVehicle> getAll() throws DaoException {
+	public List<ModelVehicle> getAll() {
 		try {
 			List<ModelVehicle> rs = jdbcTemplate.query(GET_ALL_MODEL, new ModelMapper());
 			return rs;

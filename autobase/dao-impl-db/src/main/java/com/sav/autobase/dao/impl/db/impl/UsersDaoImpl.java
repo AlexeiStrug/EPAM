@@ -20,7 +20,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.IUsersDao;
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.dao.impl.db.filters.UserSearchCriteria;
 import com.sav.autobase.datamodel.Users;
 
@@ -43,7 +42,7 @@ public class UsersDaoImpl implements IUsersDao {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Override
-	public Users getById(Integer id) throws DaoException {
+	public Users getById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_USER_BY_ID, new Object[] { id },
 					new BeanPropertyRowMapper<Users>(Users.class));
@@ -54,7 +53,8 @@ public class UsersDaoImpl implements IUsersDao {
 	}
 
 	@Override
-	public Users insert(Users user) throws DaoException {
+	public Users insert(Users user) {
+		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -78,7 +78,7 @@ public class UsersDaoImpl implements IUsersDao {
 	}
 
 	@Override
-	public Users update(Users user) throws DaoException {
+	public Users update(Users user) {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -97,13 +97,17 @@ public class UsersDaoImpl implements IUsersDao {
 	}
 
 	@Override
-	public void delete(Integer id) throws DaoException {
+	public void delete(Integer id) {
+		try{
 		jdbcTemplate.update(DELETE_USER + id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+		}
 
 	}
 
 	@Override
-	public List<Users> getAll() throws DaoException {
+	public List<Users> getAll() {
 		try {
 			List<Users> rs = jdbcTemplate.query(GET_ALL_USERS, new BeanPropertyRowMapper<Users>(Users.class));
 			return rs;
@@ -114,7 +118,7 @@ public class UsersDaoImpl implements IUsersDao {
 	}
 
 	@Override
-	public List<Users> findByCriteria(UserSearchCriteria criteria) throws DaoException {
+	public List<Users> findByCriteria(UserSearchCriteria criteria)  {
 		try {
 			if (criteria.isEmpty()) {
 				getAll();
@@ -147,7 +151,7 @@ public class UsersDaoImpl implements IUsersDao {
 	}
 
 	@Override
-	public Users findByloginPassword(String login, String password) throws DaoException {
+	public Users findByloginPassword(String login, String password) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_LOGGIN_AND_PASSWORD, new Object[] { login, password },
 					new BeanPropertyRowMapper<Users>(Users.class));

@@ -18,7 +18,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.ITypeVehicleDao;
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.datamodel.TypeVehicle;
 
 @Repository
@@ -35,7 +34,7 @@ public class TypeVehicleDaoImpl implements ITypeVehicleDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public TypeVehicle getById(Integer id) throws DaoException {
+	public TypeVehicle getById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_TYPE_BY_ID, new Object[] { id },
 					new BeanPropertyRowMapper<TypeVehicle>(TypeVehicle.class));
@@ -46,7 +45,7 @@ public class TypeVehicleDaoImpl implements ITypeVehicleDao {
 	}
 
 	@Override
-	public List<TypeVehicle> getAll() throws DaoException {
+	public List<TypeVehicle> getAll() {
 		try {
 			List<TypeVehicle> rs = jdbcTemplate.query(GET_ALL_TYPE,
 					new BeanPropertyRowMapper<TypeVehicle>(TypeVehicle.class));
@@ -58,7 +57,7 @@ public class TypeVehicleDaoImpl implements ITypeVehicleDao {
 	}
 
 	@Override
-	public TypeVehicle insert(TypeVehicle type) throws DaoException {
+	public TypeVehicle insert(TypeVehicle type) {
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -77,15 +76,18 @@ public class TypeVehicleDaoImpl implements ITypeVehicleDao {
 	}
 
 	@Override
-	public void delete(Integer id) throws DaoException {
-		jdbcTemplate.update(DELETE_TYPE + id);
-
+	public void delete(Integer id) {
+		try {
+			jdbcTemplate.update(DELETE_TYPE + id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+		}
 	}
 
 	@Override
-	public TypeVehicle update(TypeVehicle entity) throws DaoException {
-		 LOGGER.debug("Used UnsupportedOperationException");
-		 throw new UnsupportedOperationException();
+	public TypeVehicle update(TypeVehicle entity) throws UnsupportedOperationException{
+		LOGGER.debug("Used UnsupportedOperationException");
+		throw new UnsupportedOperationException();
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.sav.autobase.dao.impl.db.impl;
 
-import java.lang.UnsupportedOperationException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -19,7 +18,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.IBrandVehicleDao;
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.datamodel.BrandVehicle;
 
 @Repository
@@ -36,7 +34,7 @@ public class BrandVehicleDaoImpl implements IBrandVehicleDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public BrandVehicle getById(Integer id) throws DaoException {
+	public BrandVehicle getById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_BRAND_BY_ID, new Object[] { id },
 					new BeanPropertyRowMapper<BrandVehicle>(BrandVehicle.class));
@@ -47,7 +45,7 @@ public class BrandVehicleDaoImpl implements IBrandVehicleDao {
 	}
 
 	@Override
-	public BrandVehicle insert(BrandVehicle brand) throws DaoException {
+	public BrandVehicle insert(BrandVehicle brand) {
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -66,7 +64,7 @@ public class BrandVehicleDaoImpl implements IBrandVehicleDao {
 	}
 
 	@Override
-	public List<BrandVehicle> getAll() throws DaoException {
+	public List<BrandVehicle> getAll() {
 		try {
 			List<BrandVehicle> rs = jdbcTemplate.query(GET_ALL_BRAND,
 					new BeanPropertyRowMapper<BrandVehicle>(BrandVehicle.class));
@@ -78,15 +76,19 @@ public class BrandVehicleDaoImpl implements IBrandVehicleDao {
 	}
 
 	@Override
-	public void delete(Integer id) throws DaoException {
-		jdbcTemplate.update(DELETE_BRAND + id);
+	public void delete(Integer id) {
+		try {
+			jdbcTemplate.update(DELETE_BRAND + id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+		}
 
 	}
 
 	@Override
-	public BrandVehicle update(BrandVehicle entity) throws DaoException {
-		 LOGGER.debug("Used UnsupportedOperationException");
-		 throw new UnsupportedOperationException();
+	public BrandVehicle update(BrandVehicle entity) throws UnsupportedOperationException {
+		LOGGER.debug("Used UnsupportedOperationException");
+		throw new UnsupportedOperationException();
 	}
 
 }

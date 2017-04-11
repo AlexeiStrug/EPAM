@@ -17,26 +17,21 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.impl.db.ITripDao;
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.dao.impl.db.mapper.TripMapper;
 import com.sav.autobase.datamodel.Trip;
 
 @Repository
 public class TripDaoImpl implements ITripDao {
 
-	final String FIND_TRIP_BY_ID = "SELECT * FROM trip "
-			+ "INNER JOIN request ON request.id = trip.request_id "
-			+ "INNER JOIN place ON place.id = request.place_id "
-			+ "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
+	final String FIND_TRIP_BY_ID = "SELECT * FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
+			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
 			+ "INNER JOIN users ON users.id = vehicle.driver_id & request.client_id & request.dispatcher_id "
 			+ "WHERE trip.id = ?";
-	final String GET_ALL_TRIP = "SELECT * FROM trip "
-			+ "INNER JOIN request ON request.id = trip.request_id "
-			+ "INNER JOIN place ON place.id = request.place_id "
-			+ "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
+	final String GET_ALL_TRIP = "SELECT * FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
+			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
@@ -51,7 +46,7 @@ public class TripDaoImpl implements ITripDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Trip getById(Integer id) throws DaoException {
+	public Trip getById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_TRIP_BY_ID, new Object[] { id }, new TripMapper());
 		} catch (EmptyResultDataAccessException e) {
@@ -61,7 +56,7 @@ public class TripDaoImpl implements ITripDao {
 	}
 
 	@Override
-	public Trip insert(Trip trip) throws DaoException {
+	public Trip insert(Trip trip) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -76,12 +71,12 @@ public class TripDaoImpl implements ITripDao {
 		}, keyHolder);
 
 		Number key = keyHolder.getKey();
-		trip.setId(key.intValue());	
+		trip.setId(key.intValue());
 		return trip;
 	}
 
 	@Override
-	public Trip update(Trip trip) throws DaoException {
+	public Trip update(Trip trip) {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -96,13 +91,16 @@ public class TripDaoImpl implements ITripDao {
 	}
 
 	@Override
-	public void delete(Integer id) throws DaoException {
-		jdbcTemplate.update(DELETE_TRIP + id);
-
+	public void delete(Integer id) {
+		try {
+			jdbcTemplate.update(DELETE_TRIP + id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+		}
 	}
 
 	@Override
-	public List<Trip> getAll() throws DaoException {
+	public List<Trip> getAll() {
 		try {
 			List<Trip> rs = jdbcTemplate.query(GET_ALL_TRIP, new TripMapper());
 			return rs;
@@ -112,10 +110,10 @@ public class TripDaoImpl implements ITripDao {
 		}
 	}
 
-//	@Override
-//	public List<Trip> findByCriteria() throws DaoException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	@Override
+	public List<Trip> findByCriteria() throws UnsupportedOperationException {
+		LOGGER.debug("Used UnsupportedOperationException");
+		throw new UnsupportedOperationException();
+	}
 
 }

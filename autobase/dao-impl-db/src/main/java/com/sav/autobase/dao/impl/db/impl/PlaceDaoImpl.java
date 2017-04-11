@@ -17,7 +17,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import com.sav.autobase.dao.impl.db.IPlaceDao;
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.datamodel.Place;
 
 public class PlaceDaoImpl implements IPlaceDao {
@@ -35,7 +34,7 @@ public class PlaceDaoImpl implements IPlaceDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Place getById(Integer id) throws DaoException {
+	public Place getById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_PLACE_BY_ID, new Object[] { id },
 					new BeanPropertyRowMapper<Place>(Place.class));
@@ -46,7 +45,7 @@ public class PlaceDaoImpl implements IPlaceDao {
 	}
 
 	@Override
-	public Place getByStartPlace(Place place) throws DaoException {
+	public Place getByStartPlace(Place place) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_PLACE_BY_STARTNAME, new Object[] { place },
 					new BeanPropertyRowMapper<Place>(Place.class));
@@ -57,7 +56,7 @@ public class PlaceDaoImpl implements IPlaceDao {
 	}
 
 	@Override
-	public Place getByEndtPlace(Place place) throws DaoException {
+	public Place getByEndtPlace(Place place) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_PLACE_BY_ENDNAME, new Object[] { place },
 					new BeanPropertyRowMapper<Place>(Place.class));
@@ -68,7 +67,7 @@ public class PlaceDaoImpl implements IPlaceDao {
 	}
 
 	@Override
-	public Place insert(Place place) throws DaoException {
+	public Place insert(Place place) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -88,7 +87,7 @@ public class PlaceDaoImpl implements IPlaceDao {
 	}
 
 	@Override
-	public List<Place> getAll() throws DaoException {
+	public List<Place> getAll() {
 		try {
 			List<Place> rs = jdbcTemplate.query(GET_ALL_PLACE, new BeanPropertyRowMapper<Place>(Place.class));
 			return rs;
@@ -99,15 +98,18 @@ public class PlaceDaoImpl implements IPlaceDao {
 	}
 
 	@Override
-	public void delete(Integer id) throws DaoException {
-		jdbcTemplate.update(DELELTE_PLACE + id);
-
+	public void delete(Integer id) {
+		try {
+			jdbcTemplate.update(DELELTE_PLACE + id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+		}
 	}
 
 	@Override
-	public Place update(Place entity) throws DaoException {
-		 LOGGER.debug("Used UnsupportedOperationException");
-		 throw new UnsupportedOperationException();
+	public Place update(Place entity) throws UnsupportedOperationException {
+		LOGGER.debug("Used UnsupportedOperationException");
+		throw new UnsupportedOperationException();
 	}
 
 }

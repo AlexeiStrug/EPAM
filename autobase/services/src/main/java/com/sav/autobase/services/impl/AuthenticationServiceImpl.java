@@ -1,15 +1,16 @@
 package com.sav.autobase.services.impl;
 
 import javax.inject.Inject;
+import javax.naming.AuthenticationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.sav.autobase.dao.impl.db.IUsersDao;
-import com.sav.autobase.dao.impl.db.exceptions.DaoException;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.services.IAuthenticationService;
+import com.sav.autobase.services.exception.DAOexception;
 
 @Service
 public class AuthenticationServiceImpl implements IAuthenticationService {
@@ -20,21 +21,35 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 	private IUsersDao usersDao;
 
 	@Override
-	public boolean authenticate(String UserLogin, String UserPassword) throws DaoException {
-		boolean flag = false;
-		Users authentication = usersDao.findByloginPassword(UserLogin, UserPassword);
-		if (authentication != null) {
+	public Boolean authenticate(String UserLogin, String UserPassword) throws DAOexception {
+		Users authentication = null;
+		try {
+			authentication = usersDao.findByloginPassword(UserLogin, UserPassword);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOexception(e.getMessage());
+		}
+		if (authentication != null)
 			LOGGER.info("Success authenticate User = " + UserLogin);
-			flag = true;
-		} else
+		else
 			LOGGER.info("Failed authenticate");
-		return flag;
+
+		return authentication != null;
+
 	}
 
 	@Override
-	public void register(Users newUsers) throws DaoException {
-		LOGGER.info("Register new User");
-		usersDao.update(newUsers);
+	public void register(Users newUsers) throws DAOexception {
+		try {
+			usersDao.insert(newUsers);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOexception(e.getMessage());
+		}
+		if (newUsers != null)
+			LOGGER.info("Register new User");
+		else
+			LOGGER.info("Failed register new User");
 	}
 
 }
