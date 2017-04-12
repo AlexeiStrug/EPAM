@@ -1,11 +1,11 @@
 package com.sav.autobase.services.exception;
 
-public class DAOexception extends Exception {
+public class ModifyException extends Exception {
 
 	private String msg;
 
-	public DAOexception(String message) {
-		this.msg = "DAO connection failure, " + message;
+	public ModifyException() {
+		this.msg = "Status ready. Failure modify data." ;
 	}
 
 	public String getMsg() {
@@ -15,5 +15,4 @@ public class DAOexception extends Exception {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-
 }

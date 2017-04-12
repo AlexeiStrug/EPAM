@@ -7,6 +7,8 @@ import com.sav.autobase.datamodel.Request;
 public interface IRequestDao extends IGenericDao<Request> {
 
 	Request joinGetById(Integer id);
+	
+	Request joinFindByProcessed(String processed);
 
 	List<Request> joinGetAll();
 

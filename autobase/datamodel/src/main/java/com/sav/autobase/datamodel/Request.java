@@ -10,7 +10,7 @@ public class Request extends AbstractModel {
 	private Place place;
 	private Integer countOfPassenger;
 	private Users dispatcher;
-	private boolean processed;
+	private StatusRequest processed;
 
 	public Users getClient() {
 		return client;
@@ -60,11 +60,11 @@ public class Request extends AbstractModel {
 		this.dispatcher = dispatcher;
 	}
 
-	public boolean isProcessed() {
+	public StatusRequest getProcessed() {
 		return processed;
 	}
 
-	public void setProcessed(boolean processed) {
+	public void setProcessed(StatusRequest processed) {
 		this.processed = processed;
 	}
 
