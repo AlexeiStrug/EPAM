@@ -25,12 +25,15 @@ public class ClientService implements IClientService {
 
 	@Override
 	public Request getRequest(Integer id) throws DAOException {
-		try {
-			return requestDao.joinGetById(id);
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
-		}
+		if (id != null) {
+			try {
+				return requestDao.joinGetById(id);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException(e.getMessage());
+			}
+		} else
+			return null;
 	}
 
 	@Override
@@ -92,7 +95,7 @@ public class ClientService implements IClientService {
 	public void deleteRequest(Integer id) throws DAOException {
 		if (id != null) {
 			try {
-					requestDao.delete(id);
+				requestDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new DAOException(e.getMessage());

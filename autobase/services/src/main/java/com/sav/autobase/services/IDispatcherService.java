@@ -13,7 +13,6 @@ import com.sav.autobase.services.exception.DAOException;
 
 public interface IDispatcherService {
 	
-	@Transactional
 	Request getRequest() throws DAOException;
 
 	Trip getTrip(Integer id) throws DAOException;

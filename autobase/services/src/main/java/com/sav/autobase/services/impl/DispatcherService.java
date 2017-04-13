@@ -38,7 +38,7 @@ public class DispatcherService implements IDispatcherService {
 		try {
 			Request request = findByStatus(StatusRequest.notReady);
 			request.setProcessed(StatusRequest.inProcess);
-			return requestDao.insert(request);
+			return requestDao.update(request);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new DAOException(e.getMessage());
@@ -117,6 +117,8 @@ public class DispatcherService implements IDispatcherService {
 		if (request != null && vehicle != null) {
 			Trip newTrip = new Trip();
 			try {
+				request.setProcessed(StatusRequest.ready);
+				requestDao.update(request);
 				newTrip.setRequest(request);
 				newTrip.setVehicle(vehicle);
 				newTrip.setEndTrip(false);
