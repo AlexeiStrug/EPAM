@@ -69,16 +69,19 @@ public class ClientService implements IClientService {
 			try {
 				if (request.getProcessed() == null) {
 					request.setProcessed(StatusRequest.notReady);
+					requestDao.update(request);
 				}
 				if (request.getProcessed() == StatusRequest.ready) {
 					throw new ModifyException();
+				} else {
+					requestDao.update(request);
 				}
-				requestDao.update(request);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new DAOException(e.getMessage());
 			}
-			LOGGER.info("Updated request Request.id={}. start_date={}. end_date={}. place_id={}. count_of_passenger={}. processed={} ",
+			LOGGER.info(
+					"Updated request Request.id={}. start_date={}. end_date={}. place_id={}. count_of_passenger={}. processed={} ",
 					request.getId(), request.getStartDate(), request.getEndDate(), request.getPlace(),
 					request.getCountOfPassenger(), request.getProcessed().name());
 		} else
@@ -89,7 +92,7 @@ public class ClientService implements IClientService {
 	public void deleteRequest(Integer id) throws DAOException {
 		if (id != null) {
 			try {
-				requestDao.delete(id);
+					requestDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new DAOException(e.getMessage());

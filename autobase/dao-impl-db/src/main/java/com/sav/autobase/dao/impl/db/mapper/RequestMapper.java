@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.sav.autobase.datamodel.Place;
 import com.sav.autobase.datamodel.Request;
+import com.sav.autobase.datamodel.StatusRequest;
 import com.sav.autobase.datamodel.TypeUsers;
 import com.sav.autobase.datamodel.Users;
 
@@ -37,7 +38,7 @@ public class RequestMapper implements RowMapper<Request> {
 		Timestamp startDate = rs.getTimestamp("start_date");
 		Timestamp endDate = rs.getTimestamp("end_date");
 		Integer countOfPassenger = rs.getInt("count_of_passenger");
-		boolean processed = rs.getBoolean("processed");
+		String processed = rs.getString("processed");
 
 		Request request = new Request();
 		request.setId(id);
@@ -47,7 +48,7 @@ public class RequestMapper implements RowMapper<Request> {
 		request.setPlace(place);
 		request.setCountOfPassenger(countOfPassenger);
 		request.setDispatcher(dispatcher);
-		request.setProcessed(processed);
+		request.setProcessed(StatusRequest.valueOf(processed));
 
 		return request;
 	}

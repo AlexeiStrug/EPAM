@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import com.sav.autobase.dao.impl.db.IRequestDao;
 import com.sav.autobase.dao.impl.db.mapper.RequestMapper;
 import com.sav.autobase.datamodel.Request;
+import com.sav.autobase.datamodel.StatusRequest;
 
 @Repository
 public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestDao {
@@ -56,9 +57,9 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 	}
 	
 	@Override
-	public Request joinFindByProcessed(String processed) {
+	public Request joinFindByProcessed(StatusRequest status) {
 		try {
-			return jdbcTemplate.queryForObject(FIND_BY_PROCESSED, new Object[] { processed }, new RequestMapper());
+			return jdbcTemplate.queryForObject(FIND_BY_PROCESSED, new Object[] { status }, new RequestMapper());
 		} catch (EmptyResultDataAccessException e) {
 			LOGGER.debug("Exception thrown! ", e);
 			return null;

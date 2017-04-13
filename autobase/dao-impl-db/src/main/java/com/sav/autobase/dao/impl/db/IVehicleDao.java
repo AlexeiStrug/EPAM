@@ -12,5 +12,7 @@ public interface IVehicleDao extends IGenericDao<Vehicle> {
 	Vehicle joinGetById(Integer id);
 
 	List<Vehicle> joinGetAll();
+	
+	List<Vehicle> joinGetAllReadyCar(Boolean ready);
 
 }

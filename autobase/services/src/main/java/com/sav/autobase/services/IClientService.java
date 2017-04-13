@@ -24,6 +24,6 @@ public interface IClientService {
 	void modifyRequest(Request request) throws DAOException, ModifyException;
 
 	@Transactional
-	void deleteRequest(Integer id) throws DAOException;
+	void deleteRequest(Integer id) throws DAOException, ModifyException;
 
 }

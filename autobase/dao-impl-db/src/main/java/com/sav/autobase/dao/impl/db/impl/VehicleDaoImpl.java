@@ -34,6 +34,10 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id ";
+	final String GET_ALL_READY_VEHICLE = "SELECT * FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
+			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
+			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE ready_crash_car = ?";
 	String FIND_CRITERIA_VEHICLE = "SELECT * FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
@@ -136,6 +140,17 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 			}
 			BeanPropertySqlParameterSource namedParameters = new BeanPropertySqlParameterSource(criteria);
 			return namedParameterJdbcTemplate.query(FIND_CRITERIA_VEHICLE, namedParameters, new VehicleMapper());
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+			return null;
+		}
+	}
+
+	@Override
+	public List<Vehicle> joinGetAllReadyCar(Boolean ready) {
+		try {
+			List<Vehicle> rs = jdbcTemplate.query(GET_ALL_READY_VEHICLE, new Object[] { ready }, new VehicleMapper());
+			return rs;
 		} catch (EmptyResultDataAccessException e) {
 			LOGGER.debug("Exception thrown! ", e);
 			return null;
