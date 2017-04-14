@@ -1,5 +1,7 @@
 package com.sav.autobase.services.impl;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -16,6 +18,8 @@ import com.sav.autobase.dao.impl.db.IVehicleDao;
 import com.sav.autobase.datamodel.BrandVehicle;
 import com.sav.autobase.datamodel.ModelVehicle;
 import com.sav.autobase.datamodel.Place;
+import com.sav.autobase.datamodel.Request;
+import com.sav.autobase.datamodel.Trip;
 import com.sav.autobase.datamodel.TypeVehicle;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
@@ -270,6 +274,170 @@ public class AdminService implements IAdminService {
 			LOGGER.info("Deleted request");
 		} else
 			LOGGER.info("Failed delete request");
+	}
+
+	@Override
+	public Vehicle getVehicle(Integer id) throws DAOException {
+		if (id != null) {
+			try {
+				return vehicleDao.joinGetById(id);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException(e.getMessage());
+			}
+		} else
+			return null;
+	}
+
+	@Override
+	public List<Vehicle> getAllVehicle() throws DAOException {
+		try {
+			return vehicleDao.joinGetAll();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOException(e.getMessage());
+		}
+	}
+
+	@Override
+	public ModelVehicle getModelVehicle(Integer id) throws DAOException {
+		if (id != null) {
+			try {
+				return modelVehicleDao.joinGetById(id);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException(e.getMessage());
+			}
+		} else
+			return null;
+	}
+
+	@Override
+	public List<ModelVehicle> getAllModelVehicle() throws DAOException {
+		try {
+			return modelVehicleDao.joinGetAll();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOException(e.getMessage());
+		}
+	}
+
+	@Override
+	public BrandVehicle getBrand(Integer id) throws DAOException {
+		if (id != null) {
+			try {
+				return brandDao.getById(id);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException(e.getMessage());
+			}
+		} else
+			return null;
+	}
+
+	@Override
+	public TypeVehicle getType(Integer id) throws DAOException {
+		if (id != null) {
+			try {
+				return typeDao.getById(id);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException(e.getMessage());
+			}
+		} else
+			return null;
+	}
+
+	@Override
+	public Users getUser(Integer id) throws DAOException {
+		if (id != null) {
+			try {
+				return userDao.getById(id);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException(e.getMessage());
+			}
+		} else
+			return null;
+	}
+
+	@Override
+	public List<Users> getAllUser() throws DAOException {
+		try {
+			return userDao.getAll();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOException(e.getMessage());
+		}
+	}
+
+	@Override
+	public Request getRequest(Integer id) throws DAOException {
+		if (id != null) {
+			try {
+				return requestDao.joinGetById(id);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException(e.getMessage());
+			}
+		} else
+			return null;
+	}
+
+	@Override
+	public List<Request> getAllRequest() throws DAOException {
+		try {
+			return requestDao.joinGetAll();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOException(e.getMessage());
+		}
+	}
+
+	@Override
+	public Trip getTrip(Integer id) throws DAOException {
+		if (id != null) {
+			try {
+				return tripDao.joinGetById(id);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException(e.getMessage());
+			}
+		} else
+			return null;
+	}
+
+	@Override
+	public List<Trip> getAllTrip() throws DAOException {
+		try {
+			return tripDao.joinGetAll();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOException(e.getMessage());
+		}
+	}
+
+	@Override
+	public Place getPlace(Integer id) throws DAOException {
+		if (id != null) {
+			try {
+				return placeDao.getById(id);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException(e.getMessage());
+			}
+		} else
+			return null;
+	}
+
+	@Override
+	public List<Place> getAllPlace() throws DAOException {
+		try {
+			return placeDao.getAll();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOException(e.getMessage());
+		}
 	}
 
 }
