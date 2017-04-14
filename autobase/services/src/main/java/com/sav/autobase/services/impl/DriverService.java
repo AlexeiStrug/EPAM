@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.sav.autobase.dao.impl.db.ITripDao;
 import com.sav.autobase.dao.impl.db.IVehicleDao;
 import com.sav.autobase.datamodel.Trip;
+import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
 import com.sav.autobase.services.IDriverService;
 import com.sav.autobase.services.exception.DAOException;
@@ -25,10 +26,10 @@ public class DriverService implements IDriverService {
 	private IVehicleDao vehicleDao;
 
 	@Override
-	public Trip getTrip(Integer id) throws DAOException {
-		if (id != null) {
+	public Trip getTrip(Users user) throws DAOException {
+		if (user != null) {
 			try {
-				return tripDao.joinGetById(id);
+				return tripDao.getByUser(user);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new DAOException(e.getMessage());
@@ -38,31 +39,37 @@ public class DriverService implements IDriverService {
 	}
 
 	@Override
-	public Trip changeStatusTrip(Trip trip) throws DAOException {
-		if (trip != null) {
+	public void changeStatusTrip(Users user) throws DAOException {
+		if (user != null) {
 			try {
-				trip.setEndTrip(true);
-				return tripDao.update(trip);
+				Trip trip = getTrip(user);
+				if (trip.getEndTrip() == false) {
+					trip.setEndTrip(true);
+					tripDao.update(trip);
+				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new DAOException(e.getMessage());
 			}
-		}
-		return null;
+			LOGGER.info("Change's status trip");
+		} else
+			LOGGER.info("Failed change status trip");
 	}
 
 	@Override
-	public Vehicle changeStatusVehicle(Vehicle vehicle) throws DAOException {
-		if (vehicle != null) {
+	public void changeStatusVehicle(Users user) throws DAOException {
+		if (user != null) {
 			try {
-				vehicle.setReadyCrashCar(true);
+				Vehicle vehicle = vehicleDao.getByUser(user);
+				vehicle.setReadyCrashCar(!vehicle.isReadyCrashCar());
 				vehicleDao.update(vehicle);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new DAOException(e.getMessage());
 			}
-		}
-		return null;
+			LOGGER.info("Change's status vehicle");
+		} else
+			LOGGER.info("Failed change status vehicle");
 	}
 
 }

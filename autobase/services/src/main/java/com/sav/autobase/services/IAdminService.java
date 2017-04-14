@@ -1,73 +1,58 @@
 package com.sav.autobase.services;
 
-
-
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sav.autobase.datamodel.BrandVehicle;
 import com.sav.autobase.datamodel.ModelVehicle;
 import com.sav.autobase.datamodel.Place;
-import com.sav.autobase.datamodel.Request;
-import com.sav.autobase.datamodel.Trip;
+import com.sav.autobase.datamodel.TypeUsers;
 import com.sav.autobase.datamodel.TypeVehicle;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
+import com.sav.autobase.services.exception.DAOException;
 
 public interface IAdminService {
-	
-	@Transactional
-	Vehicle addNewVehicle(Vehicle vehicle);
-	
-	@Transactional
-	Vehicle modifyVehicle(Vehicle vehicle);
-	
-	@Transactional
-	Vehicle deleteVehicle(Vehicle vehicle);
-	
-	@Transactional
-	ModelVehicle addNewModel(ModelVehicle model);
-	
-	@Transactional
-	ModelVehicle modifyModel(ModelVehicle model);
-	
-	@Transactional
-	ModelVehicle deleteModel(ModelVehicle model);
-	
-	@Transactional
-	BrandVehicle addNewBrand(BrandVehicle brand);
-	
-	@Transactional
-	BrandVehicle deleteBrand(BrandVehicle brand);
-	
-	@Transactional
-	TypeVehicle addNewType(TypeVehicle type);
-	
-	@Transactional
-	TypeVehicle deleteType(TypeVehicle type);
 
 	@Transactional
-	Users addNewUser(Users user);
-	
+	void saveVehicle(Vehicle vehicle) throws DAOException;
+
 	@Transactional
-	Users modifyUser(Users user);
-	
+	void deleteVehicle(Integer id) throws DAOException;
+
 	@Transactional
-	Users deleteUser(Users user);
-	
+	void saveModel(ModelVehicle model) throws DAOException;
+
 	@Transactional
-	Place addNewPlace(Place place);
-	
-	@Transactional 
-	Place modifyPlace(Place place);
-	
-	@Transactional 
-	Place deletePlace(Place place);
-	
+	void deleteModel(Integer id) throws DAOException;
+
 	@Transactional
-	Trip deleteReadyTrip(Trip trip);
-	
+	void addNewBrand(BrandVehicle brand) throws DAOException;
+
 	@Transactional
-	Request deleteReadyRequest(Request request);
-	
+	void deleteBrand(Integer id) throws DAOException;
+
+	@Transactional
+	void addNewType(TypeVehicle type) throws DAOException;
+
+	@Transactional
+	void deleteType(Integer id) throws DAOException;
+
+	@Transactional
+	void saveUser(Users user) throws DAOException;
+
+	@Transactional
+	void deleteUser(Integer id) throws DAOException;
+
+	@Transactional
+	void savePlace(Place place) throws DAOException;
+
+	@Transactional
+	void deletePlace(Integer id) throws DAOException;
+
+	@Transactional
+	void deleteTrip(Integer id) throws DAOException;
+
+	@Transactional
+	void deleteRequest(Integer id) throws DAOException;
 
 }

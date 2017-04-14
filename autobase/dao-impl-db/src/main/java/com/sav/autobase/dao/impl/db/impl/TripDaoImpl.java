@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import com.sav.autobase.dao.impl.db.ITripDao;
 import com.sav.autobase.dao.impl.db.mapper.TripMapper;
 import com.sav.autobase.datamodel.Trip;
+import com.sav.autobase.datamodel.Users;
 
 @Repository
 public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
@@ -36,6 +37,13 @@ public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
 			+ "INNER JOIN users ON users.id = vehicle.driver_id & request.client_id & request.dispatcher_id ";
+	final String GET_BY_USER = "SELECT * FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
+			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
+			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
+			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
+			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
+			+ "INNER JOIN users ON users.id = vehicle.driver_id & request.client_id & request.dispatcher_id "
+			+ "WHERE users.id = ?";
 	final String INSERT_TRIP = "INSERT INTO trip (request_id, vehicle_id, end_trip) VALUES(?,?,?)";
 	final String UPDATE_TRIP = "UPDATE trip SET request_id = ?, vehicle_id = ?, end_trip = ? where id = ?";
 
@@ -109,6 +117,16 @@ public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 	public List<Trip> findByCriteria() throws UnsupportedOperationException {
 		LOGGER.debug("Used UnsupportedOperationException");
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Trip getByUser(Users user) {
+		try {
+			return jdbcTemplate.queryForObject(GET_BY_USER, new Object[] { user }, new TripMapper());
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+			return null;
+		}
 	}
 
 }

@@ -3,17 +3,17 @@ package com.sav.autobase.services;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sav.autobase.datamodel.Trip;
-import com.sav.autobase.datamodel.Vehicle;
+import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.services.exception.DAOException;
 
 public interface IDriverService {
 	
-	Trip getTrip(Integer id) throws DAOException;
+	@Transactional
+	void changeStatusTrip(Users user) throws DAOException;
 	
 	@Transactional
-	Trip changeStatusTrip(Trip trip) throws DAOException;
-	
-	@Transactional
-	Vehicle changeStatusVehicle(Vehicle vehicle) throws DAOException;
+	void changeStatusVehicle(Users user) throws DAOException;
+
+	Trip getTrip(Users user) throws DAOException;
 
 }
