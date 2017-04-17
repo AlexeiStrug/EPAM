@@ -15,15 +15,16 @@ public interface IClientService {
 	List<Request> getAllRequest() throws DAOException;
 	
 	@Transactional
-	void saveAllRequest(List<Request> requests) throws DAOException;
+	void saveAllRequest(Request... requests) throws DAOException;
 
 	@Transactional
-	void createRequest(Request request) throws DAOException;
+	void createRequest(Request request) throws DAOException, ModifyException;
 
 	@Transactional
 	void modifyRequest(Request request) throws DAOException, ModifyException;
 
 	@Transactional
 	void deleteRequest(Integer id) throws DAOException, ModifyException;
+
 
 }

@@ -440,4 +440,12 @@ public class AdminService implements IAdminService {
 		}
 	}
 
+//	public Object obj(Object obj) {
+//		try {
+//			return obj;
+//		} catch (Exception e) {
+//			LOGGER.error(e.getMessage(), e);
+//			throw new DAOException(e.getMessage());
+//		}
+//	}
 }

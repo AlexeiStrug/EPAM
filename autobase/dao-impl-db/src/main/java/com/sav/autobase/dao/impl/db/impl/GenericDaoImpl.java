@@ -15,16 +15,15 @@ import com.sav.autobase.dao.impl.db.IGenericDao;
 
 @Repository
 public abstract class GenericDaoImpl<T> implements IGenericDao<T> {
-
 	
 	@Inject
 	private JdbcTemplate jdbcTemplate;
 
 	protected abstract String getTableName();
 
-	private final String FIND_BY_ID = "SELECT * FROM " + getTableName() + " WHERE id = ? ";
+	private final String FIND_BY_ID = "SELECT * FROM " + getTableName() + " WHERE id = ?";
 	private final String GET_ALL = "SELECT * FROM " + getTableName();
-	private final String DELETE = "DELETE FROM " + getTableName() + " WHERE id= ?";
+	private final String DELETE = "DELETE FROM " + getTableName() + " WHERE id= ";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(BrandVehicleDaoImpl.class);
 

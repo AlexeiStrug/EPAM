@@ -14,10 +14,10 @@ import com.sav.autobase.services.exception.DAOException;
 @Service
 public class AuthenticationServiceImpl implements IAuthenticationService {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
-
 	@Inject
 	private IUsersDao usersDao;
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
 	@Override
 	public Boolean authenticate(String UserLogin, String UserPassword) throws DAOException {

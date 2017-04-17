@@ -18,7 +18,7 @@ import com.sav.autobase.services.exception.ModifyException;
 @Service
 public class ClientService implements IClientService {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
 	@Inject
 	private IRequestDao requestDao;
@@ -47,19 +47,22 @@ public class ClientService implements IClientService {
 	}
 
 	@Override
-	public void createRequest(Request request) throws DAOException {
+	public void createRequest(Request request) throws DAOException, ModifyException {
 		if (request != null) {
 			try {
-				if (request.getProcessed() == null) {
-					request.setProcessed(StatusRequest.notReady);
-				}
-				requestDao.insert(request);
+				if (request.getId() == null) {
+					if (request.getProcessed() == null) {
+						request.setProcessed(StatusRequest.notReady);
+					}
+					requestDao.insert(request);
+				} else
+					modifyRequest(request);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new DAOException(e.getMessage());
 			}
 			LOGGER.info(
-					"Created new request Request.id={}. start_date={}. end_date={}. place_id={}. count_of_passenger={}. processed={} ",
+					"Created new request Request.id={}. start_date={}. end_date={}. place={}. count_of_passenger={}. processed={} ",
 					request.getId(), request.getStartDate(), request.getEndDate(), request.getPlace(),
 					request.getCountOfPassenger(), request.getProcessed().name());
 		} else
@@ -84,7 +87,7 @@ public class ClientService implements IClientService {
 				throw new DAOException(e.getMessage());
 			}
 			LOGGER.info(
-					"Updated request Request.id={}. start_date={}. end_date={}. place_id={}. count_of_passenger={}. processed={} ",
+					"Updated request Request.id={}. start_date={}. end_date={}. place={}. count_of_passenger={}. processed={} ",
 					request.getId(), request.getStartDate(), request.getEndDate(), request.getPlace(),
 					request.getCountOfPassenger(), request.getProcessed().name());
 		} else
@@ -106,7 +109,7 @@ public class ClientService implements IClientService {
 	}
 
 	@Override
-	public void saveAllRequest(List<Request> requests) throws DAOException {
+	public void saveAllRequest(Request... requests) throws DAOException {
 		if (requests != null) {
 			try {
 				for (Request request : requests) {
@@ -120,4 +123,5 @@ public class ClientService implements IClientService {
 		} else
 			LOGGER.info("Failed save all request");
 	}
+
 }

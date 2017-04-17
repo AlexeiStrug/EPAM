@@ -25,12 +25,12 @@ import com.sav.autobase.datamodel.StatusRequest;
 public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestDao {
 
 	final String FIND_REQUEST_BY_ID = "SELECT * FROM request "
-			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
+			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id WHERE request.id = ?";
 	final String GET_ALL_REQUEST = "SELECT * FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
 			+ "INNER JOIN place ON place.id = request.place_id ";
-	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, dispatcher_id, processed) VALUES(?,?,?,?,?,?,?)";
+	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, processed) VALUES(?,?,?,?,?,?)";
 	final String UPDATE_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, dispatcher_id = ?, processed = ? where id = ?";
 	final String FIND_BY_PROCESSED = "SELECT * FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
@@ -79,8 +79,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 				ps.setTimestamp(3, request.getEndDate());
 				ps.setInt(4, request.getPlace().getId());
 				ps.setInt(5, request.getCountOfPassenger());
-				ps.setInt(6, request.getDispatcher().getId());
-				ps.setString(7, request.getProcessed().name());
+				ps.setString(6, request.getProcessed().name());
 				return ps;
 			}
 		}, keyHolder);

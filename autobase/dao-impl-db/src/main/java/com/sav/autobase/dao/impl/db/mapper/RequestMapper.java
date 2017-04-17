@@ -17,12 +17,14 @@ public class RequestMapper implements RowMapper<Request> {
 	@Override
 	public Request mapRow(ResultSet rs, int rowNum) throws SQLException {
 
+		
 		Users dispatcher = new Users();
 		dispatcher.setFirstName(rs.getString("first_name"));
 		dispatcher.setLastName(rs.getString("last_name"));
 		dispatcher.setLogin(rs.getString("login"));
 		dispatcher.setType(TypeUsers.valueOf(rs.getString("type")));
-
+		
+		
 		Users client = new Users();
 		client.setFirstName(rs.getString("first_name"));
 		client.setLastName(rs.getString("last_name"));
@@ -47,7 +49,7 @@ public class RequestMapper implements RowMapper<Request> {
 		request.setEndDate(endDate);
 		request.setPlace(place);
 		request.setCountOfPassenger(countOfPassenger);
-		request.setDispatcher(dispatcher);
+		request.setDispatcher(null);
 		request.setProcessed(StatusRequest.valueOf(processed));
 
 		return request;

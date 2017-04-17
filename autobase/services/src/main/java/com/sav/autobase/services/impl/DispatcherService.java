@@ -22,7 +22,7 @@ import com.sav.autobase.services.exception.DAOException;
 @Service
 public class DispatcherService implements IDispatcherService {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(DispatcherService.class);
 
 	@Inject
 	private IRequestDao requestDao;
