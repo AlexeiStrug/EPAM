@@ -70,7 +70,7 @@ public class Request extends AbstractModel {
 
 	@Override
 	public String toString() {
-		return "Request id=" + getId() + " [client=" + client + ", startDate=" + startDate + ", endDate=" + endDate
+		return "Request id=" + getId() + ", startDate=" + startDate + ", endDate=" + endDate
 				+ ", place=" + place + ", countOfPassenger=" + countOfPassenger + ", dispatcher=" + dispatcher + ", processed =" + processed + "]";
 	}
 
@@ -131,5 +131,7 @@ public class Request extends AbstractModel {
 			return false;
 		return true;
 	}
+
+	
 
 }

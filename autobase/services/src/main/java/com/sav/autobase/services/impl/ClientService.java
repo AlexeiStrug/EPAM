@@ -82,11 +82,9 @@ public class ClientService implements IClientService {
 					throw new ModifyException();
 				}
 				if (request.getDispatcher() == null) {
-					request.setDispatcher(null);
+					requestDao.updateClientRequest(request);
+				} else
 					requestDao.update(request);
-				} else {
-					requestDao.update(request);
-				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new DAOException();

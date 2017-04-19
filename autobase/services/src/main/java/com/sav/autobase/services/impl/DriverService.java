@@ -37,6 +37,22 @@ public class DriverService implements IDriverService {
 		} else
 			return null;
 	}
+	
+	@Override
+	public void changeStatusVehicle(Users user) throws DAOException {
+		if (user != null) {
+			try {
+				Vehicle vehicle = vehicleDao.getByUser(user);
+				vehicle.setReadyCrashCar(!vehicle.isReadyCrashCar());
+				vehicleDao.update(vehicle);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException();
+			}
+			LOGGER.info("Change's status vehicle");
+		} else
+			LOGGER.info("Failed change status vehicle");
+	}
 
 	@Override
 	public void changeStatusTrip(Users user) throws DAOException {
@@ -56,20 +72,5 @@ public class DriverService implements IDriverService {
 			LOGGER.info("Failed change status trip");
 	}
 
-	@Override
-	public void changeStatusVehicle(Users user) throws DAOException {
-		if (user != null) {
-			try {
-				Vehicle vehicle = vehicleDao.getByUser(user);
-				vehicle.setReadyCrashCar(!vehicle.isReadyCrashCar());
-				vehicleDao.update(vehicle);
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				throw new DAOException();
-			}
-			LOGGER.info("Change's status vehicle");
-		} else
-			LOGGER.info("Failed change status vehicle");
-	}
 
 }

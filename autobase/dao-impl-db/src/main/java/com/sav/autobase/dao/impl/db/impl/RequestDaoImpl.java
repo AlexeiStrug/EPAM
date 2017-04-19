@@ -28,13 +28,14 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id WHERE request.id = ?";
 	final String GET_ALL_REQUEST = "SELECT * FROM request "
-			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
+			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id ";
 	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, processed) VALUES(?,?,?,?,?,?)";
 	final String UPDATE_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, dispatcher_id = ?, processed = ? where id = ?;";
+	final String UPDATE_CLIENT_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, processed = ? where id = ?;";
 	final String FIND_BY_PROCESSED = "SELECT * FROM request "
-			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
-			+ "INNER JOIN place ON place.id = request.place_id WHERE processed = ?";
+			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
+			+ "INNER JOIN place ON place.id = request.place_id WHERE request.processed = ?";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(RequestDaoImpl.class);
 
@@ -59,7 +60,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 	@Override
 	public Request joinFindByProcessed(StatusRequest status) {
 		try {
-			return jdbcTemplate.queryForObject(FIND_BY_PROCESSED, new Object[] { status }, new RequestMapper());
+			return jdbcTemplate.queryForObject(FIND_BY_PROCESSED, new Object[] { status.name() }, new RequestMapper());
 		} catch (EmptyResultDataAccessException e) {
 			LOGGER.debug("Exception thrown! ", e);
 			return null;
@@ -86,6 +87,25 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 
 		Number key = keyHolder.getKey();
 		request.setId(key.intValue());
+		return request;
+	}
+	
+	@Override
+	public Request updateClientRequest(Request request) {
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(UPDATE_CLIENT_REQUEST);
+				ps.setInt(1, request.getClient().getId());
+				ps.setTimestamp(2, request.getStartDate());
+				ps.setTimestamp(3, request.getEndDate());
+				ps.setInt(4, request.getPlace().getId());
+				ps.setInt(5, request.getCountOfPassenger());
+				ps.setString(6, request.getProcessed().name());
+				ps.setInt(7, request.getId());
+				return ps;
+			}
+		});
 		return request;
 	}
 

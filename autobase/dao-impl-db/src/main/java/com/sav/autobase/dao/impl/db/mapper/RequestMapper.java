@@ -20,10 +20,15 @@ public class RequestMapper implements RowMapper<Request> {
 		
 		Users dispatcher = new Users();
 		dispatcher.setId(rs.getInt("dispatcher_id"));
+		if (dispatcher.getId() == 0)
+		{
+			dispatcher = null;
+		} else {
 		dispatcher.setFirstName(rs.getString("first_name"));
 		dispatcher.setLastName(rs.getString("last_name"));
 		dispatcher.setLogin(rs.getString("login"));
 		dispatcher.setType(TypeUsers.valueOf(rs.getString("type")));
+		}
 		
 		
 		Users client = new Users();

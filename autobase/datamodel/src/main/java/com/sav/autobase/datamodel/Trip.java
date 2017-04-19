@@ -27,7 +27,7 @@ public class Trip extends AbstractModel {
 	}
 	@Override
 	public String toString() {
-		return "Trip [request=" + request + ", vehicle=" + vehicle + ", endTrip=" + endTrip + "]";
+		return "Trip id=" + getId()+ " [request=" + request + ", vehicle=" + vehicle + ", endTrip=" + endTrip + "]";
 	}
 	 
 	

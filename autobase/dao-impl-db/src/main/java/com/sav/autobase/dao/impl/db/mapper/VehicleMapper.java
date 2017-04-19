@@ -19,7 +19,10 @@ public class VehicleMapper implements RowMapper<Vehicle> {
 		
 		
 		ModelMapper modelMapper = new ModelMapper();
+
+		
 		Users driver = new Users();
+		driver.setId(rs.getInt("driver_id"));
 		driver.setFirstName(rs.getString("first_name"));
 		driver.setLastName(rs.getString("last_name"));
 		driver.setType(TypeUsers.valueOf(rs.getString("type")));
@@ -31,8 +34,6 @@ public class VehicleMapper implements RowMapper<Vehicle> {
 		Vehicle vehicle = new Vehicle();
 		vehicle.setId(id);
 		vehicle.setDriver(driver);
-		
-		
 		vehicle.setModel(modelMapper.mapRow(rs, rowNum));
 		vehicle.setReadyCrashCar(readyCrashCar);
 

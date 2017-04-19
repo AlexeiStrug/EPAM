@@ -39,15 +39,17 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE ready_crash_car = ?";
-	final String GET_BY_USER = "SELECT * FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+	final String GET_BY_USER = "SELECT * FROM vehicle "
+			+ "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
-			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE users.id = ?";
+			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
+			+ "WHERE users.id = ?";
 	String FIND_CRITERIA_VEHICLE = "SELECT * FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE true ";
-	final String UPDATE_VEHICLE = "UPDATE vehicle SET driver_id = ?, model_id = ?, ready_crash_car = ? WHERE vehicle.id = ? ";
+	final String UPDATE_VEHICLE = "UPDATE vehicle SET driver_id = ?, model_id = ?, ready_crash_car = ? WHERE id = ?; ";
 	final String INSERT_VEHICLE = "INSERT INTO vehicle (driver_id, model_id, ready_crash_car) VALUES(?,?,?)";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(VehicleDaoImpl.class);
@@ -79,9 +81,10 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 				PreparedStatement ps = connection.prepareStatement(UPDATE_VEHICLE);
-				ps.setObject(1, vehicle.getDriver().getId());
-				ps.setObject(2, vehicle.getModel().getId());
+				ps.setInt(1, vehicle.getDriver().getId());
+				ps.setInt(2, vehicle.getModel().getId());
 				ps.setBoolean(3, vehicle.isReadyCrashCar());
+				ps.setInt(4, vehicle.getId());
 				return ps;
 			}
 		});
@@ -96,8 +99,8 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 				PreparedStatement ps = connection.prepareStatement(INSERT_VEHICLE, new String[] { "id" });
-				ps.setObject(1, vehicle.getDriver().getId());
-				ps.setObject(2, vehicle.getModel().getId());
+				ps.setInt(1, vehicle.getDriver().getId());
+				ps.setInt(2, vehicle.getModel().getId());
 				ps.setBoolean(3, vehicle.isReadyCrashCar());
 				return ps;
 			}
@@ -165,7 +168,7 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 	@Override
 	public Vehicle getByUser(Users user) {
 		try {
-			return jdbcTemplate.queryForObject(GET_BY_USER, new Object[] { user }, new VehicleMapper());
+			return jdbcTemplate.queryForObject(GET_BY_USER, new Object[] { user.getId() }, new VehicleMapper());
 		} catch (EmptyResultDataAccessException e) {
 			LOGGER.debug("Exception thrown! ", e);
 			return null;

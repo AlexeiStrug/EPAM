@@ -10,6 +10,8 @@ public interface IRequestDao extends IGenericDao<Request> {
 	Request joinGetById(Integer id);
 	
 	Request joinFindByProcessed(StatusRequest status);
+	
+	Request updateClientRequest(Request request);
 
 	List<Request> joinGetAll();
 

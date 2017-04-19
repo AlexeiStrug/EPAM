@@ -85,15 +85,28 @@ public class DriverServiceTest extends AbstractTest {
 		LOGGER.debug("^^^DELETED created entites");
 		adminService.deleteAll();
 	}
+//	
+//	@Test
+//	public void getTrip() throws DAOException{
+//		LOGGER.debug("^^^GET TRIP test");
+//		
+//		Trip tripFromDb = driverService.getTrip(newUser);
+//		LOGGER.info("{}", tripFromDb);
+//		
+//		Assert.notNull(tripFromDb, "trip must get trip by User");
+//	}
 	
-	@Test
-	public void getTrip() throws DAOException{
-		LOGGER.debug("^^^GET TRIP test");
+	@Test 
+	public void changeStatusVehicle() throws DAOException {
+		LOGGER.debug("^^^CHANGE STATUS VEHICLE test");
 		
 		Trip tripFromDb = driverService.getTrip(newUser);
 		LOGGER.info("{}", tripFromDb);
 		
-		Assert.notNull(tripFromDb, "trip must get trip by User");
+		driverService.changeStatusVehicle(newUser);
+		
+		
+		
 	}
 	
 	
