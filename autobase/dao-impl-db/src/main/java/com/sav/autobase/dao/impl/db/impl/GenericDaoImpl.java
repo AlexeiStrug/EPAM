@@ -25,7 +25,7 @@ public abstract class GenericDaoImpl<T> implements IGenericDao<T> {
 	private final String GET_ALL = "SELECT * FROM " + getTableName();
 	private final String DELETE = "DELETE FROM " + getTableName() + " WHERE id= ";
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(BrandVehicleDaoImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GenericDaoImpl.class);
 
 	@Override
 	public T getById(Object id) {

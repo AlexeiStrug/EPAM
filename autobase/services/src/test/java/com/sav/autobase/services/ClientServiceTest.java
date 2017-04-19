@@ -1,5 +1,7 @@
 package com.sav.autobase.services;
 
+
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,138 +12,149 @@ import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.sav.autobase.datamodel.Place;
 import com.sav.autobase.datamodel.Request;
-import com.sav.autobase.datamodel.TypeUsers;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.services.exception.DAOException;
 import com.sav.autobase.services.exception.ModifyException;
 
 public class ClientServiceTest extends AbstractTest {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(ClientServiceTest.class);
+
 	@Inject
 	private IClientService clientService;
 
-	Users newestUser = new Users();
-	Place newPlace = new Place();
-	Request request1 = new Request();
-	Request request2 = new Request();
-	Request request3 = new Request();
+	@Inject
+	private IAdminService adminService;
+
+	private Users newUser;
+	private Place newPlace;
+	private Request request;
+	private Request request1;
+	private Request request2;
+	private Request request3;
 
 	@Before
-	public void runBeforeMethodcreateTest() {
+	public void runBeforeMethod() throws DAOException, ParseException {
 
-		newestUser.setId(1);
-		newestUser.setFirstName("Sasha");
-		newestUser.setLastName("SSS");
-		newestUser.setLogin("dsfsdf");
-		newestUser.setPassword("12345");
-		newestUser.setEmail("sdfsdfsd@asda.ru");
-		newestUser.setDateBirth(new Timestamp(new Date().getTime()));
-		newestUser.setType(TypeUsers.client);
+		LOGGER.debug("^^^CREATED necessary entities:");
+		newUser = entityFactory.createUser();
+		adminService.saveUser(newUser);
+		LOGGER.debug("{}", newUser);
 
-		newPlace.setId(1);
-		newPlace.setPlaceStart("Minsk");
-		newPlace.setPlaceEnd("Gomel");
-		newPlace.setDistance(250);
+		newPlace = entityFactory.createPlace();
+		adminService.savePlace(newPlace);
+		LOGGER.debug("{}", newPlace);
+		
+		request = entityFactory.createRequest(newUser, newPlace);
+		request1 = entityFactory.createRequest(newUser, newPlace);
+		request2 = entityFactory.createRequest(newUser, newPlace);
+		request3 = entityFactory.createRequest(newUser, newPlace);
 	}
 
 	@After
-	public void runAfterMethodcreateTest() throws DAOException, ModifyException {
-		clientService.deleteRequest(request1.getId());
+	public void runAfterMethod() throws DAOException {
+		
+		LOGGER.debug("^^^DELETED created entites");
+		adminService.deleteAll();
 	}
 
+//	@Test
+//	public void createTest() throws DAOException, ModifyException {
+//
+//		LOGGER.debug("^^^CREATED test");
+//
+//		clientService.createRequest(request);
+//		Request requestFromDb = clientService.getRequest(request.getId());
+//
+//		Assert.notNull(requestFromDb, "request must be saved");
+//
+//	}
+	
 	@Test
-	public void createTest() throws DAOException, ParseException, ModifyException {
-
-		request1.setClient(newestUser);
-		Date dateStart = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-14");
-		request1.setStartDate(new Timestamp(dateStart.getTime()));
-		Date dateEnd = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-17");
-		request1.setEndDate(new Timestamp(dateEnd.getTime()));
-		request1.setPlace(newPlace);
-		request1.setCountOfPassenger(5);
+	public void updateTest() throws DAOException, ModifyException, ParseException {
+		
+		LOGGER.debug("^^^UPDATED test");
+		
 		clientService.createRequest(request1);
-
-		Integer savedRequestId = request1.getId();
-		Request requestFromDb = clientService.getRequest(savedRequestId);
-
-		Assert.notNull(requestFromDb, "request must be saved");
-
-		Assert.notNull(requestFromDb.getProcessed().name(), "created column Processed must not be empty");
-		Assert.isTrue(requestFromDb.getProcessed().name().equals(request1.getProcessed().name()),
-				"Processed in DB must be equals created Processed in Java");
-
-		Assert.notNull(requestFromDb.getClient(), "created column Client_id must not be empty");
-		Assert.notNull(requestFromDb.getPlace(), "created column Client_id must not be empty");
-
-		Assert.isTrue(requestFromDb.getStartDate().equals(request1.getStartDate()), "created must be eq...");
-		Assert.isTrue(requestFromDb.getEndDate().equals(request1.getEndDate()), "created must be eq...");
-
+		
+		Request requestFromDb = clientService.getRequest(request1.getId());
+		requestFromDb.setCountOfPassenger(10);
+		Date dateStart = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-20");
+		requestFromDb.setStartDate(new Timestamp(dateStart.getTime()));
+		
+		clientService.createRequest(requestFromDb);
+		Request updatedRequest = clientService.getRequest(requestFromDb.getId());
+		
+		Assert.isTrue(requestFromDb.equals(updatedRequest), "Request must be equal");
+		
 	}
-
-	@Before
-	public void runBeforeMethodSaveAllRequest() {
-
-		newestUser.setId(1);
-		newestUser.setFirstName("Sasha");
-		newestUser.setLastName("SSS");
-		newestUser.setLogin("dsfsdf");
-		newestUser.setPassword("12345");
-		newestUser.setEmail("sdfsdfsd@asda.ru");
-		newestUser.setDateBirth(new Timestamp(new Date().getTime()));
-		newestUser.setType(TypeUsers.client);
-
-		newPlace.setId(1);
-		newPlace.setPlaceStart("Minsk");
-		newPlace.setPlaceEnd("Gomel");
-		newPlace.setDistance(250);
-	}
-
-	@Test
-	public void SaveAllRequest() throws ParseException, DAOException, ModifyException {
-
-		request1.setClient(newestUser);
-		Date dateStart = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-14");
-		request1.setStartDate(new Timestamp(dateStart.getTime()));
-		Date dateEnd = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-17");
-		request1.setEndDate(new Timestamp(dateEnd.getTime()));
-		request1.setPlace(newPlace);
-		request1.setCountOfPassenger(5);
-
-		request2.setClient(newestUser);
-		Date dateStart1 = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-14");
-		request2.setStartDate(new Timestamp(dateStart1.getTime()));
-		Date dateEnd1 = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-17");
-		request2.setEndDate(new Timestamp(dateEnd1.getTime()));
-		request2.setPlace(newPlace);
-		request2.setCountOfPassenger(5);
-
-		request3.setClient(newestUser);
-		Date dateStart2 = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-14");
-		request3.setStartDate(new Timestamp(dateStart2.getTime()));
-		Date dateEnd2 = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-17");
-		request3.setEndDate(new Timestamp(dateEnd2.getTime()));
-		request3.setPlace(newPlace);
-		request3.setCountOfPassenger(5);
-		
-		clientService.saveAllRequest(request1,request2, request3);
-		
-		Integer savedRequestId1 = request1.getId();
-		Request requestFromDb1 = clientService.getRequest(savedRequestId1);
-		
-		Integer savedRequestId2 = request2.getId();
-		Request requestFromDb2 = clientService.getRequest(savedRequestId2);
-		
-		Integer savedRequestId3 = request3.getId();
-		Request requestFromDb3 = clientService.getRequest(savedRequestId3);
-
-		Assert.notNull(requestFromDb1, "request must be saved");
-		Assert.notNull(requestFromDb2, "request must be saved");
-		Assert.notNull(requestFromDb3, "request must be saved");
-
-	}
+	
+//	@Test
+//	public void deleteTest() throws DAOException, ModifyException {
+//		LOGGER.debug("^^^DELETED test");
+//		
+//		clientService.createRequest(request);
+//		
+//		clientService.deleteRequest(request.getId());
+//		Request requestFromDb = clientService.getRequest(request.getId());
+//		Assert.isNull(requestFromDb, "request must not exist");
+//		
+//	}
+	
+//	@Test
+//	public void getTest() throws DAOException, ModifyException {
+//		
+//		LOGGER.debug("^^^GET test");
+//		
+//		clientService.createRequest(request);
+//		Request requestFromDb = clientService.getRequest(request.getId());
+//		LOGGER.info("{}", requestFromDb);
+//		
+//		Assert.notNull(requestFromDb, "request must get request by ID");
+//	}
+	
+//	@Test
+//	public void getAllTest() throws DAOException, ModifyException {
+//		
+//		LOGGER.debug("^^^GET ALL test");
+//		
+//		clientService.createRequest(request1);
+//		clientService.createRequest(request2);
+//		clientService.createRequest(request3);
+//		
+//		List<Request> requestFromDb = clientService.getAllRequest();
+//		Assert.notNull(requestFromDb, "request must getAll requests");
+//	}
+//
+//	 @Test
+//	 public void SaveAllRequest() throws ParseException, DAOException,
+//	 ModifyException {
+//	
+//		 clientService.createRequest(request1);
+//		 clientService.createRequest(request2);
+//		 clientService.createRequest(request3);
+//	
+//	 clientService.saveAllRequest(request1, request2, request3);
+//	
+//	 Integer savedRequestId1 = request1.getId();
+//	 Request requestFromDb1 = clientService.getRequest(savedRequestId1);
+//	
+//	 Integer savedRequestId2 = request2.getId();
+//	 Request requestFromDb2 = clientService.getRequest(savedRequestId2);
+//	
+//	 Integer savedRequestId3 = request3.getId();
+//	 Request requestFromDb3 = clientService.getRequest(savedRequestId3);
+//	
+//	 Assert.notNull(requestFromDb1, "request must be saved");
+//	 Assert.notNull(requestFromDb2, "request must be saved");
+//	 Assert.notNull(requestFromDb3, "request must be saved");
+//	
+//	 }
 
 }

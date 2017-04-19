@@ -41,7 +41,7 @@ public class DispatcherService implements IDispatcherService {
 			return requestDao.update(request);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 	}
 
@@ -52,7 +52,7 @@ public class DispatcherService implements IDispatcherService {
 				return requestDao.joinFindByProcessed(status);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -65,7 +65,7 @@ public class DispatcherService implements IDispatcherService {
 				return tripDao.joinGetById(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -77,7 +77,7 @@ public class DispatcherService implements IDispatcherService {
 			return tripDao.joinGetAll();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 	}
 
@@ -88,7 +88,7 @@ public class DispatcherService implements IDispatcherService {
 				requestDao.update(request);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info(
 					"Updated request Request.id={}. start_date={}. end_date={}. place_id={}. count_of_passenger={}. processed={} ",
@@ -105,7 +105,7 @@ public class DispatcherService implements IDispatcherService {
 				tripDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Deleted request");
 		} else
@@ -125,7 +125,7 @@ public class DispatcherService implements IDispatcherService {
 				tripDao.insert(newTrip);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Create new trip Trip.id={}. request_id={}. vehicle_id={}. end_trip={} ", newTrip.getId(),
 					newTrip.getRequest().getId(), newTrip.getVehicle().getId(), newTrip.getEndTrip());
@@ -144,7 +144,7 @@ public class DispatcherService implements IDispatcherService {
 				tripDao.update(trip);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Updated trip Trip.id={}. request_id={}. vehicle_id={}. end_trip={} ", trip.getId(),
 					trip.getRequest().getId(), trip.getVehicle().getId(), trip.getEndTrip());
@@ -162,7 +162,7 @@ public class DispatcherService implements IDispatcherService {
 					return null;
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return vehicleDao.joinGetAllReadyCar(true);

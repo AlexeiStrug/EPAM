@@ -9,7 +9,6 @@ import com.sav.autobase.datamodel.ModelVehicle;
 import com.sav.autobase.datamodel.Place;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.Trip;
-import com.sav.autobase.datamodel.TypeUsers;
 import com.sav.autobase.datamodel.TypeVehicle;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
@@ -77,6 +76,9 @@ public interface IAdminService {
 
 	List<Trip> getAllTrip() throws DAOException;
 	
+	@Transactional 
+	void saveTrip(Trip trip) throws DAOException;
+	
 	@Transactional
 	void deleteTrip(Integer id) throws DAOException;
 
@@ -85,6 +87,12 @@ public interface IAdminService {
 	List<Request> getAllRequest() throws DAOException;
 	
 	@Transactional
+	void saveRequest(Request request) throws DAOException;
+	
+	@Transactional
 	void deleteRequest(Integer id) throws DAOException;
+	
+	@Transactional
+	void deleteAll() throws DAOException;
 
 }

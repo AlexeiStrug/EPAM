@@ -26,7 +26,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 			authentication = usersDao.findByloginPassword(UserLogin, UserPassword);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 		if (authentication != null)
 			LOGGER.info("Success authenticate User = " + UserLogin);
@@ -42,7 +42,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 			usersDao.insert(newUsers);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 		if (newUsers != null)
 			LOGGER.info("Register new User");

@@ -31,7 +31,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
 			+ "INNER JOIN place ON place.id = request.place_id ";
 	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, processed) VALUES(?,?,?,?,?,?)";
-	final String UPDATE_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, dispatcher_id = ?, processed = ? where id = ?";
+	final String UPDATE_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, dispatcher_id = ?, processed = ? where id = ?;";
 	final String FIND_BY_PROCESSED = "SELECT * FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id & request.dispatcher_id "
 			+ "INNER JOIN place ON place.id = request.place_id WHERE processed = ?";
@@ -102,6 +102,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 				ps.setInt(5, request.getCountOfPassenger());
 				ps.setInt(6, request.getDispatcher().getId());
 				ps.setString(7, request.getProcessed().name());
+				ps.setInt(8, request.getId());
 				return ps;
 			}
 		});

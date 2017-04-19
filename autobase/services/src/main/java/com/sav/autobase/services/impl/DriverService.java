@@ -32,7 +32,7 @@ public class DriverService implements IDriverService {
 				return tripDao.getByUser(user);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -49,7 +49,7 @@ public class DriverService implements IDriverService {
 				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Change's status trip");
 		} else
@@ -65,7 +65,7 @@ public class DriverService implements IDriverService {
 				vehicleDao.update(vehicle);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Change's status vehicle");
 		} else

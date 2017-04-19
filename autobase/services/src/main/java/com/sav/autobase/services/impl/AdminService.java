@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.sav.autobase.dao.impl.db.IAdminUtilityProcedures;
 import com.sav.autobase.dao.impl.db.IGenericDao;
 import com.sav.autobase.dao.impl.db.IModelVehicleDao;
 import com.sav.autobase.dao.impl.db.IPlaceDao;
@@ -29,7 +30,7 @@ import com.sav.autobase.services.exception.DAOException;
 @Service
 public class AdminService implements IAdminService {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AdminService.class);
 
 	@Inject
 	private IUsersDao userDao;
@@ -50,6 +51,9 @@ public class AdminService implements IAdminService {
 	private IRequestDao requestDao;
 
 	@Inject
+	private IAdminUtilityProcedures adminUntilityProcedures;
+
+	@Inject
 	private IGenericDao<TypeVehicle> typeDao;
 
 	@Inject
@@ -62,12 +66,13 @@ public class AdminService implements IAdminService {
 				if (vehicle.getId() == null) {
 					vehicleDao.insert(vehicle);
 					LOGGER.info("Saved new Vehicle");
-				} else
+				} else {
 					vehicleDao.update(vehicle);
-				LOGGER.info("Updated new Vehicle");
+					LOGGER.info("Updated new Vehicle");
+				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			LOGGER.info("Failed save new Vehicle");
@@ -81,7 +86,7 @@ public class AdminService implements IAdminService {
 				vehicleDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Deleted vehicle");
 		} else
@@ -95,12 +100,13 @@ public class AdminService implements IAdminService {
 				if (model.getId() == null) {
 					modelVehicleDao.insert(model);
 					LOGGER.info("Saved new Model Vehicle");
-				} else
+				} else {
 					modelVehicleDao.update(model);
-				LOGGER.info("Updated new Model Vehicle");
+					LOGGER.info("Updated new Model Vehicle");
+				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			LOGGER.info("Failed save new Model Vehicle");
@@ -113,7 +119,7 @@ public class AdminService implements IAdminService {
 				modelVehicleDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Deleted model vehicle");
 		} else
@@ -127,12 +133,13 @@ public class AdminService implements IAdminService {
 				if (brand.getId() == null) {
 					brandDao.insert(brand);
 					LOGGER.info("Saved new brand");
-				} else
+				} else {
 					brandDao.update(brand);
-				LOGGER.info("Updated new brand");
+					LOGGER.info("Updated new brand");
+				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			LOGGER.info("Failed save new brand");
@@ -145,7 +152,7 @@ public class AdminService implements IAdminService {
 				brandDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Deleted brand");
 		} else
@@ -159,12 +166,13 @@ public class AdminService implements IAdminService {
 				if (type.getId() == null) {
 					typeDao.insert(type);
 					LOGGER.info("Saved new type");
-				} else
+				} else {
 					typeDao.update(type);
-				LOGGER.info("Updated new type");
+					LOGGER.info("Updated new type");
+				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			LOGGER.info("Failed save new type");
@@ -177,7 +185,7 @@ public class AdminService implements IAdminService {
 				typeDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Deleted type");
 		} else
@@ -191,12 +199,13 @@ public class AdminService implements IAdminService {
 				if (user.getId() == null) {
 					userDao.insert(user);
 					LOGGER.info("Saved new user");
-				} else
+				} else {
 					userDao.update(user);
-				LOGGER.info("Updated new user");
+					LOGGER.info("Updated new user");
+				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			LOGGER.info("Failed save new user");
@@ -209,7 +218,7 @@ public class AdminService implements IAdminService {
 				userDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Deleted user");
 		} else
@@ -223,12 +232,13 @@ public class AdminService implements IAdminService {
 				if (place.getId() == null) {
 					placeDao.insert(place);
 					LOGGER.info("Saved new place");
-				} else
+				} else {
 					placeDao.update(place);
-				LOGGER.info("Updated new place");
+					LOGGER.info("Updated new place");
+				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			LOGGER.info("Failed save new place");
@@ -241,7 +251,7 @@ public class AdminService implements IAdminService {
 				placeDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Deleted Place");
 		} else
@@ -255,7 +265,7 @@ public class AdminService implements IAdminService {
 				tripDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Deleted trip");
 		} else
@@ -269,7 +279,7 @@ public class AdminService implements IAdminService {
 				requestDao.delete(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 			LOGGER.info("Deleted request");
 		} else
@@ -283,7 +293,7 @@ public class AdminService implements IAdminService {
 				return vehicleDao.joinGetById(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -295,7 +305,7 @@ public class AdminService implements IAdminService {
 			return vehicleDao.joinGetAll();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 	}
 
@@ -306,7 +316,7 @@ public class AdminService implements IAdminService {
 				return modelVehicleDao.joinGetById(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -318,7 +328,7 @@ public class AdminService implements IAdminService {
 			return modelVehicleDao.joinGetAll();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 	}
 
@@ -329,7 +339,7 @@ public class AdminService implements IAdminService {
 				return brandDao.getById(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -342,7 +352,7 @@ public class AdminService implements IAdminService {
 				return typeDao.getById(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -355,7 +365,7 @@ public class AdminService implements IAdminService {
 				return userDao.getById(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -367,7 +377,7 @@ public class AdminService implements IAdminService {
 			return userDao.getAll();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 	}
 
@@ -378,7 +388,7 @@ public class AdminService implements IAdminService {
 				return requestDao.joinGetById(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -390,7 +400,7 @@ public class AdminService implements IAdminService {
 			return requestDao.joinGetAll();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 	}
 
@@ -401,7 +411,7 @@ public class AdminService implements IAdminService {
 				return tripDao.joinGetById(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -413,7 +423,7 @@ public class AdminService implements IAdminService {
 			return tripDao.joinGetAll();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 	}
 
@@ -424,7 +434,7 @@ public class AdminService implements IAdminService {
 				return placeDao.getById(id);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				throw new DAOException(e.getMessage());
+				throw new DAOException();
 			}
 		} else
 			return null;
@@ -436,16 +446,56 @@ public class AdminService implements IAdminService {
 			return placeDao.getAll();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new DAOException(e.getMessage());
+			throw new DAOException();
 		}
 	}
 
-//	public Object obj(Object obj) {
-//		try {
-//			return obj;
-//		} catch (Exception e) {
-//			LOGGER.error(e.getMessage(), e);
-//			throw new DAOException(e.getMessage());
-//		}
-//	}
+	@Override
+	public void deleteAll() throws DAOException {
+		try {
+			adminUntilityProcedures.delete();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOException();
+		}
+
+	}
+
+	@Override
+	public void saveRequest(Request request) throws DAOException {
+		if (request != null) {
+			try {
+				if (request.getId() == null) {
+					requestDao.insert(request);
+					LOGGER.info("Saved new request");
+				} else {
+					requestDao.update(request);
+					LOGGER.info("Updated new request");
+				}
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException();
+			}
+		} else
+			LOGGER.info("Failed save new request");
+	}
+
+	@Override
+	public void saveTrip(Trip trip) throws DAOException {
+		if (trip != null) {
+			try {
+				if (trip.getId() == null) {
+					tripDao.insert(trip);
+					LOGGER.info("Saved new trip");
+				} else {
+					tripDao.update(trip);
+					LOGGER.info("Updated new trip");
+				}
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException();
+			}
+		} else
+			LOGGER.info("Failed save new trip");
+	}
 }

@@ -19,6 +19,7 @@ public class RequestMapper implements RowMapper<Request> {
 
 		
 		Users dispatcher = new Users();
+		dispatcher.setId(rs.getInt("dispatcher_id"));
 		dispatcher.setFirstName(rs.getString("first_name"));
 		dispatcher.setLastName(rs.getString("last_name"));
 		dispatcher.setLogin(rs.getString("login"));
@@ -26,12 +27,14 @@ public class RequestMapper implements RowMapper<Request> {
 		
 		
 		Users client = new Users();
+		client.setId(rs.getInt("client_id"));
 		client.setFirstName(rs.getString("first_name"));
 		client.setLastName(rs.getString("last_name"));
 		client.setLogin(rs.getString("login"));
 		client.setType(TypeUsers.valueOf(rs.getString("type")));
 
 		Place place = new Place();
+		place.setId(rs.getInt("place_id"));
 		place.setPlaceStart(rs.getString("place_start"));
 		place.setPlaceEnd(rs.getString("place_end"));
 		place.setDistance(rs.getInt("distance"));
@@ -49,7 +52,7 @@ public class RequestMapper implements RowMapper<Request> {
 		request.setEndDate(endDate);
 		request.setPlace(place);
 		request.setCountOfPassenger(countOfPassenger);
-		request.setDispatcher(null);
+		request.setDispatcher(dispatcher);
 		request.setProcessed(StatusRequest.valueOf(processed));
 
 		return request;
