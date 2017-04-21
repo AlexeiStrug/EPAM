@@ -34,7 +34,7 @@ public class ClientServiceTest extends AbstractTest {
 	private Users newUser;
 	private Place newPlace;
 	private Request request;
-	
+
 	/* For Get all and Save all TEST */
 	private Request request1;
 	private Request request2;
@@ -53,11 +53,6 @@ public class ClientServiceTest extends AbstractTest {
 		LOGGER.debug("{}", newPlace);
 
 		request = entityFactory.createRequest(newUser, newPlace);
-		
-		/* For Get all and Save all TEST */
-		request1 = entityFactory.createRequest(newUser, newPlace);
-		request2 = entityFactory.createRequest(newUser, newPlace);
-		request3 = entityFactory.createRequest(newUser, newPlace);
 	}
 
 	@After
@@ -67,78 +62,86 @@ public class ClientServiceTest extends AbstractTest {
 		adminService.deleteAll();
 	}
 
-//	@Test
-//	public void createTest() throws DAOException, ModifyException {
-//
-//		LOGGER.debug("^^^CREATED test");
-//
-//		clientService.createRequest(request);
-//		Request requestFromDb = clientService.getRequest(request.getId());
-//
-//		Assert.notNull(requestFromDb, "request must be saved");
-//
-//	}
-//
-//	@Test
-//	public void updateTest() throws DAOException, ModifyException, ParseException {
-//
-//		LOGGER.debug("^^^UPDATED test");
-//
-//		clientService.createRequest(request1);
-//
-//		Request requestFromDb = clientService.getRequest(request1.getId());
-//		requestFromDb.setCountOfPassenger(10);
-//		Date dateStart = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-20");
-//		requestFromDb.setStartDate(new Timestamp(dateStart.getTime()));
-//
-//		clientService.createRequest(requestFromDb);
-//		Request updatedRequest = clientService.getRequest(requestFromDb.getId());
-//
-//		Assert.notNull(updatedRequest, "request must be saved");
-////		Assert.isTrue(requestFromDb.equals(updatedRequest), "Request must be equal");
-//
-//	}
-//
-//	@Test
-//	public void deleteTest() throws DAOException, ModifyException {
-//		LOGGER.debug("^^^DELETED test");
-//
-//		clientService.createRequest(request);
-//
-//		clientService.deleteRequest(request.getId());
-//		Request requestFromDb = clientService.getRequest(request.getId());
-//		Assert.isNull(requestFromDb, "request must not exist");
-//
-//	}
-//
-//	@Test
-//	public void getTest() throws DAOException, ModifyException {
-//
-//		LOGGER.debug("^^^GET test");
-//
-//		clientService.createRequest(request);
-//		Request requestFromDb = clientService.getRequest(request.getId());
-//		LOGGER.info("{}", requestFromDb);
-//
-//		Assert.notNull(requestFromDb, "request must get request by ID");
-//	}
-//
-//	@Test
-//	public void getAllTest() throws DAOException, ModifyException {
-//
-//		LOGGER.debug("^^^GET ALL test");
-//
-//		clientService.createRequest(request1);
-//		clientService.createRequest(request2);
-//		clientService.createRequest(request3);
-//
-//		List<Request> requestFromDb = clientService.getAllRequest();
-//		Assert.notNull(requestFromDb, "request must getAll requests");
-//	}
+	@Test
+	public void createTest() throws DAOException, ModifyException {
+
+		LOGGER.debug("^^^CREATED test");
+
+		clientService.createRequest(request);
+		Request requestFromDb = clientService.getRequest(request.getId());
+
+		Assert.notNull(requestFromDb, "Method must be saved request");
+	}
+
+	@Test
+	public void updateTest() throws DAOException, ModifyException, ParseException {
+
+		LOGGER.debug("^^^UPDATED test");
+
+		clientService.createRequest(request);
+
+		Request requestFromDb = clientService.getRequest(request.getId());
+		requestFromDb.setCountOfPassenger(10);
+		Date dateStart = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-20");
+		requestFromDb.setStartDate(new Timestamp(dateStart.getTime()));
+
+		clientService.createRequest(requestFromDb);
+		Request updatedRequest = clientService.getRequest(requestFromDb.getId());
+
+		Assert.notNull(updatedRequest, "Method must be saved request");
+		Assert.isTrue(requestFromDb.equals(updatedRequest), "Request must be equal");
+	}
+
+	@Test
+	public void deleteTest() throws DAOException, ModifyException {
+		LOGGER.debug("^^^DELETED test");
+
+		clientService.createRequest(request);
+
+		clientService.deleteRequest(request.getId());
+		Request requestFromDb = clientService.getRequest(request.getId());
+
+		Assert.isNull(requestFromDb, "Method must not exist");
+	}
+
+	@Test
+	public void getTest() throws DAOException, ModifyException {
+
+		LOGGER.debug("^^^GET test");
+
+		clientService.createRequest(request);
+		Request requestFromDb = clientService.getRequest(request.getId());
+		LOGGER.info("{}", requestFromDb);
+
+		Assert.notNull(requestFromDb, "Method must get request by ID");
+	}
+
+	@Test
+	public void getAllTest() throws DAOException, ModifyException, ParseException {
+
+		LOGGER.debug("^^^GET ALL test");
+
+		request1 = entityFactory.createRequest(newUser, newPlace);
+		request2 = entityFactory.createRequest(newUser, newPlace);
+		request3 = entityFactory.createRequest(newUser, newPlace);
+
+		clientService.createRequest(request1);
+		clientService.createRequest(request2);
+		clientService.createRequest(request3);
+
+		List<Request> requestFromDb = clientService.getAllRequest();
+
+		Assert.notNull(requestFromDb, "Method must getAll requests");
+	}
 
 	@Test
 	public void SaveAllRequest() throws ParseException, DAOException, ModifyException {
 
+		LOGGER.debug("^^^SAVE ALL test");
+
+		request1 = entityFactory.createRequest(newUser, newPlace);
+		request2 = entityFactory.createRequest(newUser, newPlace);
+		request3 = entityFactory.createRequest(newUser, newPlace);
 
 		clientService.saveAllRequest(request1, request2, request3);
 
@@ -151,9 +154,9 @@ public class ClientServiceTest extends AbstractTest {
 		Integer savedRequestId3 = request3.getId();
 		Request requestFromDb3 = clientService.getRequest(savedRequestId3);
 
-		Assert.notNull(requestFromDb1, "request must be saved");
-		Assert.notNull(requestFromDb2, "request must be saved");
-		Assert.notNull(requestFromDb3, "request must be saved");
+		Assert.notNull(requestFromDb1, "Method must be saved request1");
+		Assert.notNull(requestFromDb2, "Method must be saved request2");
+		Assert.notNull(requestFromDb3, "Method must be saved request3");
 
 	}
 

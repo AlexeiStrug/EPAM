@@ -27,25 +27,25 @@ import com.sav.autobase.datamodel.Vehicle;
 @Repository
 public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleDao {
 
-	final String FIND_VEHICLE_BY_ID = "SELECT * FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+	final String FIND_VEHICLE_BY_ID = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE vehicle.id = ?";
-	final String GET_ALL_VEHICLE = "SELECT * FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+	final String GET_ALL_VEHICLE = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id ";
-	final String GET_ALL_READY_VEHICLE = "SELECT * FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+	final String GET_ALL_READY_VEHICLE = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE ready_crash_car = ?";
-	final String GET_BY_USER = "SELECT * FROM vehicle "
+	final String GET_BY_USER = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle "
 			+ "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
 			+ "WHERE users.id = ?";
-	String FIND_CRITERIA_VEHICLE = "SELECT * FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+	String FIND_CRITERIA_VEHICLE = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE true ";

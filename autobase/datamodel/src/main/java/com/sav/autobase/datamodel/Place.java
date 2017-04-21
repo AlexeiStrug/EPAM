@@ -58,5 +58,42 @@ public class Place extends AbstractModel {
 		return builder.toString();
 
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((distance == null) ? 0 : distance.hashCode());
+		result = prime * result + ((placeEnd == null) ? 0 : placeEnd.hashCode());
+		result = prime * result + ((placeStart == null) ? 0 : placeStart.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof Place))
+			return false;
+		Place other = (Place) obj;
+		if (distance == null) {
+			if (other.distance != null)
+				return false;
+		} else if (!distance.equals(other.distance))
+			return false;
+		if (placeEnd == null) {
+			if (other.placeEnd != null)
+				return false;
+		} else if (!placeEnd.equals(other.placeEnd))
+			return false;
+		if (placeStart == null) {
+			if (other.placeStart != null)
+				return false;
+		} else if (!placeStart.equals(other.placeStart))
+			return false;
+		return true;
+	}
 
 }

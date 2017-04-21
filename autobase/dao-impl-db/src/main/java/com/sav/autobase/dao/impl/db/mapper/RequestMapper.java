@@ -44,7 +44,7 @@ public class RequestMapper implements RowMapper<Request> {
 		place.setPlaceEnd(rs.getString("place_end"));
 		place.setDistance(rs.getInt("distance"));
 
-		Integer id = rs.getInt("id");
+		Integer id = rs.getInt("request_id");
 		Timestamp startDate = rs.getTimestamp("start_date");
 		Timestamp endDate = rs.getTimestamp("end_date");
 		Integer countOfPassenger = rs.getInt("count_of_passenger");

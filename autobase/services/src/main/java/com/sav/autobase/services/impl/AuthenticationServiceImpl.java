@@ -38,15 +38,15 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
 	@Override
 	public void register(Users newUsers) throws DAOException {
-		try {
-			usersDao.insert(newUsers);
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new DAOException();
-		}
-		if (newUsers != null)
+		if (newUsers != null) {
+			try {
+				usersDao.insert(newUsers);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException();
+			}
 			LOGGER.info("Register new User");
-		else
+		} else
 			LOGGER.info("Failed register new User");
 	}
 

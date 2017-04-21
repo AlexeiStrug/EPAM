@@ -23,10 +23,10 @@ import com.sav.autobase.datamodel.ModelVehicle;
 @Repository
 public class ModelVehicleDaoImpl extends GenericDaoImpl<ModelVehicle> implements IModelVehicleDao {
 
-	final String FIND_MODEL_BY_ID = "SELECT * FROM model_vehicle "
+	final String FIND_MODEL_BY_ID = "SELECT model_vehicle.id as model_id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name FROM model_vehicle "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle ON model_vehicle.type_id=type_vehicle.id WHERE model_vehicle.id = ? ";
-	final String GET_ALL_MODEL = "SELECT * FROM model_vehicle "
+	final String GET_ALL_MODEL = "SELECT model_vehicle.id as model_id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name FROM model_vehicle "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle ON model_vehicle.type_id=type_vehicle.id";
 	final String UPDATE_MODEL = "UPDATE model_vehicle SET brand_id = ?, name_model = ?, register_number = ?, type_id = ?, count_of_passenger = ? WHERE model_vehicle.id = ? ";

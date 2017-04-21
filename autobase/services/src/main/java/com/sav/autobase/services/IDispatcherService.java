@@ -8,12 +8,15 @@ import com.sav.autobase.dao.impl.db.filters.VehicleSerachCriteria;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.StatusRequest;
 import com.sav.autobase.datamodel.Trip;
+import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
 import com.sav.autobase.services.exception.DAOException;
 
 public interface IDispatcherService {
 	
-	Request getRequest() throws DAOException;
+	Request getRequestByStatus(Users user) throws DAOException;
+	
+	Request getRequest(Integer id) throws DAOException;
 
 	Trip getTrip(Integer id) throws DAOException;
 
@@ -28,7 +31,7 @@ public interface IDispatcherService {
 	void deleteTrip(Integer id) throws DAOException;
 
 	@Transactional
-	void createTrip(Request request, Vehicle vehicle) throws DAOException;
+	Trip createTrip(Request request, Vehicle vehicle) throws DAOException;
 
 	@Transactional
 	void modifyTrip(Trip trip) throws DAOException;

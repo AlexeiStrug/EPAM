@@ -77,7 +77,7 @@ public class Request extends AbstractModel {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + ((client == null) ? 0 : client.hashCode());
 		result = prime * result + ((countOfPassenger == null) ? 0 : countOfPassenger.hashCode());
 		result = prime * result + ((dispatcher == null) ? 0 : dispatcher.hashCode());
@@ -92,7 +92,7 @@ public class Request extends AbstractModel {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (!(obj instanceof Request))
 			return false;

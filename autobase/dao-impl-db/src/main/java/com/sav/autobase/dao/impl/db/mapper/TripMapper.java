@@ -15,7 +15,7 @@ public class TripMapper implements RowMapper<Trip> {
 		RequestMapper requestMapper = new RequestMapper();
 		VehicleMapper vehicleMapper = new VehicleMapper();
 
-		Integer id = rs.getInt("id");
+		Integer id = rs.getInt("trip_id");
 		Boolean endTrip = rs.getBoolean("end_trip");
 
 		Trip trip = new Trip();

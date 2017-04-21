@@ -22,7 +22,7 @@ public class ModelMapper implements RowMapper<ModelVehicle> {
 		type.setId(rs.getInt("type_id"));
 		type.setTypeName(rs.getString("type_name"));
 		
-		Integer id = rs.getInt("id");
+		Integer id = rs.getInt("model_id");
 		String nameModel = rs.getString("name_model");
 		String registerNumber = rs.getString("register_number");
 		Integer countOfPassenger = rs.getInt("count_of_passenger");

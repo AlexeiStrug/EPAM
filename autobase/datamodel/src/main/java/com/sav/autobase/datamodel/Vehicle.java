@@ -58,5 +58,39 @@ public class Vehicle extends AbstractModel{
 		return builder.toString();
 
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((driver == null) ? 0 : driver.hashCode());
+		result = prime * result + ((model == null) ? 0 : model.hashCode());
+		result = prime * result + (readyCrashCar ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof Vehicle))
+			return false;
+		Vehicle other = (Vehicle) obj;
+		if (driver == null) {
+			if (other.driver != null)
+				return false;
+		} else if (!driver.equals(other.driver))
+			return false;
+		if (model == null) {
+			if (other.model != null)
+				return false;
+		} else if (!model.equals(other.model))
+			return false;
+		if (readyCrashCar != other.readyCrashCar)
+			return false;
+		return true;
+	}
 
 }

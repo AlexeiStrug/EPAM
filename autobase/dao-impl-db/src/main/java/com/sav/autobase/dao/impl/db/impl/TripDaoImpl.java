@@ -24,20 +24,20 @@ import com.sav.autobase.datamodel.Users;
 @Repository
 public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 
-	final String FIND_TRIP_BY_ID = "SELECT * FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
+	final String FIND_TRIP_BY_ID = "SELECT trip.id as trip_id, trip.end_trip, trip.vehicle_id, trip.request_id, request.id, request.dispatcher_id, request.client_id,  vehicle.driver_id, users.first_name, users.last_name,users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
 			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
 			+ "INNER JOIN users ON (users.id = vehicle.driver_id AND users.id = request.client_id ) "
 			+ "WHERE trip.id = ?";
-	final String GET_ALL_TRIP = "SELECT * FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
+	final String GET_ALL_TRIP = "SELECT trip.id as trip_id, trip.end_trip, trip.vehicle_id, trip.request_id, request.id, request.dispatcher_id, request.client_id,  vehicle.driver_id, users.first_name, users.last_name,users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
 			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
 			+ "INNER JOIN users ON (users.id = vehicle.driver_id AND users.id = request.client_id) ";
-	final String GET_BY_USER = "SELECT * FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
+	final String GET_BY_USER = "SELECT trip.id as trip_id, trip.end_trip, trip.vehicle_id, trip.request_id, request.id, request.dispatcher_id, request.client_id,  vehicle.driver_id, users.first_name, users.last_name,users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
 			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
@@ -77,7 +77,7 @@ public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 				PreparedStatement ps = connection.prepareStatement(INSERT_TRIP, new String[] { "id" });
 				ps.setInt(1, trip.getRequest().getId());
 				ps.setInt(2, trip.getVehicle().getId());
-				ps.setBoolean(3, trip.getEndTrip());
+				ps.setBoolean(3, trip.isEndTrip());
 				return ps;
 			}
 		}, keyHolder);
@@ -95,7 +95,8 @@ public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 				PreparedStatement ps = connection.prepareStatement(UPDATE_TRIP);
 				ps.setInt(1, trip.getRequest().getId());
 				ps.setInt(2, trip.getVehicle().getId());
-				ps.setBoolean(3, trip.getEndTrip());
+				ps.setBoolean(3, trip.isEndTrip());
+				ps.setInt(4, trip.getId());
 				return ps;
 			}
 		});

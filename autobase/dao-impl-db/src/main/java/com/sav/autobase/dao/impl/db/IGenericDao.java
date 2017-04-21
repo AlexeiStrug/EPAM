@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface IGenericDao<T> {
 
-	public T getById(Object id);
+	public T getById(Integer t);
 
 	public T insert(T entity);
-
+	
 	public T update(T entity);
 
-	public void delete(Object id);
+	public void delete(Integer t);
 	
 	List<T> getAll();
 
