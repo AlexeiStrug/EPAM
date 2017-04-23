@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
-import com.sav.autobase.dao.impl.db.filters.VehicleSerachCriteria;
+import com.sav.autobase.dao.api.filter.VehicleSerachCriteria;
 import com.sav.autobase.datamodel.BrandVehicle;
 import com.sav.autobase.datamodel.ModelVehicle;
 import com.sav.autobase.datamodel.Place;

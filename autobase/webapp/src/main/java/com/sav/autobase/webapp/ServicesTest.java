@@ -2,14 +2,6 @@ package com.sav.autobase.webapp;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.sav.autobase.dao.impl.db.IRequestDao;
-import com.sav.autobase.dao.impl.db.filters.UserSearchCriteria;
-import com.sav.autobase.datamodel.TypeUsers;
-import com.sav.autobase.datamodel.Vehicle;
-import com.sav.autobase.services.ITripService;
-import com.sav.autobase.services.IUsersService;
-import com.sav.autobase.services.IVehicleService;
-
 public class ServicesTest {
 
 	public static void main(String[] args) {
@@ -26,11 +18,11 @@ public class ServicesTest {
 		
 //		Vehicle vehicle = new Vehicle();
 //		System.out.println(service.getById(5));
-		IUsersService service =context.getBean(IUsersService.class);
-		UserSearchCriteria criteria = new UserSearchCriteria();
-		criteria.setLastName("struh");
-		System.out.println(service.findByCriteria(criteria));
-		
+//		IUsersService service =context.getBean(IUsersService.class);
+//		UserSearchCriteria criteria = new UserSearchCriteria();
+//		criteria.setLastName("struh");
+//		System.out.println(service.findByCriteria(criteria));
+//		
 //		System.out.println(service.getById(1));
 		
 		

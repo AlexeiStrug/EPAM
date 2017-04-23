@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.sav.autobase.dao.impl.db.IUsersDao;
+import com.sav.autobase.dao.api.IUsersDao;
+import com.sav.autobase.datamodel.StatusRequest;
+import com.sav.autobase.datamodel.TypeUsers;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.services.IAuthenticationService;
 import com.sav.autobase.services.exception.DAOException;
@@ -40,7 +42,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 	public void register(Users newUsers) throws DAOException {
 		if (newUsers != null) {
 			try {
-				usersDao.insert(newUsers);
+				if (newUsers.getType().name() == null) {
+					newUsers.setType(TypeUsers.client);
+					usersDao.insert(newUsers);
+				} else
+					usersDao.insert(newUsers);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new DAOException();

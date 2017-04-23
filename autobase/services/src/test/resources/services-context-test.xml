@@ -20,7 +20,7 @@
 	
 	
 	<bean id="dataSource"
-		class="com.sav.autobase.dao.impl.db.util.SchemaNameAwareBasicDataSource"
+		class="com.sav.autobase.dao.db.util.SchemaNameAwareBasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="org.postgresql.Driver" />
 		<property name="url" value="${jdbc.url}" />

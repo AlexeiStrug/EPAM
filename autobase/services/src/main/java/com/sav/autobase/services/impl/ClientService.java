@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.sav.autobase.dao.impl.db.IRequestDao;
+import com.sav.autobase.dao.api.IRequestDao;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.StatusRequest;
 import com.sav.autobase.services.IClientService;

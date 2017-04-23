@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.sav.autobase.dao.impl.db.ITripDao;
-import com.sav.autobase.dao.impl.db.IVehicleDao;
+import com.sav.autobase.dao.api.ITripDao;
+import com.sav.autobase.dao.api.IVehicleDao;
 import com.sav.autobase.datamodel.Trip;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;

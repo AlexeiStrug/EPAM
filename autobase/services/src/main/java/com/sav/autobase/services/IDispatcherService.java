@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sav.autobase.dao.impl.db.filters.VehicleSerachCriteria;
+import com.sav.autobase.dao.api.filter.VehicleSerachCriteria;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.StatusRequest;
 import com.sav.autobase.datamodel.Trip;

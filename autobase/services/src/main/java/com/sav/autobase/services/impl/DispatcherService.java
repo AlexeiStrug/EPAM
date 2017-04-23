@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.sav.autobase.dao.impl.db.IRequestDao;
-import com.sav.autobase.dao.impl.db.ITripDao;
-import com.sav.autobase.dao.impl.db.IVehicleDao;
-import com.sav.autobase.dao.impl.db.filters.VehicleSerachCriteria;
+import com.sav.autobase.dao.api.IRequestDao;
+import com.sav.autobase.dao.api.ITripDao;
+import com.sav.autobase.dao.api.IVehicleDao;
+import com.sav.autobase.dao.api.filter.VehicleSerachCriteria;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.StatusRequest;
 import com.sav.autobase.datamodel.Trip;
@@ -139,7 +139,7 @@ public class DispatcherService implements IDispatcherService {
 				newTrip.setEndTrip(false);
 				Trip result = tripDao.insert(newTrip);
 				LOGGER.info("Create new trip Trip.id={}. request_id={}. vehicle_id={}. end_trip={} ", newTrip.getId(),
-						newTrip.getRequest().getId(), newTrip.getVehicle().getId(), newTrip.isEndTrip());
+						newTrip.getRequest(), newTrip.getVehicle(), newTrip.isEndTrip());
 				return result;
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
@@ -161,7 +161,7 @@ public class DispatcherService implements IDispatcherService {
 				throw new DAOException();
 			}
 			LOGGER.info("Updated trip Trip.id={}. request_id={}. vehicle_id={}. end_trip={} ", trip.getId(),
-					trip.getRequest().getId(), trip.getVehicle().getId(), trip.isEndTrip());
+					trip.getRequest(), trip.getVehicle(), trip.isEndTrip());
 		} else
 			LOGGER.info("Failed update trip");
 	}
