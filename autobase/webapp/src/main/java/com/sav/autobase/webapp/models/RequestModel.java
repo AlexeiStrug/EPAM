@@ -9,7 +9,7 @@ public class RequestModel {
 	private Timestamp endDate;
 	private PlaceModel place;
 	private Integer countOfPassenger;
-	private ClientUsersModel dispatcher;
+	private DispatcherUsersModel dispatcher;
 	private String processed;
 
 	public ClientUsersModel getClient() {
@@ -52,11 +52,11 @@ public class RequestModel {
 		this.countOfPassenger = countOfPassenger;
 	}
 
-	public ClientUsersModel getDispatcher() {
+	public DispatcherUsersModel getDispatcher() {
 		return dispatcher;
 	}
 
-	public void setDispatcher(ClientUsersModel dispatcher) {
+	public void setDispatcher(DispatcherUsersModel dispatcher) {
 		this.dispatcher = dispatcher;
 	}
 

@@ -2,15 +2,15 @@ package com.sav.autobase.webapp.models;
 
 public class VehicleModel {
 
-	private ClientUsersModel driver;
+	private DriverUsersModel driver;
 	private ModelVehicleModel model;
 	private boolean readyCrashCar;
 
-	public ClientUsersModel getDriver() {
+	public DriverUsersModel getDriver() {
 		return driver;
 	}
 
-	public void setDriver(ClientUsersModel driver) {
+	public void setDriver(DriverUsersModel driver) {
 		this.driver = driver;
 	}
 

@@ -5,8 +5,8 @@ public class ModelVehicleModel {
 	private String nameModel;
 	private String registerNumber;
 	private Integer countOfPassenger;
-	private TypeVehicleModel brand;
-	private BrandVehicleModel type;
+	private BrandVehicleModel brand;
+	private TypeVehicleModel type;
 
 	public String getNameModel() {
 		return nameModel;
@@ -32,20 +32,21 @@ public class ModelVehicleModel {
 		this.countOfPassenger = countOfPassenger;
 	}
 
-	public TypeVehicleModel getBrand() {
+	public BrandVehicleModel getBrand() {
 		return brand;
 	}
 
-	public void setBrand(TypeVehicleModel brand) {
+	public void setBrand(BrandVehicleModel brand) {
 		this.brand = brand;
 	}
 
-	public BrandVehicleModel getType() {
+	public TypeVehicleModel getType() {
 		return type;
 	}
 
-	public void setType(BrandVehicleModel type) {
+	public void setType(TypeVehicleModel type) {
 		this.type = type;
 	}
+
 
 }

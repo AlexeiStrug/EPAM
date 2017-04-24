@@ -68,7 +68,7 @@ public class ClientController {
 			@PathVariable(value = "id") Integer requestIdParam) throws DAOException, ModifyException {
 
 		Request request = clientService.getRequest(requestIdParam);
-		request.setClient(model2user(requestModel.getClient()));
+		request.setClient(model2client(requestModel.getClient()));
 		request.setStartDate(requestModel.getStartDate());
 		request.setEndDate(requestModel.getEndDate());
 		request.setPlace(model2place(requestModel.getPlace()));
@@ -85,10 +85,10 @@ public class ClientController {
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
 
-	/* ---Convert model to entity--- */
+	/* ---Convert model to entity and entity to model--- */
 	private ClientRequestModel request2model(Request request) {
 		ClientRequestModel requestModel = new ClientRequestModel();
-		requestModel.setClient(user2model(request.getClient()));
+		requestModel.setClient(client2model(request.getClient()));
 		requestModel.setStartDate(request.getStartDate());
 		requestModel.setEndDate(request.getEndDate());
 		requestModel.setPlace(place2model(request.getPlace()));
@@ -99,7 +99,7 @@ public class ClientController {
 
 	private Request model2request(ClientRequestModel requestModel) {
 		Request request = new Request();
-		request.setClient(model2user(requestModel.getClient()));
+		request.setClient(model2client(requestModel.getClient()));
 		request.setStartDate(requestModel.getStartDate());
 		request.setEndDate(requestModel.getEndDate());
 		request.setPlace(model2place(requestModel.getPlace()));
@@ -109,7 +109,7 @@ public class ClientController {
 		return request;
 	}
 
-	private ClientUsersModel user2model(Users user) {
+	private ClientUsersModel client2model(Users user) {
 		ClientUsersModel userModel = new ClientUsersModel();
 		userModel.setFirstName(userModel.getFirstName());
 		userModel.setLastName(userModel.getLastName());
@@ -120,7 +120,7 @@ public class ClientController {
 
 	}
 
-	private Users model2user(ClientUsersModel userModel) {
+	private Users model2client(ClientUsersModel userModel) {
 		Users user = new Users();
 		user.setFirstName(userModel.getFirstName());
 		user.setLastName(userModel.getLastName());
