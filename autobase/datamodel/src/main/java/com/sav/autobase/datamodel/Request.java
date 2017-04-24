@@ -2,7 +2,7 @@ package com.sav.autobase.datamodel;
 
 import java.sql.Timestamp;
 
-public class Request extends AbstractModel {
+public class Request extends AbstractData {
 
 	private Users client;
 	private Timestamp startDate;

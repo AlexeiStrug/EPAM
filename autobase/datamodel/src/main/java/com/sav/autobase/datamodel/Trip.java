@@ -1,6 +1,6 @@
 package com.sav.autobase.datamodel;
 
-public class Trip extends AbstractModel {
+public class Trip extends AbstractData {
 
 	private Request request;
 	private Vehicle vehicle;

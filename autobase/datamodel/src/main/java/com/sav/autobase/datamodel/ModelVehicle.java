@@ -1,6 +1,6 @@
 package com.sav.autobase.datamodel;
 
-public class ModelVehicle extends AbstractModel {
+public class ModelVehicle extends AbstractData {
 
 
 	private String nameModel;

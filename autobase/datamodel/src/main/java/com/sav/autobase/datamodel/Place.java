@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Place extends AbstractModel {
+public class Place extends AbstractData {
 
 	private String placeStart;
 	private String placeEnd;

@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Vehicle extends AbstractModel{
+public class Vehicle extends AbstractData{
 
 	private Users driver;
 	private ModelVehicle model;

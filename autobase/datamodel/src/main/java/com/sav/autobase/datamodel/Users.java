@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Users extends AbstractModel {
+public class Users extends AbstractData {
 
 	private String firstName;
 	private String lastName;

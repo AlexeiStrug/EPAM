@@ -1,6 +1,6 @@
 package com.sav.autobase.datamodel;
 
-public class TypeVehicle extends AbstractModel {
+public class TypeVehicle extends AbstractData {
 
 	@Override
 	public String toString() {

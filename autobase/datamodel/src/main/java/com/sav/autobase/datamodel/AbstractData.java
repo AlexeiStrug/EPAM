@@ -1,6 +1,6 @@
 package com.sav.autobase.datamodel;
 
-public class AbstractModel {
+public class AbstractData {
 	
 	private Integer id;
 
@@ -26,9 +26,9 @@ public class AbstractModel {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof AbstractModel))
+		if (!(obj instanceof AbstractData))
 			return false;
-		AbstractModel other = (AbstractModel) obj;
+		AbstractData other = (AbstractData) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
