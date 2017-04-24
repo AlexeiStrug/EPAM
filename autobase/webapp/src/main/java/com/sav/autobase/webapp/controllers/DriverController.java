@@ -47,7 +47,7 @@ public class DriverController {
 		DriverTripModel tripModel = trip2model(trip);
 		return new ResponseEntity<DriverTripModel>(tripModel, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/vehicle/{users}", method = RequestMethod.GET)
 	public ResponseEntity<?> getVehicle(@PathVariable(value = "users") Users userParam) throws DAOException {
 
@@ -55,24 +55,21 @@ public class DriverController {
 		VehicleModel vehicleModel = vehicle2model(vehicle);
 		return new ResponseEntity<VehicleModel>(vehicleModel, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/trip/{users}", method = RequestMethod.PUT)
-	public ResponseEntity<?> changeStatusTrip(@RequestBody TripModel tripModel,
-			@PathVariable(value = "users") Users userParam) throws DAOException {
+	public ResponseEntity<?> changeStatusTrip(@PathVariable(value = "users") Users userParam) throws DAOException {
 
 		driverService.changeStatusTrip(userParam);
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "/request/{users}", method = RequestMethod.PUT)
-	public ResponseEntity<?> changeStatusVehicle(@RequestBody VehicleModel vehicleModel,
-			@PathVariable(value = "users") Users userParam) throws DAOException {
 
-		driverService.changeStatusVehicle(userParam);;
+	@RequestMapping(value = "/request/{users}", method = RequestMethod.PUT)
+	public ResponseEntity<?> changeStatusVehicle(@PathVariable(value = "users") Users userParam) throws DAOException {
+
+		driverService.changeStatusVehicle(userParam);
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
-	
-	
+
 	/* ---Convert model to entity and entity to model--- */
 	private DriverTripModel trip2model(Trip trip) {
 		DriverTripModel tripModel = new DriverTripModel();
