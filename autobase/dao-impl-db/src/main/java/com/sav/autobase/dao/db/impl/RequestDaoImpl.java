@@ -20,22 +20,26 @@ import com.sav.autobase.dao.api.IRequestDao;
 import com.sav.autobase.dao.db.mapper.RequestMapper;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.StatusRequest;
+import com.sav.autobase.datamodel.Users;
 
 @Repository
 public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestDao {
 
-	final String FIND_REQUEST_BY_ID = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed FROM request "
+	final String FIND_REQUEST_BY_ID = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id WHERE request.id = ?";
-	final String GET_ALL_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed FROM request "
+	final String GET_ALL_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id ";
-	final String FIND_BY_PROCESSED = "SELECT request.id as request_id, request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed FROM request "
+	final String GET_ALL_REQUEST_BY_USER = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
+			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
+			+ "INNER JOIN place ON place.id = request.place_id " + "where users.id = ?";
+	final String FIND_BY_PROCESSED = "SELECT request.id as request_id, request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id WHERE request.processed = ? LIMIT 1";
-	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, processed) VALUES(?,?,?,?,?,?)";
-	final String UPDATE_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, dispatcher_id = ?, processed = ? where id = ?;";
-	final String UPDATE_CLIENT_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, processed = ? where id = ?;";
+	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger, comment, processed) VALUES(?,?,?,?,?,?,?)";
+	final String UPDATE_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, dispatcher_id = ?, comment = ?, processed = ? where id = ?;";
+	final String UPDATE_CLIENT_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, comment = ?, processed = ? where id = ?;";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(RequestDaoImpl.class);
 
@@ -46,7 +50,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 	protected String getTableName() {
 		return "request";
 	}
-	
+
 	@Override
 	public Request joinGetById(Integer id) {
 		try {
@@ -56,7 +60,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 			return null;
 		}
 	}
-	
+
 	@Override
 	public Request joinFindByProcessed(StatusRequest status) {
 		try {
@@ -80,7 +84,8 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 				ps.setTimestamp(3, request.getEndDate());
 				ps.setInt(4, request.getPlace().getId());
 				ps.setInt(5, request.getCountOfPassenger());
-				ps.setString(6, request.getProcessed().name());
+				ps.setString(6, request.getComment());
+				ps.setString(7, request.getProcessed().name());
 				return ps;
 			}
 		}, keyHolder);
@@ -89,7 +94,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 		request.setId(key.intValue());
 		return request;
 	}
-	
+
 	@Override
 	public Request updateClientRequest(Request request) {
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -101,8 +106,9 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 				ps.setTimestamp(3, request.getEndDate());
 				ps.setInt(4, request.getPlace().getId());
 				ps.setInt(5, request.getCountOfPassenger());
-				ps.setString(6, request.getProcessed().name());
-				ps.setInt(7, request.getId());
+				ps.setString(6, request.getComment());
+				ps.setString(7, request.getProcessed().name());
+				ps.setInt(8, request.getId());
 				return ps;
 			}
 		});
@@ -121,8 +127,9 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 				ps.setInt(4, request.getPlace().getId());
 				ps.setInt(5, request.getCountOfPassenger());
 				ps.setInt(6, request.getDispatcher().getId());
-				ps.setString(7, request.getProcessed().name());
-				ps.setInt(8, request.getId());
+				ps.setString(7, request.getComment());
+				ps.setString(8, request.getProcessed().name());
+				ps.setInt(9, request.getId());
 				return ps;
 			}
 		});
@@ -140,4 +147,15 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 		}
 	}
 
+	@Override
+	public List<Request> joinGetAllbyUser(Users user) {
+		try {
+			List<Request> rs = jdbcTemplate.query(GET_ALL_REQUEST_BY_USER, new Object[] { user.getId() },
+					new RequestMapper());
+			return rs;
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.debug("Exception thrown! ", e);
+			return null;
+		}
+	}
 }

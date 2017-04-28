@@ -1,6 +1,6 @@
 package com.sav.autobase.webapp.models;
 
-public class DispatcherUsersModel {
+public class DispatcherUsersModel extends IdModel{
 
 	private String firstName;
 	private String login;

@@ -210,11 +210,14 @@ public class DispatcherServiceTest extends AbstractTest {
 		newVehicle1 = entityFactory.createVehicle(newModel, newUser);
 		newVehicle2 = entityFactory.createVehicle(newModel, newUser);
 		newVehicle3 = entityFactory.createVehicle(newModel, newUser);
+		LOGGER.info("{},{},{}", newVehicle1,newVehicle2,newVehicle3);
 
 		VehicleSerachCriteria criteria = new VehicleSerachCriteria();
 		criteria.setCountOfPassenger(5);
+		criteria.setReadyCrashCar(true);
 
 		List<Vehicle> vehicleCriteria = dispatcherService.findByCriteria(criteria);
+		LOGGER.info("{}", vehicleCriteria);
 
 		Assert.notNull(vehicleCriteria, "Method must get vehicle by CRITERIA");
 	}

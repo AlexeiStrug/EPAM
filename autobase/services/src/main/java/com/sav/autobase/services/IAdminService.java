@@ -83,8 +83,10 @@ public interface IAdminService {
 	void deleteTrip(Integer id) throws DAOException;
 
 	Request getRequest(Integer id) throws DAOException;
-
+	
 	List<Request> getAllRequest() throws DAOException;
+	
+	List<Request> getAllRequestByUser(Users user) throws DAOException;
 	
 	@Transactional
 	void saveRequest(Request request) throws DAOException;
@@ -92,6 +94,7 @@ public interface IAdminService {
 	@Transactional
 	void deleteRequest(Integer id) throws DAOException;
 	
+	/* ---Only for test--- */
 	@Transactional
 	void deleteAll() throws DAOException;
 

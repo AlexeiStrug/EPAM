@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sav.autobase.datamodel.Request;
+import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.services.exception.DAOException;
 import com.sav.autobase.services.exception.ModifyException;
 
@@ -12,11 +13,8 @@ public interface IClientService {
 
 	Request getRequest(Integer id) throws DAOException;
 
-	List<Request> getAllRequest() throws DAOException;
+	List<Request> getAllRequest(Users user) throws DAOException;
 	
-	@Transactional
-	void saveAllRequest(Request... requests) throws DAOException;
-
 	@Transactional
 	void createRequest(Request request) throws DAOException, ModifyException;
 

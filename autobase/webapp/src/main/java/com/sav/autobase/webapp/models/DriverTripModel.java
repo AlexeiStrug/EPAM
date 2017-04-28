@@ -1,6 +1,6 @@
 package com.sav.autobase.webapp.models;
 
-public class DriverTripModel {
+public class DriverTripModel extends IdModel{
 
 	private ClientRequestModel request;
 	private VehicleModel vehicle;

@@ -1,6 +1,6 @@
 package com.sav.autobase.webapp.models;
 
-public class BrandVehicleModel {
+public class BrandVehicleModel extends IdModel{
 
 	private String brandName;
 

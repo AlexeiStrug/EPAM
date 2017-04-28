@@ -17,7 +17,7 @@ public interface IDispatcherService {
 	Request getRequestByStatus(Users user) throws DAOException;
 	
 	Request getRequest(Integer id) throws DAOException;
-
+	
 	Trip getTrip(Integer id) throws DAOException;
 
 	List<Trip> getAllTrip() throws DAOException;

@@ -1,6 +1,6 @@
 package com.sav.autobase.webapp.models;
 
-public class DriverUsersModel {
+public class DriverUsersModel extends IdModel{
 
 	private String firstName;
 	private String lastName;

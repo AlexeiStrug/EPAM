@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,8 +18,8 @@ import com.sav.autobase.datamodel.Trip;
 import com.sav.autobase.datamodel.TypeVehicle;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
+import com.sav.autobase.services.IDriverService;
 import com.sav.autobase.services.exception.DAOException;
-import com.sav.autobase.services.impl.DriverService;
 import com.sav.autobase.webapp.models.BrandVehicleModel;
 import com.sav.autobase.webapp.models.ClientRequestModel;
 import com.sav.autobase.webapp.models.ClientUsersModel;
@@ -29,7 +28,6 @@ import com.sav.autobase.webapp.models.DriverUsersModel;
 import com.sav.autobase.webapp.models.IdModel;
 import com.sav.autobase.webapp.models.ModelVehicleModel;
 import com.sav.autobase.webapp.models.PlaceModel;
-import com.sav.autobase.webapp.models.TripModel;
 import com.sav.autobase.webapp.models.TypeVehicleModel;
 import com.sav.autobase.webapp.models.VehicleModel;
 
@@ -38,35 +36,39 @@ import com.sav.autobase.webapp.models.VehicleModel;
 public class DriverController {
 
 	@Inject
-	private DriverService driverService;
+	private IDriverService driverService;
 
 	@RequestMapping(value = "/trip/{users}", method = RequestMethod.GET)
-	public ResponseEntity<?> getTrip(@PathVariable(value = "users") Users userParam) throws DAOException {
-
-		Trip trip = driverService.getTrip(userParam);
+	public ResponseEntity<?> getTrip(@RequestBody DriverUsersModel userModel) throws DAOException {
+		
+		Users user = model2driver(userModel);
+		Trip trip = driverService.getTrip(user);
 		DriverTripModel tripModel = trip2model(trip);
 		return new ResponseEntity<DriverTripModel>(tripModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/vehicle/{users}", method = RequestMethod.GET)
-	public ResponseEntity<?> getVehicle(@PathVariable(value = "users") Users userParam) throws DAOException {
+	public ResponseEntity<?> getVehicle(@RequestBody DriverUsersModel userModel) throws DAOException {
 
-		Vehicle vehicle = driverService.getVehicle(userParam);
+		Users user = model2driver(userModel);
+		Vehicle vehicle = driverService.getVehicle(user);
 		VehicleModel vehicleModel = vehicle2model(vehicle);
 		return new ResponseEntity<VehicleModel>(vehicleModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/trip/{users}", method = RequestMethod.PUT)
-	public ResponseEntity<?> changeStatusTrip(@PathVariable(value = "users") Users userParam) throws DAOException {
+	public ResponseEntity<?> changeStatusTrip(@RequestBody DriverUsersModel userModel) throws DAOException {
 
-		driverService.changeStatusTrip(userParam);
+		Users user = model2driver(userModel);
+		driverService.changeStatusTrip(user);
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/request/{users}", method = RequestMethod.PUT)
-	public ResponseEntity<?> changeStatusVehicle(@PathVariable(value = "users") Users userParam) throws DAOException {
+	public ResponseEntity<?> changeStatusVehicle(@RequestBody DriverUsersModel userModel) throws DAOException {
 
-		driverService.changeStatusVehicle(userParam);
+		Users user = model2driver(userModel);
+		driverService.changeStatusVehicle(user);
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
 
@@ -94,6 +96,7 @@ public class DriverController {
 		requestModel.setEndDate(request.getEndDate());
 		requestModel.setPlace(place2model(request.getPlace()));
 		requestModel.setCountOfPassenger(request.getCountOfPassenger());
+		requestModel.setComment(request.getComment());
 		requestModel.setProcessed(request.getProcessed().name());
 		return requestModel;
 	}
@@ -105,6 +108,7 @@ public class DriverController {
 		request.setEndDate(requestModel.getEndDate());
 		request.setPlace(model2place(requestModel.getPlace()));
 		request.setCountOfPassenger(requestModel.getCountOfPassenger());
+		request.setComment(requestModel.getComment());
 		request.setProcessed(StatusRequest.valueOf(requestModel.getProcessed()));
 
 		return request;

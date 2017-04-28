@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sav.autobase.dao.api.filter.VehicleSerachCriteria;
 import com.sav.autobase.datamodel.BrandVehicle;
 import com.sav.autobase.datamodel.ModelVehicle;
 import com.sav.autobase.datamodel.Place;
@@ -24,11 +24,10 @@ import com.sav.autobase.datamodel.TypeUsers;
 import com.sav.autobase.datamodel.TypeVehicle;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
+import com.sav.autobase.services.IDispatcherService;
 import com.sav.autobase.services.exception.DAOException;
 import com.sav.autobase.services.exception.ModifyException;
-import com.sav.autobase.services.impl.DispatcherService;
 import com.sav.autobase.webapp.models.BrandVehicleModel;
-import com.sav.autobase.webapp.models.ClientRequestModel;
 import com.sav.autobase.webapp.models.ClientUsersModel;
 import com.sav.autobase.webapp.models.DispatcherUsersModel;
 import com.sav.autobase.webapp.models.DriverUsersModel;
@@ -39,19 +38,21 @@ import com.sav.autobase.webapp.models.RequestModel;
 import com.sav.autobase.webapp.models.TripModel;
 import com.sav.autobase.webapp.models.TypeVehicleModel;
 import com.sav.autobase.webapp.models.VehicleModel;
+import com.sav.autobase.webapp.models.VehicleSearchModel;
 
 @RestController
 @RequestMapping("/dispatcher")
 public class DispatcherController {
 
 	@Inject
-	private DispatcherService dispatcherService;
+	private IDispatcherService dispatcherService;
 
 	@RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getByIdRequest(@PathVariable(value = "id") Integer requestIdParam) throws DAOException {
 
 		Request request = dispatcherService.getRequest(requestIdParam);
 		RequestModel requestModel = request2model(request);
+
 		return new ResponseEntity<RequestModel>(requestModel, HttpStatus.OK);
 	}
 
@@ -60,43 +61,47 @@ public class DispatcherController {
 
 		Request request = dispatcherService.getRequestByStatus(userParam);
 		RequestModel requestModel = request2model(request);
+
 		return new ResponseEntity<RequestModel>(requestModel, HttpStatus.OK);
 	}
-
-	// @RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
-	// public ResponseEntity<?> findByStatusRequest(@RequestParam(required =
-	// false) StatusRequest status)
-	// throws DAOException {
-	//
-	// Request request = new Request();
-	// try {
-	// request = dispatcherService.findByStatus(status);
-	// } catch (IllegalArgumentException e) {
-	// String msg = String.format("Status [%s] request is not supported. Please
-	// use one of: %s", status,
-	// StatusRequest.values());
-	// return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
-	// }
-	//
-	// RequestModel requestModel = request2model(request);
-	// return new ResponseEntity<RequestModel>(requestModel, HttpStatus.OK);
-	// }
 
 	@RequestMapping(value = "/request/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateRequest(@RequestBody RequestModel requestModel,
 			@PathVariable(value = "id") Integer requestIdParam) throws DAOException, ModifyException {
 
 		Request request = dispatcherService.getRequest(requestIdParam);
-		request.setClient(model2client(requestModel.getClient()));
-		request.setStartDate(requestModel.getStartDate());
-		request.setEndDate(requestModel.getEndDate());
-		request.setPlace(model2place(requestModel.getPlace()));
-		request.setCountOfPassenger(requestModel.getCountOfPassenger());
-		request.setDispatcher(model2dispatcher(requestModel.getDispatcher()));
-		request.setProcessed(StatusRequest.valueOf(requestModel.getProcessed()));
+
+		requestApplyChanges(request, requestModel);
 
 		dispatcherService.modifyRequest(request);
+
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
+	}
+
+	public void requestApplyChanges(Request requestFromDb, RequestModel requestModel)
+			throws DAOException, ModifyException {
+
+		if (requestModel.getClient() != null) {
+			requestFromDb.setClient(model2client(requestModel.getClient()));
+		}
+		if (requestModel.getStartDate() != null) {
+			requestFromDb.setStartDate(requestModel.getStartDate());
+		}
+		if (requestModel.getEndDate() != null) {
+			requestFromDb.setEndDate(requestModel.getEndDate());
+		}
+		if (requestModel.getPlace() != null) {
+			requestFromDb.setPlace(model2place(requestModel.getPlace()));
+		}
+		if (requestModel.getCountOfPassenger() != null) {
+			requestFromDb.setCountOfPassenger(requestModel.getCountOfPassenger());
+		}
+		if (requestModel.getComment() != null) {
+			requestFromDb.setComment(requestModel.getComment());
+		}
+		if (requestModel.getProcessed() != null) {
+			requestFromDb.setProcessed(StatusRequest.valueOf(requestModel.getProcessed()));
+		}
 	}
 
 	@RequestMapping(value = "/trip/{id}", method = RequestMethod.GET)
@@ -104,6 +109,7 @@ public class DispatcherController {
 
 		Trip trip = dispatcherService.getTrip(tripIdParam);
 		TripModel tripModel = trip2model(trip);
+
 		return new ResponseEntity<TripModel>(tripModel, HttpStatus.OK);
 	}
 
@@ -120,35 +126,63 @@ public class DispatcherController {
 
 		return new ResponseEntity<List<TripModel>>(tripModel, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "/{request},{vehicle}", method = RequestMethod.POST)
-	public ResponseEntity<?> createTrip(@RequestBody TripModel tripModel, @PathVariable(value = "request,vehicle") Request requestParam, Vehicle vehicleParam)
+
+	@RequestMapping(value = "/trip", method = RequestMethod.PUT)
+	public ResponseEntity<?> createTrip(@RequestBody RequestModel requestModel, @RequestBody VehicleModel vehicleModel)
 			throws DAOException, ModifyException {
 
-		Trip trip = model2trip(tripModel);
-		dispatcherService.createTrip(requestParam, vehicleParam);
-		
+		Request request = model2request(requestModel);
+		Vehicle vehicle = model2vehicle(vehicleModel);
+		Trip trip = dispatcherService.createTrip(request, vehicle);
+
 		return new ResponseEntity<IdModel>(new IdModel(trip.getId()), HttpStatus.CREATED);
 	}
-	
+
 	@RequestMapping(value = "/trip/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateRequest(@RequestBody TripModel tripModel,
 			@PathVariable(value = "id") Integer tripIdParam) throws DAOException, ModifyException {
 
-		Trip trip = new Trip();
-		trip.setRequest(model2request(tripModel.getRequest()));
-		trip.setVehicle(model2vehicle(tripModel.getVehicle()));
-		trip.setEndTrip(tripModel.isEndTrip());
+		Trip trip = dispatcherService.getTrip(tripIdParam);
+
+		tripApplyChanges(trip, tripModel);
 
 		dispatcherService.modifyTrip(trip);
+
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
-	
-	
-	
+
+	public void tripApplyChanges(Trip tripFromDb, TripModel tripModel) throws DAOException, ModifyException {
+
+		if (tripModel.getRequest() != null) {
+			tripFromDb.setRequest(model2request(tripModel.getRequest()));
+		}
+		if (tripModel.getVehicle() != null) {
+			tripFromDb.setVehicle(model2vehicle(tripModel.getVehicle()));
+		}
+		if (tripModel.isEndTrip() != null) {
+			tripFromDb.setEndTrip(tripModel.isEndTrip());
+		}
+	}
+
+	@RequestMapping(value = "/vehicle/criteria")
+	public ResponseEntity<?> findVehicleByCriteria(@RequestBody VehicleSearchModel criteriaModel) throws DAOException {
+
+		VehicleSerachCriteria criteria = model2vehicleSearch(criteriaModel);
+		List<Vehicle> allCriteria = dispatcherService.findByCriteria(criteria);
+
+		List<VehicleModel> convertCriteria = new ArrayList<>();
+		for (Vehicle vehicle : allCriteria) {
+			convertCriteria.add(vehicle2model(vehicle));
+		}
+
+		return new ResponseEntity<List<VehicleModel>>(convertCriteria, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/trip/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteRequest(@PathVariable(value = "id") Integer tripIdParam) throws DAOException {
+	public ResponseEntity<?> deleteTrip(@PathVariable(value = "id") Integer tripIdParam) throws DAOException {
+
 		dispatcherService.deleteTrip(tripIdParam);
+
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
 
@@ -161,6 +195,7 @@ public class DispatcherController {
 		requestModel.setPlace(place2model(request.getPlace()));
 		requestModel.setCountOfPassenger(request.getCountOfPassenger());
 		requestModel.setDispatcher(dispatcher2model(request.getDispatcher()));
+		requestModel.setComment(request.getComment());
 		requestModel.setProcessed(request.getProcessed().name());
 		return requestModel;
 	}
@@ -173,6 +208,7 @@ public class DispatcherController {
 		request.setPlace(model2place(requestModel.getPlace()));
 		request.setCountOfPassenger(requestModel.getCountOfPassenger());
 		request.setDispatcher(model2dispatcher(requestModel.getDispatcher()));
+		request.setComment(requestModel.getComment());
 		request.setProcessed(StatusRequest.valueOf(requestModel.getProcessed()));
 
 		return request;
@@ -180,11 +216,11 @@ public class DispatcherController {
 
 	private ClientUsersModel client2model(Users user) {
 		ClientUsersModel userModel = new ClientUsersModel();
-		userModel.setFirstName(userModel.getFirstName());
-		userModel.setLastName(userModel.getLastName());
-		userModel.setDateBirth(userModel.getDateBirth());
-		userModel.setLogin(userModel.getLogin());
-		userModel.setEmail(userModel.getEmail());
+		userModel.setFirstName(user.getFirstName());
+		userModel.setLastName(user.getLastName());
+		userModel.setDateBirth(user.getDateBirth());
+		userModel.setLogin(user.getLogin());
+		userModel.setEmail(user.getEmail());
 		return userModel;
 
 	}
@@ -218,9 +254,9 @@ public class DispatcherController {
 
 	private DispatcherUsersModel dispatcher2model(Users user) {
 		DispatcherUsersModel userModel = new DispatcherUsersModel();
-		userModel.setFirstName(userModel.getFirstName());
-		userModel.setLogin(userModel.getLogin());
-		userModel.setEmail(userModel.getEmail());
+		userModel.setFirstName(user.getFirstName());
+		userModel.setLogin(user.getLogin());
+		userModel.setEmail(user.getEmail());
 		userModel.setType(user.getType().name());
 		return userModel;
 
@@ -315,9 +351,9 @@ public class DispatcherController {
 
 	private DriverUsersModel driver2model(Users user) {
 		DriverUsersModel userModel = new DriverUsersModel();
-		userModel.setFirstName(userModel.getFirstName());
-		userModel.setLastName(userModel.getLastName());
-		userModel.setLogin(userModel.getLogin());
+		userModel.setFirstName(user.getFirstName());
+		userModel.setLastName(user.getLastName());
+		userModel.setLogin(user.getLogin());
 		return userModel;
 	}
 
@@ -327,5 +363,27 @@ public class DispatcherController {
 		user.setLastName(userModel.getLastName());
 		user.setLogin(userModel.getLogin());
 		return user;
+	}
+
+	private VehicleSearchModel vehicleSearch2model(VehicleSerachCriteria criteria) {
+		VehicleSearchModel criteriaModel = new VehicleSearchModel();
+		criteriaModel.setBrand(criteria.getBrand());
+		criteriaModel.setType(criteria.getType());
+		criteriaModel.setNameModel(criteria.getNameModel());
+		criteriaModel.setCountOfPassenger(criteria.getCountOfPassenger());
+		criteriaModel.setRegisterNumber(criteria.getRegisterNumber());
+		criteriaModel.setReadyCrashCar(criteria.getReadyCrashCar());
+		return criteriaModel;
+	}
+
+	private VehicleSerachCriteria model2vehicleSearch(VehicleSearchModel criteriaModel) {
+		VehicleSerachCriteria criteria = new VehicleSerachCriteria();
+		criteria.setBrand(criteriaModel.getBrand());
+		criteria.setType(criteriaModel.getType());
+		criteria.setNameModel(criteriaModel.getNameModel());
+		criteria.setCountOfPassenger(criteriaModel.getCountOfPassenger());
+		criteria.setRegisterNumber(criteriaModel.getRegisterNumber());
+		criteria.setReadyCrashCar(criteriaModel.getReadyCrashCar());
+		return criteria;
 	}
 }

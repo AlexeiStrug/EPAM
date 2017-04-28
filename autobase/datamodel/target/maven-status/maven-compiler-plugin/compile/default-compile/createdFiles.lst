@@ -7,8 +7,8 @@ com\sav\autobase\datamodel\StatusRequest.class
 com\sav\autobase\datamodel\BrandVehicle.class
 com\sav\autobase\datamodel\TypeVehicle.class
 com\sav\autobase\datamodel\Users$1.class
-com\sav\autobase\datamodel\AbstractModel.class
 com\sav\autobase\datamodel\Trip.class
 com\sav\autobase\datamodel\Place.class
+com\sav\autobase\datamodel\AbstractData.class
 com\sav\autobase\datamodel\Place$1.class
 com\sav\autobase\datamodel\Vehicle$1.class

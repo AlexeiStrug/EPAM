@@ -1,6 +1,6 @@
 package com.sav.autobase.webapp.models;
 
-public class PlaceModel {
+public class PlaceModel extends IdModel {
 
 	private String placeStart;
 	private String placeEnd;

@@ -53,6 +53,7 @@ public class ClientServiceTest extends AbstractTest {
 		LOGGER.debug("{}", newPlace);
 
 		request = entityFactory.createRequest(newUser, newPlace);
+		adminService.saveRequest(request);
 	}
 
 	@After
@@ -129,35 +130,9 @@ public class ClientServiceTest extends AbstractTest {
 		clientService.createRequest(request2);
 		clientService.createRequest(request3);
 
-		List<Request> requestFromDb = clientService.getAllRequest();
+		List<Request> requestFromDb = clientService.getAllRequest(newUser);
 
 		Assert.notNull(requestFromDb, "Method must getAll requests");
-	}
-
-	@Test
-	public void SaveAllRequest() throws ParseException, DAOException, ModifyException {
-
-		LOGGER.debug("^^^SAVE ALL test");
-
-		request1 = entityFactory.createRequest(newUser, newPlace);
-		request2 = entityFactory.createRequest(newUser, newPlace);
-		request3 = entityFactory.createRequest(newUser, newPlace);
-
-		clientService.saveAllRequest(request1, request2, request3);
-
-		Integer savedRequestId1 = request1.getId();
-		Request requestFromDb1 = clientService.getRequest(savedRequestId1);
-
-		Integer savedRequestId2 = request2.getId();
-		Request requestFromDb2 = clientService.getRequest(savedRequestId2);
-
-		Integer savedRequestId3 = request3.getId();
-		Request requestFromDb3 = clientService.getRequest(savedRequestId3);
-
-		Assert.notNull(requestFromDb1, "Method must be saved request1");
-		Assert.notNull(requestFromDb2, "Method must be saved request2");
-		Assert.notNull(requestFromDb3, "Method must be saved request3");
-
 	}
 
 }

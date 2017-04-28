@@ -12,5 +12,13 @@ public class IdModel {
 		super();
 		this.id = id;
 	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public IdModel() {
+		
+	}
 
 }

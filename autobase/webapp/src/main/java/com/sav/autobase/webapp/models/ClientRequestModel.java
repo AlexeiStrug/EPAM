@@ -2,14 +2,16 @@ package com.sav.autobase.webapp.models;
 
 import java.sql.Timestamp;
 
-public class ClientRequestModel {
+public class ClientRequestModel extends IdModel{
 
 	private ClientUsersModel client;
 	private Timestamp startDate;
 	private Timestamp endDate;
 	private PlaceModel place;
 	private Integer countOfPassenger;
+	private String comment;
 	private String processed;
+
 
 	public ClientUsersModel getClient() {
 		return client;
@@ -49,6 +51,14 @@ public class ClientRequestModel {
 
 	public void setCountOfPassenger(Integer countOfPassenger) {
 		this.countOfPassenger = countOfPassenger;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public String getProcessed() {

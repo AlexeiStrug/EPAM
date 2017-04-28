@@ -2,7 +2,7 @@ package com.sav.autobase.webapp.models;
 
 import java.sql.Timestamp;
 
-public class ClientUsersModel {
+public class ClientUsersModel  extends IdModel{
 
 	private String firstName;
 	private String lastName;

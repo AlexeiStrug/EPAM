@@ -10,6 +10,7 @@ public class Request extends AbstractData {
 	private Place place;
 	private Integer countOfPassenger;
 	private Users dispatcher;
+	private String comment;
 	private StatusRequest processed;
 
 	public Users getClient() {
@@ -68,10 +69,19 @@ public class Request extends AbstractData {
 		this.processed = processed;
 	}
 
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
 	@Override
 	public String toString() {
-		return "Request id=" + getId() + ", startDate=" + startDate + ", endDate=" + endDate
-				+ ", place=" + place + ", countOfPassenger=" + countOfPassenger + ", dispatcher=" + dispatcher + ", processed =" + processed + "]";
+		return "Request id=" + getId() + ", startDate=" + startDate + ", endDate=" + endDate + ", place=" + place
+				+ ", countOfPassenger=" + countOfPassenger + ", dispatcher=" + dispatcher + ", comment =" + comment
+				+ ", processed =" + processed + "]";
 	}
 
 	@Override
@@ -79,6 +89,7 @@ public class Request extends AbstractData {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((client == null) ? 0 : client.hashCode());
+		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
 		result = prime * result + ((countOfPassenger == null) ? 0 : countOfPassenger.hashCode());
 		result = prime * result + ((dispatcher == null) ? 0 : dispatcher.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
@@ -101,6 +112,11 @@ public class Request extends AbstractData {
 			if (other.client != null)
 				return false;
 		} else if (!client.equals(other.client))
+			return false;
+		if (comment == null) {
+			if (other.comment != null)
+				return false;
+		} else if (!comment.equals(other.comment))
 			return false;
 		if (countOfPassenger == null) {
 			if (other.countOfPassenger != null)
@@ -131,7 +147,5 @@ public class Request extends AbstractData {
 			return false;
 		return true;
 	}
-
-	
 
 }

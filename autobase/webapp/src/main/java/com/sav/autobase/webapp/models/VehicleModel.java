@@ -1,6 +1,6 @@
 package com.sav.autobase.webapp.models;
 
-public class VehicleModel {
+public class VehicleModel extends IdModel{
 
 	private DriverUsersModel driver;
 	private ModelVehicleModel model;

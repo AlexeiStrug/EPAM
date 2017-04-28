@@ -21,6 +21,7 @@ import com.sav.autobase.datamodel.ModelVehicle;
 import com.sav.autobase.datamodel.Place;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.Trip;
+import com.sav.autobase.datamodel.TypeUsers;
 import com.sav.autobase.datamodel.TypeVehicle;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
@@ -199,6 +200,9 @@ public class AdminService implements IAdminService {
 				if (user.getId() == null) {
 					userDao.insert(user);
 					LOGGER.info("Saved new user");
+					if (user.getType() == TypeUsers.administator) {
+						LOGGER.error("ERROR Saved new administator user");
+					}
 				} else {
 					userDao.update(user);
 					LOGGER.info("Updated new user");
@@ -214,6 +218,9 @@ public class AdminService implements IAdminService {
 	@Override
 	public void deleteUser(Integer id) throws DAOException {
 		if (id != null) {
+			if (userDao.getById(id).getType() == TypeUsers.administator) {
+				LOGGER.error("ERROR DELETE administator user");
+			}
 			try {
 				userDao.delete(id);
 			} catch (Exception e) {
@@ -405,6 +412,16 @@ public class AdminService implements IAdminService {
 	}
 
 	@Override
+	public List<Request> getAllRequestByUser(Users user) throws DAOException {
+		try {
+			return requestDao.joinGetAllbyUser(user);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new DAOException();
+		}
+	}
+
+	@Override
 	public Trip getTrip(Integer id) throws DAOException {
 		if (id != null) {
 			try {
@@ -498,4 +515,5 @@ public class AdminService implements IAdminService {
 		} else
 			LOGGER.info("Failed save new trip");
 	}
+
 }

@@ -106,9 +106,9 @@ public class DispatcherService implements IDispatcherService {
 				throw new DAOException();
 			}
 			LOGGER.info(
-					"Updated request Request.id={}. start_date={}. end_date={}. place_id={}. count_of_passenger={}. processed={} ",
+					"Updated request Request.id={}. start_date={}. end_date={}. place_id={}. count_of_passenger={}. comment={}. processed={} ",
 					request.getId(), request.getStartDate(), request.getEndDate(), request.getPlace(),
-					request.getCountOfPassenger(), request.getProcessed().name());
+					request.getCountOfPassenger(), request.getComment(), request.getProcessed().name());
 		} else
 			LOGGER.info("Failed update request");
 	}
@@ -178,4 +178,5 @@ public class DispatcherService implements IDispatcherService {
 		} else
 			return vehicleDao.joinGetAllReadyCar(true);
 	}
+
 }

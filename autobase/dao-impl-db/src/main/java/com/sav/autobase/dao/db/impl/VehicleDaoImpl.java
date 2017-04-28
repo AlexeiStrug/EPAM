@@ -129,22 +129,22 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 				getAll();
 			}
 			if (criteria.getBrand() != null && criteria.getBrand().length() > 0) {
-				FIND_CRITERIA_VEHICLE += "AND brand_model=:brand";
+				FIND_CRITERIA_VEHICLE += " AND brand_model=:brand";
 			}
-			if (criteria.getBrand() != null && criteria.getBrand().length() > 0) {
-				FIND_CRITERIA_VEHICLE += "AND type_model=:type";
+			if (criteria.getType() != null && criteria.getType().length() > 0) {
+				FIND_CRITERIA_VEHICLE += " AND type_model=:type";
 			}
-			if (criteria.getBrand() != null && criteria.getBrand().length() > 0) {
-				FIND_CRITERIA_VEHICLE += "AND name_model=:nameModel";
+			if (criteria.getNameModel() != null && criteria.getNameModel().length() > 0) {
+				FIND_CRITERIA_VEHICLE += " AND name_model=:nameModel";
 			}
-			if (criteria.getBrand() != null && criteria.getBrand().length() > 0) {
-				FIND_CRITERIA_VEHICLE += "AND passenger_of_count=:passengerOfCount";
+			if (criteria.getCountOfPassenger() != null) {
+				FIND_CRITERIA_VEHICLE += " AND count_of_passenger>=:countOfPassenger";
 			}
-			if (criteria.getBrand() != null && criteria.getBrand().length() > 0) {
-				FIND_CRITERIA_VEHICLE += "AND register_number=:registerNumber";
+			if (criteria.getRegisterNumber() != null) {
+				FIND_CRITERIA_VEHICLE += " AND register_number=:registerNumber";
 			}
-			if (criteria.getBrand() != null && criteria.getBrand().length() > 0) {
-				FIND_CRITERIA_VEHICLE += "AND ready_crash_car=:readyCrashCar";
+			if (criteria.getReadyCrashCar() != null) {
+				FIND_CRITERIA_VEHICLE += " AND ready_crash_car=:readyCrashCar";
 			}
 			BeanPropertySqlParameterSource namedParameters = new BeanPropertySqlParameterSource(criteria);
 			return namedParameterJdbcTemplate.query(FIND_CRITERIA_VEHICLE, namedParameters, new VehicleMapper());

@@ -1,6 +1,6 @@
 package com.sav.autobase.webapp.models;
 
-public class TypeVehicleModel {
+public class TypeVehicleModel extends IdModel{
 	
 	private String typeName;
 

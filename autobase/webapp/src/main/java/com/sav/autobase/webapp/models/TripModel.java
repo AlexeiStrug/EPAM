@@ -1,10 +1,10 @@
 package com.sav.autobase.webapp.models;
 
-public class TripModel {
+public class TripModel  extends IdModel{
 
 	private RequestModel request;
 	private VehicleModel vehicle;
-	private boolean endTrip;
+	private Boolean endTrip;
 
 	public RequestModel getRequest() {
 		return request;
@@ -22,7 +22,7 @@ public class TripModel {
 		this.vehicle = vehicle;
 	}
 
-	public boolean isEndTrip() {
+	public Boolean isEndTrip() {
 		return endTrip;
 	}
 

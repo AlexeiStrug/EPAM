@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.sav.autobase.dao.api.IRequestDao;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.StatusRequest;
+import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.services.IClientService;
 import com.sav.autobase.services.exception.DAOException;
 import com.sav.autobase.services.exception.ModifyException;
@@ -37,12 +38,17 @@ public class ClientService implements IClientService {
 	}
 
 	@Override
-	public List<Request> getAllRequest() throws DAOException {
-		try {
-			return requestDao.joinGetAll();
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new DAOException();
+	public List<Request> getAllRequest(Users user) throws DAOException {
+		if (user != null) {
+			try {
+				return requestDao.joinGetAllbyUser(user);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new DAOException();
+			}
+		} else {
+			LOGGER.info("Failed getAll request by user");
+			return null;
 		}
 	}
 
@@ -63,9 +69,9 @@ public class ClientService implements IClientService {
 				throw new DAOException();
 			}
 			LOGGER.info(
-					"Created new request Request.id={}. client={}. start_date={}. end_date={}. place={}. count_of_passenger={}. processed={} ",
+					"Created new request Request.id={}. client={}. start_date={}. end_date={}. place={}. count_of_passenger={}. comment={}. processed={} ",
 					request.getId(), request.getClient(), request.getStartDate(), request.getEndDate(),
-					request.getPlace(), request.getCountOfPassenger(), request.getProcessed().name());
+					request.getPlace(), request.getCountOfPassenger(), request.getComment(), request.getProcessed().name());
 		} else
 			LOGGER.info("Failed created new request");
 	}
@@ -90,9 +96,9 @@ public class ClientService implements IClientService {
 				throw new DAOException();
 			}
 			LOGGER.info(
-					"Updated request Request.id={}. start_date={}. end_date={}. place={}. count_of_passenger={}. processed={} ",
+					"Updated request Request.id={}. start_date={}. end_date={}. place={}. count_of_passenger={}. comment={}. processed={} ",
 					request.getId(), request.getStartDate(), request.getEndDate(), request.getPlace(),
-					request.getCountOfPassenger(), request.getProcessed().name());
+					request.getCountOfPassenger(), request.getComment(), request.getProcessed().name());
 		} else
 			LOGGER.info("Failed update request");
 
@@ -110,22 +116,6 @@ public class ClientService implements IClientService {
 			LOGGER.info("Deleted request");
 		} else
 			LOGGER.info("Failed delete request");
-	}
-
-	@Override
-	public void saveAllRequest(Request... requests) throws DAOException {
-		if (requests != null) {
-			try {
-				for (Request request : requests) {
-					createRequest(request);
-				}
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				throw new DAOException();
-			}
-			LOGGER.info("Saved all requests");
-		} else
-			LOGGER.info("Failed save all request");
 	}
 
 }

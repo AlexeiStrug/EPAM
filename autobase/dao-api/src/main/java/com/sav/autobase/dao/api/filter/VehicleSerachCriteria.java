@@ -49,11 +49,11 @@ public class VehicleSerachCriteria {
 		this.registerNumber = registerNumber;
 	}
 
-	public boolean isReadyCrashCar() {
+	public Boolean getReadyCrashCar() {
 		return readyCrashCar;
 	}
 
-	public void setReadyCrashCar(boolean readyCrashCar) {
+	public void setReadyCrashCar(Boolean readyCrashCar) {
 		this.readyCrashCar = readyCrashCar;
 	}
 

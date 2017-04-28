@@ -2,7 +2,10 @@ package com.sav.autobase.webapp.models;
 
 import java.sql.Timestamp;
 
-public class RequestModel {
+public class RequestModel extends IdModel{
+
+	public RequestModel() {
+	}
 
 	private ClientUsersModel client;
 	private Timestamp startDate;
@@ -10,6 +13,7 @@ public class RequestModel {
 	private PlaceModel place;
 	private Integer countOfPassenger;
 	private DispatcherUsersModel dispatcher;
+	private String comment;
 	private String processed;
 
 	public ClientUsersModel getClient() {
@@ -58,6 +62,14 @@ public class RequestModel {
 
 	public void setDispatcher(DispatcherUsersModel dispatcher) {
 		this.dispatcher = dispatcher;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public String getProcessed() {
