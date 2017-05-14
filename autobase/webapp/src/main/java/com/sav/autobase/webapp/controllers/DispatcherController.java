@@ -21,7 +21,6 @@ import com.sav.autobase.datamodel.Trip;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
 import com.sav.autobase.services.IDispatcherService;
-import com.sav.autobase.services.exception.ModifyException;
 import com.sav.autobase.services.exception.ServiceException;
 import com.sav.autobase.webapp.converter.entity2model.Request2Model;
 import com.sav.autobase.webapp.converter.entity2model.Trip2Model;
@@ -32,7 +31,6 @@ import com.sav.autobase.webapp.converter.model2entity.Model2Request;
 import com.sav.autobase.webapp.converter.model2entity.Model2Vehicle;
 import com.sav.autobase.webapp.converter.model2entity.Model2VehicleSearch;
 import com.sav.autobase.webapp.filter.BasicAuthFilter;
-import com.sav.autobase.webapp.models.ClientRequestModel;
 import com.sav.autobase.webapp.models.IdModel;
 import com.sav.autobase.webapp.models.RequestModel;
 import com.sav.autobase.webapp.models.TripModel;
@@ -66,11 +64,18 @@ public class DispatcherController {
 	@RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getByIdRequest(@PathVariable(value = "id") Integer requestIdParam) {
 
+		if (requestIdParam == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+
 		Request request;
 		try {
 			request = dispatcherService.getRequest(requestIdParam);
 		} catch (ServiceException e) {
 			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		if (request == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		RequestModel requestModel = new Request2Model().convert(request);
@@ -100,6 +105,10 @@ public class DispatcherController {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
+		if (request == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+
 		RequestModel requestModel = new Request2Model().convert(request);
 
 		return new ResponseEntity<RequestModel>(requestModel, HttpStatus.OK);
@@ -119,6 +128,10 @@ public class DispatcherController {
 	@RequestMapping(value = "/request/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> updateRequest(@RequestBody RequestModel requestModel,
 			@PathVariable(value = "id") Integer requestIdParam) {
+
+		if (requestIdParam == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
 
 		Request request;
 		try {
@@ -144,9 +157,10 @@ public class DispatcherController {
 	 * came to update
 	 * 
 	 * @param requestFromDb
-	 *            - transferring the request for update request from Database
+	 *            - transferring the Request for update request from Database
 	 * @param requestModel
-	 *            transferring the request for update request http request
+	 *            transferring the RequestModel for update request from http
+	 *            request
 	 */
 	public void requestApplyChanges(Request requestFromDb, RequestModel requestModel) {
 
@@ -195,13 +209,17 @@ public class DispatcherController {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
+		if (trip == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+
 		TripModel tripModel = new Trip2Model().convert(trip);
 
 		return new ResponseEntity<TripModel>(tripModel, HttpStatus.OK);
 	}
 
 	/**
-	 * The method returns all trip
+	 * The method returns all trips
 	 * 
 	 * @return HttpStatus.OK if successfully get all and get all the trips <br>
 	 *         HttpStatus.NO_CONTENT if error with get all trips <br>
@@ -209,18 +227,19 @@ public class DispatcherController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<TripModel>> getAllTrip() {
 
-		List<Trip> allTrip;
+		List<Trip> getAllTrip;
 		try {
-			allTrip = dispatcherService.getAllTrip();
+			getAllTrip = dispatcherService.getAllTrip();
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		if (allTrip == null) {
+		if (getAllTrip == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
+
 		List<TripModel> tripModel = new ArrayList<>();
-		for (Trip trip : allTrip) {
+		for (Trip trip : getAllTrip) {
 			tripModel.add(new Trip2Model().convert(trip));
 		}
 
@@ -256,6 +275,7 @@ public class DispatcherController {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
+
 		return new ResponseEntity<IdModel>(new IdModel(trip.getId()), HttpStatus.CREATED);
 	}
 
@@ -302,9 +322,9 @@ public class DispatcherController {
 	 * came to update
 	 * 
 	 * @param tripFromDb
-	 *            - transferring the trip for update trip from Database
+	 *            - transferring the Trip for update trip from Database
 	 * @param tripModel
-	 *            - transferring the trip for update request http trip
+	 *            - transferring the TripModel for update trip from http request
 	 */
 	public void tripApplyChanges(Trip tripFromDb, TripModel tripModel) {
 
@@ -362,8 +382,16 @@ public class DispatcherController {
 	@RequestMapping(value = "/trip/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteTrip(@PathVariable(value = "id") Integer tripIdParam) throws ServiceException {
 
-		dispatcherService.deleteTrip(tripIdParam);
+		if (tripIdParam == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
 
+		try {
+			dispatcherService.deleteTrip(tripIdParam);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
 }

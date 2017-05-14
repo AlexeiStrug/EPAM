@@ -22,7 +22,7 @@ public interface IClientService {
 	void modifyRequest(Request request) throws ServiceException, ModifyException;
 
 	@Transactional
-	void deleteRequest(Integer id) throws ServiceException, ModifyException;
+	void deleteRequest(Integer id) throws ServiceException;
 
 
 }

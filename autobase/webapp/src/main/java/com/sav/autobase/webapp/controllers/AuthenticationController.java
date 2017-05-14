@@ -53,10 +53,10 @@ public class AuthenticationController {
 			authUser = authService.authenticate(login, password);
 		} catch (ServiceException e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		if (authUser == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Users>(authUser, HttpStatus.OK);
 	}
@@ -66,10 +66,10 @@ public class AuthenticationController {
 	 * 
 	 * @param userModel
 	 *            - transferring the new user for registration
-	 * @return HttpStatus.CREATED if user successfully passed register and "ID" the
-	 *         users <br>
-	 *         HttpStatus.BAD_REQUEST if error created new user or created user from
-	 *         type "Administrator"
+	 * @return HttpStatus.CREATED if user successfully passed register and "ID"
+	 *         the users <br>
+	 *         HttpStatus.BAD_REQUEST if error created new user or created user
+	 *         from type "Administrator"
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.PUT)
 	public ResponseEntity<?> registerUser(@RequestBody UsersModel userModel) {

@@ -4,7 +4,7 @@ public class VehicleModel extends IdModel{
 
 	private DriverUsersModel driver;
 	private ModelVehicleModel model;
-	private boolean readyCrashCar;
+	private Boolean readyCrashCar;
 
 	public DriverUsersModel getDriver() {
 		return driver;
@@ -22,11 +22,11 @@ public class VehicleModel extends IdModel{
 		this.model = model;
 	}
 
-	public boolean isReadyCrashCar() {
+	public Boolean isReadyCrashCar() {
 		return readyCrashCar;
 	}
 
-	public void setReadyCrashCar(boolean readyCrashCar) {
+	public void setReadyCrashCar(Boolean readyCrashCar) {
 		this.readyCrashCar = readyCrashCar;
 	}
 

@@ -57,18 +57,18 @@ public class ClientController {
 
 		Users user = (Users) httpServletRequest.getAttribute(BasicAuthFilter.userAttribute);
 
-		List<Request> allRequest;
+		List<Request> getAllRequest;
 		try {
-			allRequest = clientService.getAllRequest(user);
+			getAllRequest = clientService.getAllRequest(user);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		if (allRequest == null) {
+		if (getAllRequest == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		List<ClientRequestModel> convertRequest = new ArrayList<>();
-		for (Request request : allRequest) {
+		for (Request request : getAllRequest) {
 			convertRequest.add(new ClientRequest2Model().convert(request));
 		}
 
@@ -96,6 +96,9 @@ public class ClientController {
 			request = clientService.getRequest(requestIdParam);
 		} catch (ServiceException e) {
 			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		if (request == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		ClientRequestModel requestModel = new ClientRequest2Model().convert(request);
@@ -178,9 +181,9 @@ public class ClientController {
 	 * came to update
 	 * 
 	 * @param requestFromDb
-	 *            - transferring the request for update request from Database
+	 *            - transferring the Request for update request from Database
 	 * @param requestModel
-	 *            - transferring the request for update request http request
+	 *            - transferring the ClientRequestModel for update request from http request
 	 */
 	public void requestApplyChanges(Request requestFromDb, ClientRequestModel requestModel) {
 
@@ -224,9 +227,6 @@ public class ClientController {
 		try {
 			clientService.deleteRequest(requestIdParam);
 		} catch (ServiceException e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (ModifyException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

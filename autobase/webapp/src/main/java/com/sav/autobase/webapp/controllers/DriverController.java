@@ -42,7 +42,7 @@ public class DriverController {
 	 *            - transferring the user(driver) from BasicAuthFilter
 	 * @return HttpStatus.OK if there is the trip created by the dispatcher for
 	 *         execution by a certain driver <br>
-	 *         HttpStatus.NO_CONTENT if trip == null
+	 *         HttpStatus.NO_CONTENT if error get trip
 	 */
 	@RequestMapping(value = "/trip", method = RequestMethod.GET)
 	public ResponseEntity<?> getTrip(HttpServletRequest httpServletRequest) {
@@ -69,7 +69,7 @@ public class DriverController {
 	 *            - transferring the user(driver) from BasicAuthFilter
 	 * @return HttpStatus.OK if there is the vehicle created by the dispatcher
 	 *         for execution by a certain driver <br>
-	 *         HttpStatus.NO_CONTENT if vehicle == null
+	 *         HttpStatus.NO_CONTENT if error get vehicle
 	 */
 	@RequestMapping(value = "/vehicle", method = RequestMethod.GET)
 	public ResponseEntity<?> getVehicle(HttpServletRequest httpServletRequest) {
@@ -78,13 +78,14 @@ public class DriverController {
 		Vehicle vehicle;
 		try {
 			vehicle = driverService.getVehicle(user);
-			if (vehicle == null) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
+		if (vehicle == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+
 		VehicleModel vehicleModel = new Vehicle2Model().convert(vehicle);
 		return new ResponseEntity<VehicleModel>(vehicleModel, HttpStatus.OK);
 	}
