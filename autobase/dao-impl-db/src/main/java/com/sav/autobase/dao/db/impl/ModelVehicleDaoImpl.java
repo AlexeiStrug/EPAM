@@ -47,7 +47,7 @@ public class ModelVehicleDaoImpl extends GenericDaoImpl<ModelVehicle> implements
 		try {
 			return jdbcTemplate.queryForObject(FIND_MODEL_BY_ID, new Object[] { id }, new ModelMapper());
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -58,7 +58,7 @@ public class ModelVehicleDaoImpl extends GenericDaoImpl<ModelVehicle> implements
 			List<ModelVehicle> rs = jdbcTemplate.query(GET_ALL_MODEL, new ModelMapper());
 			return rs;
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}

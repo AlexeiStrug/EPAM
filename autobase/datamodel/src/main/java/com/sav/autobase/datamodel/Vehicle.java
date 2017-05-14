@@ -1,11 +1,12 @@
 package com.sav.autobase.datamodel;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Vehicle extends AbstractData{
+public class Vehicle extends AbstractData implements Serializable{
 
 	private Users driver;
 	private ModelVehicle model;

@@ -1,8 +1,10 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:c='http://www.springframework.org/schema/c'
+	xmlns:p='http://www.springframework.org/schema/p' xmlns:cache='http://www.springframework.org/schema/cache'
+
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	    http://www.springframework.org/schema/context 
@@ -12,13 +14,20 @@
 	    http://www.springframework.org/schema/jee
 	    http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
 	    http://www.springframework.org/schema/task
-	    http://www.springframework.org/schema/task/spring-task-3.0.xsd">
-	    
-	<context:annotation-config />
-	<context:component-scan base-package="com.sav.autobase.dao.db.impl" />
+	    http://www.springframework.org/schema/task/spring-task-3.0.xsd
+	    http://www.springframework.org/schema/cache 
+	    http://www.springframework.org/schema/cache/spring-cache.xsd">
 
+
+
+	<context:component-scan base-package="com.sav.autobase.dao.db.impl" />
 	<context:property-placeholder
 		ignore-unresolvable="true" location="classpath:db.properties" />
+	<context:component-scan base-package="com.sav.autobase.dao.db.cache" />
+	<context:property-placeholder
+		ignore-unresolvable="true" location="classpath:redis.properties" />
+
+	<context:annotation-config />
 
 
 	<!-- Initialization for data source -->
@@ -40,13 +49,33 @@
 		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
 		<constructor-arg ref="dataSource" />
 	</bean>
-	
+
 	<tx:annotation-driven />
 
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
 
+
+	<cache:annotation-driven cache-manager="redisCacheManager" />
+
+	<bean id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:host-name="${redis.host}" p:port="${redis.port}" p:use-pool="true" />
+
+
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+		p:connection-factory-ref="jedisConnectionFactory"
+		p:valueSerializer-ref="jacksonJsonRedisSerializer"
+		p:keySerializer-ref="stringRedisSerializer" p:hashKeySerializer-ref="stringRedisSerializer" />
+
+	<bean id="stringRedisSerializer"
+		class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+
+	<bean id="jacksonJsonRedisSerializer"
+		class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+
+	<bean id='redisCacheManager' class='org.springframework.data.redis.cache.RedisCacheManager'
+		c:redis-operations-ref='redisTemplate' />
 </beans>

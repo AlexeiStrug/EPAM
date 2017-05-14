@@ -38,13 +38,14 @@ public abstract class GenericDaoImpl<T> implements IGenericDao<T> {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(GenericDaoImpl.class);
 
+	
 	@Override
 	public T getById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_BY_ID, new Object[] { id },
 					new BeanPropertyRowMapper<T>(entityClass));
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -60,7 +61,7 @@ public abstract class GenericDaoImpl<T> implements IGenericDao<T> {
 		try {
 			jdbcTemplate.update(DELETE + id);
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 		}
 	}
 
@@ -70,7 +71,7 @@ public abstract class GenericDaoImpl<T> implements IGenericDao<T> {
 			List<T> rs = jdbcTemplate.query(GET_ALL, new BeanPropertyRowMapper<T>(entityClass));
 			return rs;
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}

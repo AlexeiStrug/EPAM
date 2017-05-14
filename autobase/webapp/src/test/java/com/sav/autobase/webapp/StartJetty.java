@@ -1,4 +1,5 @@
 package com.sav.autobase.webapp;
+
 import java.lang.management.ManagementFactory;
 
 import javax.management.MBeanServer;
@@ -11,13 +12,13 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class StartJetty {
-	
+
 	public static void main(String[] args) {
 
-		startInstance(8091);
-		// startInstance(8082);
-		// startInstance(8083);
-		// startInstance(8084);
+		startInstance(8081);
+		startInstance(8082);
+		startInstance(8083);
+		startInstance(8084);
 	}
 
 	private static void startInstance(int port) {
@@ -32,21 +33,21 @@ public class StartJetty {
 
 		server.addConnector(http);
 
-		WebAppContext bb = new WebAppContext();
-		bb.setServer(server);
-		bb.setContextPath("/");
-		bb.setWar("src/main/webapp");
+		WebAppContext contex = new WebAppContext();
+		contex.setServer(server);
+		contex.setContextPath("/");
+		contex.setWar("src/main/webapp");
 
-		server.setHandler(bb);
+		server.setHandler(contex);
 
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 		MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
 		server.addEventListener(mBeanContainer);
 		server.addBean(mBeanContainer);
-
+		
 		try {
 			server.start();
-			// server.join();
+//			server.join();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(100);

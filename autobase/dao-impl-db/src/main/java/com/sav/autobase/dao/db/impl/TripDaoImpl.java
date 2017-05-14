@@ -62,7 +62,7 @@ public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 		try {
 			return jdbcTemplate.queryForObject(FIND_TRIP_BY_ID, new Object[] { id }, new TripMapper());
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -109,7 +109,7 @@ public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 			List<Trip> rs = jdbcTemplate.query(GET_ALL_TRIP, new TripMapper());
 			return rs;
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -125,7 +125,7 @@ public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 		try {
 			return jdbcTemplate.queryForObject(GET_BY_USER, new Object[] { user.getId() }, new TripMapper());
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}

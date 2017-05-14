@@ -1,8 +1,9 @@
 package com.sav.autobase.datamodel;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Request extends AbstractData {
+public class Request extends AbstractData implements Serializable{
 
 	private Users client;
 	private Timestamp startDate;

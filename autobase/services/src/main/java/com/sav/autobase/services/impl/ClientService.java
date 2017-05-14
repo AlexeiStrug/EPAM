@@ -13,7 +13,7 @@ import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.StatusRequest;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.services.IClientService;
-import com.sav.autobase.services.exception.DAOException;
+import com.sav.autobase.services.exception.ServiceException;
 import com.sav.autobase.services.exception.ModifyException;
 
 @Service
@@ -25,97 +25,97 @@ public class ClientService implements IClientService {
 	private IRequestDao requestDao;
 
 	@Override
-	public Request getRequest(Integer id) throws DAOException {
-		if (id != null) {
-			try {
-				return requestDao.joinGetById(id);
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				throw new DAOException();
-			}
-		} else
+	public Request getRequest(Integer id) throws ServiceException {
+		if (id == null) {
 			return null;
-	}
-
-	@Override
-	public List<Request> getAllRequest(Users user) throws DAOException {
-		if (user != null) {
-			try {
-				return requestDao.joinGetAllbyUser(user);
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				throw new DAOException();
-			}
-		} else {
-			LOGGER.info("Failed getAll request by user");
-			return null;
+		}
+		try {
+			return requestDao.joinGetById(id);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ServiceException();
 		}
 	}
 
 	@Override
-	public void createRequest(Request request) throws DAOException, ModifyException {
-		if (request != null) {
-			try {
-				if (request.getId() == null) {
-					if (request.getProcessed() == null) {
-						request.setProcessed(StatusRequest.notReady);
-					}
-					requestDao.insert(request);
-				} else {
-					modifyRequest(request);
-				}
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				throw new DAOException();
-			}
-			LOGGER.info(
-					"Created new request Request.id={}. client={}. start_date={}. end_date={}. place={}. count_of_passenger={}. comment={}. processed={} ",
-					request.getId(), request.getClient(), request.getStartDate(), request.getEndDate(),
-					request.getPlace(), request.getCountOfPassenger(), request.getComment(), request.getProcessed().name());
-		} else
-			LOGGER.info("Failed created new request");
+	public List<Request> getAllRequest(Users user) throws ServiceException {
+		if (user == null) {
+			LOGGER.error("Failed getAll request by user");
+			return null;
+		}
+		try {
+			return requestDao.joinGetAllbyUser(user);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ServiceException();
+		}
 	}
 
 	@Override
-	public void modifyRequest(Request request) throws DAOException, ModifyException {
-		if (request != null) {
-			try {
+	public void createRequest(Request request) throws ServiceException, ModifyException {
+		if (request == null) {
+			LOGGER.error("Failed created new request");
+			return;
+		}
+		try {
+			if (request.getId() == null) {
 				if (request.getProcessed() == null) {
 					request.setProcessed(StatusRequest.notReady);
-					requestDao.update(request);
 				}
-				if (request.getProcessed() == StatusRequest.ready) {
-					throw new ModifyException();
-				}
-				if (request.getDispatcher() == null) {
-					requestDao.updateClientRequest(request);
-				} else
-					requestDao.update(request);
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				throw new DAOException();
+				requestDao.insert(request);
+			} else {
+				modifyRequest(request);
 			}
-			LOGGER.info(
-					"Updated request Request.id={}. start_date={}. end_date={}. place={}. count_of_passenger={}. comment={}. processed={} ",
-					request.getId(), request.getStartDate(), request.getEndDate(), request.getPlace(),
-					request.getCountOfPassenger(), request.getComment(), request.getProcessed().name());
-		} else
-			LOGGER.info("Failed update request");
-
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ServiceException();
+		}
+		LOGGER.info(
+				"Created new request Request.id={}. client={}. start_date={}. end_date={}. place={}. count_of_passenger={}. comment={}. processed={} ",
+				request.getId(), request.getClient(), request.getStartDate(), request.getEndDate(), request.getPlace(),
+				request.getCountOfPassenger(), request.getComment(), request.getProcessed().name());
 	}
 
 	@Override
-	public void deleteRequest(Integer id) throws DAOException {
-		if (id != null) {
-			try {
-				requestDao.delete(id);
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				throw new DAOException();
+	public void modifyRequest(Request request) throws ServiceException, ModifyException {
+		if (request == null) {
+			LOGGER.error("Failed update request");
+			return;
+		}
+		try {
+			if (request.getProcessed() == null) {
+				request.setProcessed(StatusRequest.notReady);
+				requestDao.update(request);
 			}
-			LOGGER.info("Deleted request");
-		} else
-			LOGGER.info("Failed delete request");
+			if (request.getProcessed() == StatusRequest.ready) {
+				throw new ModifyException();
+			}
+			if (request.getDispatcher() == null) {
+				requestDao.updateClientRequest(request);
+			} else
+				requestDao.update(request);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ServiceException();
+		}
+		LOGGER.info(
+				"Updated request Request.id={}. start_date={}. end_date={}. place={}. count_of_passenger={}. comment={}. processed={} ",
+				request.getId(), request.getStartDate(), request.getEndDate(), request.getPlace(),
+				request.getCountOfPassenger(), request.getComment(), request.getProcessed().name());
 	}
 
+	@Override
+	public void deleteRequest(Integer id) throws ServiceException {
+		if (id == null && requestDao.getById(id).getProcessed() == StatusRequest.inProcess) {
+			LOGGER.error("Failed delete request");
+			return;
+		}
+		try {
+			requestDao.delete(id);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ServiceException();
+		}
+		LOGGER.info("Deleted request");
+	}
 }

@@ -1,7 +1,7 @@
 package com.sav.autobase.datamodel;
 
 public class AbstractData {
-	
+
 	private Integer id;
 
 	public Integer getId() {
@@ -36,7 +36,5 @@ public class AbstractData {
 			return false;
 		return true;
 	}
-	
-	
 
 }

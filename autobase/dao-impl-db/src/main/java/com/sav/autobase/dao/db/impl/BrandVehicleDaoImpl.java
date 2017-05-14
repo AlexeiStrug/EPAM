@@ -52,7 +52,7 @@ public class BrandVehicleDaoImpl extends GenericDaoImpl<BrandVehicle> {
 
 	@Override
 	public BrandVehicle update(BrandVehicle entity) throws UnsupportedOperationException {
-		LOGGER.debug("Used UnsupportedOperationException");
+		LOGGER.error("Used UnsupportedOperationException");
 		throw new UnsupportedOperationException();
 	}
 

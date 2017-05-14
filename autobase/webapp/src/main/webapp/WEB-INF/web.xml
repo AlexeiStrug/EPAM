@@ -31,6 +31,7 @@
 		<servlet-name>SpringMVC</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
 	<filter-mapping>
 		<filter-name>basicAuthFilter</filter-name>
 		<url-pattern>/*</url-pattern>

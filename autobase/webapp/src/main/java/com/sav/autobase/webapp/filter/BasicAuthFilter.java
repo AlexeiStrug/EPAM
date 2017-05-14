@@ -15,27 +15,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.services.IAuthenticationService;
-import com.sav.autobase.services.exception.DAOException;
+import com.sav.autobase.services.exception.ServiceException;
 
-import components.UserDataStorage;
-
+@Component
 public class BasicAuthFilter implements Filter {
 
 	private IAuthenticationService authService;
-	private UserDataStorage userDataStorage;
-	private ApplicationContext appContex;
+	private ApplicationContext appContext;
+	
+	public static final String userAttribute = "UserLoggin";
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
 		WebApplicationContext context = WebApplicationContextUtils
 				.getRequiredWebApplicationContext(config.getServletContext());
 		authService = context.getBean(IAuthenticationService.class);
-		appContex = context;
-
+		appContext = context;
 	}
 
 	@Override
@@ -44,8 +45,11 @@ public class BasicAuthFilter implements Filter {
 
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-
-		userDataStorage = appContex.getBean(UserDataStorage.class);
+		
+		if (!isAuthRequired(req)) {
+			chain.doFilter(request, response);
+			return;
+		}
 
 		String[] credentials = resolveCredentials(req);
 
@@ -55,19 +59,20 @@ public class BasicAuthFilter implements Filter {
 			return;
 		}
 
-		String username = credentials[0];
+		String login = credentials[0];
 		String password = credentials[1];
+		
 		try {
-			if (authService.authenticate(username, password)) {
-				userDataStorage.setLoggedIn(true);
+			Users user = authService.authenticate(login, password);
+			if (user != null) {
+				request.setAttribute(userAttribute, user);
 				chain.doFilter(request, response);
 			} else {
 				res.sendError(401);
 			}
-		} catch (DAOException e) {
+		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private String[] resolveCredentials(HttpServletRequest req) {
@@ -80,6 +85,16 @@ public class BasicAuthFilter implements Filter {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	private boolean isAuthRequired(HttpServletRequest req) {
+		if (req.getRequestURI().startsWith("/auth/login")) {
+			return false;
+		}
+		if (req.getRequestURI().startsWith("/auth/register")) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override

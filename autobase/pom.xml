@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<common.project.version>1.0</common.project.version>
-		<spring.version>4.0.3.RELEASE</spring.version>
+		<spring.version>4.3.3.RELEASE</spring.version>
 		<jetty9.version>9.2.13.v20150730</jetty9.version>
 	</properties>
 
@@ -20,7 +20,7 @@
 		<module>datamodel</module>
 		<module>dao-api</module>
 		<module>dao-impl-db</module>
-		<!--module>dao-impl-xml</module -->
+		<module>dao-impl-xml</module>
 		<module>services</module>
 		<module>webapp</module>
 	</modules>
@@ -46,8 +46,11 @@
 				<version>1.0.0</version>
 			</dependency>
 
-			<!--dependency> <groupId>com.sav.autobase</groupId> <artifactId>dao-impl-xml</artifactId> 
-				<version>1.0.0</version> </dependency -->
+			<dependency>
+				<groupId>com.sav.autobase</groupId>
+				<artifactId>dao-impl-xml</artifactId>
+				<version>1.0.0</version>
+			</dependency>
 
 
 			<dependency>
@@ -78,9 +81,29 @@
 			</dependency>
 
 			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>2.9.0.pr3</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>2.9.0.pr3</version>
+			</dependency>
+			<dependency>
 				<groupId>javax.inject</groupId>
 				<artifactId>javax.inject</artifactId>
 				<version>1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-redis</artifactId>
+				<version>1.7.4.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+				<version>2.9.0</version>
 			</dependency>
 
 			<!-- Spring framework -->
@@ -136,7 +159,6 @@
 				<scope>test</scope>
 			</dependency>
 
-
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
@@ -175,9 +197,31 @@
 				<scope>test</scope>
 			</dependency>
 
-
-
-
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.12</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>1.7.25</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.7.12</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>1.4</version>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.17</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-api</artifactId>
@@ -194,11 +238,17 @@
 				<version>2.1</version>
 			</dependency>
 			<dependency>
+				<groupId>org.lazyluke</groupId>
+				<artifactId>log4jdbc-remix</artifactId>
+				<version>0.2.7</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-jcl</artifactId>
 				<version>2.1</version>
-
 			</dependency>
+
+
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
@@ -230,6 +280,11 @@
 				<artifactId>jetty-jmx</artifactId>
 				<version>${jetty9.version}</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-client</artifactId>
+				<version>${jetty9.version}</version>
 			</dependency>
 
 

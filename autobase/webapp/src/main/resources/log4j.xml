@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration debug="true"
+	xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %c{1}:%L - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="file" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="ERROR" />
+		<param name="append" value="false" />
+		<param name="maxFileSize" value="5MB" />
+		<param name="maxBackupIndex" value="5" />
+		<param name="file" value="logs/ERROR.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="DB" class="org.apache.log4j.jdbc.JDBCAppender">
+		<param name="Threshold" value="WARN" />
+		<param name="driver" value="org.postgresql.Driver" />
+		<param name="URL" value="jdbc:postgresql://localhost:5432/autobase" />
+		<param name="user" value="postgres" />
+		<param name="password" value="postgres" />
+		<param name="sql"
+			value="INSERT INTO test.logs (dated, logger, level, message) VALUES (to_timestamp('%d','YYYY-MM-DD HH24:MI:SS,MS'),'%C','%p','%m')" />
+	</appender>
+
+	<appender name="ErrorEmailAppender" class="org.apache.log4j.net.SMTPAppender">
+		<param name="Threshold" value="ERROR" />
+		<param name="SMTPProtocol" value="smtps" />
+		<param name="SMTPHost" value="smtp.gmail.com" />
+		<param name="SMTPPort" value="465" />
+		<param name="SMTPUsername" value="alexeistrug@gmail.com" />
+		<param name="SMTPPassword" value="mdmswed66!" />
+		<param name="From" value="alexeistrug@gmail.com" />
+		<param name="To" value="alexei_strug@mail.ru" />
+		<param name="Subject" value="Testing Log4j mail notification" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{ISO8601}]%n%n%-5p%n%n%c%n%n%m%n%n" />
+		</layout>
+	</appender>
+
+	<appender name="EMAIL_ASYNC" class="org.apache.log4j.AsyncAppender">
+		<param name="BufferSize" value="1" />
+		<appender-ref ref="ErrorEmailAppender" />
+	</appender>
+	
+	<logger name="log4j.rootLogger" additivity="false">
+		<appender-ref ref="DB" />
+	</logger>
+
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="console" />
+		<appender-ref ref="file" />
+		<appender-ref ref="DB" />
+		<appender-ref ref="ErrorEmailAppender" />
+	</root>
+	
+</log4j:configuration>

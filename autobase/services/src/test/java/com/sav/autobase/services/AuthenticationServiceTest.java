@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.sav.autobase.datamodel.Users;
-import com.sav.autobase.services.exception.DAOException;
+import com.sav.autobase.services.exception.ModifyException;
+import com.sav.autobase.services.exception.ServiceException;
 
 public class AuthenticationServiceTest extends AbstractTest {
 	
@@ -28,7 +29,7 @@ public class AuthenticationServiceTest extends AbstractTest {
 	private Users newUser;
 	
 	@Before
-	public void runBeforeMethod() throws DAOException, ParseException {
+	public void runBeforeMethod() throws ServiceException, ParseException {
 
 		LOGGER.debug("^^^CREATED necessary entities:");
 
@@ -39,14 +40,14 @@ public class AuthenticationServiceTest extends AbstractTest {
 	}
 
 	@After
-	public void runAfterMethod() throws DAOException {
+	public void runAfterMethod() throws ServiceException {
 
 		LOGGER.debug("^^^DELETED created entites");
 		adminService.deleteAll();
 	}
 	
 	@Test
-	public void registerUserTest() throws DAOException {
+	public void registerUserTest() throws ServiceException, ModifyException {
 		
 		LOGGER.debug("^^^REGISTER USER test");
 
@@ -59,12 +60,12 @@ public class AuthenticationServiceTest extends AbstractTest {
 	}
 	
 	@Test
-	public void authenticateTest() throws DAOException {
+	public void authenticateTest() throws ServiceException {
 		
 		LOGGER.debug("^^^AUTHENTICATE USER test");
 		
-		boolean givem = authService.authenticate(newUser.getLogin(), newUser.getPassword());
+		Users userGiven = authService.authenticate(newUser.getLogin(), newUser.getPassword());
 		
-		Assert.isTrue(givem, "Method must be true");
+		Assert.notNull(userGiven, "Method must be true");
 	}
 }

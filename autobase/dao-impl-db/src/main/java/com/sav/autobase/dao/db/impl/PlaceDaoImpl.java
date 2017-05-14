@@ -25,6 +25,7 @@ public class PlaceDaoImpl extends GenericDaoImpl<Place> implements IPlaceDao {
 	final String FIND_PLACE_BY_STARTNAME = "SELECT * FROM place WHERE place_start = ?";
 	final String FIND_PLACE_BY_ENDNAME = "SELECT * FROM place WHERE place_end = ?";
 	final String INSERT_PLACE = "INSERT INTO place (place_start, place_end, distance) VALUES(?,?,?)";
+	
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(PlaceDaoImpl.class);
 
@@ -42,7 +43,7 @@ public class PlaceDaoImpl extends GenericDaoImpl<Place> implements IPlaceDao {
 			return jdbcTemplate.queryForObject(FIND_PLACE_BY_STARTNAME, new Object[] { place },
 					new BeanPropertyRowMapper<Place>(Place.class));
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -53,7 +54,7 @@ public class PlaceDaoImpl extends GenericDaoImpl<Place> implements IPlaceDao {
 			return jdbcTemplate.queryForObject(FIND_PLACE_BY_ENDNAME, new Object[] { place },
 					new BeanPropertyRowMapper<Place>(Place.class));
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -80,7 +81,7 @@ public class PlaceDaoImpl extends GenericDaoImpl<Place> implements IPlaceDao {
 
 	@Override
 	public Place update(Place entity) throws UnsupportedOperationException {
-		LOGGER.debug("Used UnsupportedOperationException");
+		LOGGER.error("Used UnsupportedOperationException");
 		throw new UnsupportedOperationException();
 	}
 

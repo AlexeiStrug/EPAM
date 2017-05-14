@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
 import com.sav.autobase.datamodel.Place;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.Users;
-import com.sav.autobase.services.exception.DAOException;
+import com.sav.autobase.services.exception.ServiceException;
 import com.sav.autobase.services.exception.ModifyException;
 
 public class ClientServiceTest extends AbstractTest {
@@ -41,7 +41,7 @@ public class ClientServiceTest extends AbstractTest {
 	private Request request3;
 
 	@Before
-	public void runBeforeMethod() throws DAOException, ParseException, ModifyException {
+	public void runBeforeMethod() throws ServiceException, ParseException, ModifyException {
 
 		LOGGER.debug("^^^CREATED necessary entities:");
 		newUser = entityFactory.createUser();
@@ -57,14 +57,14 @@ public class ClientServiceTest extends AbstractTest {
 	}
 
 	@After
-	public void runAfterMethod() throws DAOException {
+	public void runAfterMethod() throws ServiceException {
 
 		LOGGER.debug("^^^DELETED created entites");
 		adminService.deleteAll();
 	}
 
 	@Test
-	public void createTest() throws DAOException, ModifyException {
+	public void createTest() throws ServiceException, ModifyException {
 
 		LOGGER.debug("^^^CREATED test");
 
@@ -75,7 +75,7 @@ public class ClientServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void updateTest() throws DAOException, ModifyException, ParseException {
+	public void updateTest() throws ServiceException, ModifyException, ParseException {
 
 		LOGGER.debug("^^^UPDATED test");
 
@@ -94,7 +94,7 @@ public class ClientServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void deleteTest() throws DAOException, ModifyException {
+	public void deleteTest() throws ServiceException, ModifyException {
 		LOGGER.debug("^^^DELETED test");
 
 		clientService.createRequest(request);
@@ -106,7 +106,7 @@ public class ClientServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void getTest() throws DAOException, ModifyException {
+	public void getTest() throws ServiceException, ModifyException {
 
 		LOGGER.debug("^^^GET test");
 
@@ -118,7 +118,7 @@ public class ClientServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void getAllTest() throws DAOException, ModifyException, ParseException {
+	public void getAllTest() throws ServiceException, ModifyException, ParseException {
 
 		LOGGER.debug("^^^GET ALL test");
 

@@ -1,6 +1,8 @@
 package com.sav.autobase.datamodel;
 
-public class BrandVehicle extends AbstractData{
+import java.io.Serializable;
+
+public class BrandVehicle extends AbstractData implements Serializable{
 
 	private String brandName;
 

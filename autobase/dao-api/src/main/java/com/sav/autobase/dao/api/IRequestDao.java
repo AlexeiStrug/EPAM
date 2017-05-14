@@ -17,6 +17,7 @@ public interface IRequestDao extends IGenericDao<Request> {
 	List<Request> joinGetAll();
 	
 	List<Request> joinGetAllbyUser(Users user);
-	
 
+	List<Request> joinGetAllByStatus(StatusRequest status);
+	
 }

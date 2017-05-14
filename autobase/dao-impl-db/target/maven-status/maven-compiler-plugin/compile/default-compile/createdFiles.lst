@@ -2,6 +2,7 @@ com\sav\autobase\dao\db\impl\PlaceDaoImpl.class
 com\sav\autobase\dao\db\impl\TripDaoImpl$2.class
 com\sav\autobase\dao\db\impl\VehicleDaoImpl$2.class
 com\sav\autobase\dao\db\impl\AdminUtilityProceduresDao.class
+com\sav\autobase\dao\db\cache\ICache.class
 com\sav\autobase\dao\db\impl\RequestDaoImpl.class
 com\sav\autobase\dao\db\mapper\TripMapper.class
 com\sav\autobase\dao\db\impl\BrandVehicleDaoImpl$1.class
@@ -13,7 +14,9 @@ com\sav\autobase\dao\db\util\SchemaNameAwareBasicDataSource.class
 com\sav\autobase\dao\db\impl\GenericDaoImpl.class
 com\sav\autobase\dao\db\impl\RequestDaoImpl$3.class
 com\sav\autobase\dao\db\impl\TripDaoImpl$1.class
+com\sav\autobase\dao\db\cache\AppConfig.class
 com\sav\autobase\dao\db\impl\VehicleDaoImpl.class
+com\sav\autobase\dao\db\cache\UserCache.class
 com\sav\autobase\dao\db\impl\UsersDaoImpl.class
 com\sav\autobase\dao\db\impl\TripDaoImpl.class
 com\sav\autobase\dao\db\impl\TypeVehicleDaoImpl$1.class

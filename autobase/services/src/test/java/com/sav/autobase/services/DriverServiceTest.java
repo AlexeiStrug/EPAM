@@ -19,7 +19,7 @@ import com.sav.autobase.datamodel.Trip;
 import com.sav.autobase.datamodel.TypeVehicle;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
-import com.sav.autobase.services.exception.DAOException;
+import com.sav.autobase.services.exception.ServiceException;
 
 public class DriverServiceTest extends AbstractTest {
 
@@ -41,7 +41,7 @@ public class DriverServiceTest extends AbstractTest {
 	private Trip newTrip;
 
 	@Before
-	public void runBeforeMethod() throws DAOException, ParseException {
+	public void runBeforeMethod() throws ServiceException, ParseException {
 
 		LOGGER.debug("^^^CREATED necessary entities:");
 
@@ -80,14 +80,14 @@ public class DriverServiceTest extends AbstractTest {
 	}
 
 	@After
-	public void runAfterMethod() throws DAOException {
+	public void runAfterMethod() throws ServiceException {
 
 		LOGGER.debug("^^^DELETED created entites");
 		adminService.deleteAll();
 	}
 
 	@Test
-	public void getTrip() throws DAOException {
+	public void getTrip() throws ServiceException {
 		LOGGER.debug("^^^GET TRIP test");
 
 		Trip tripFromDb = driverService.getTrip(newUser);
@@ -97,7 +97,7 @@ public class DriverServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void getVehicle() throws DAOException {
+	public void getVehicle() throws ServiceException {
 		LOGGER.debug("^^^GET VEHICLE test");
 
 		Vehicle vehicleFromDb = driverService.getVehicle(newUser);
@@ -107,7 +107,7 @@ public class DriverServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void changeStatusVehicle() throws DAOException {
+	public void changeStatusVehicle() throws ServiceException {
 		LOGGER.debug("^^^CHANGE STATUS VEHICLE test");
 
 		Vehicle vehicleFromDb = driverService.getVehicle(newUser);
@@ -122,7 +122,7 @@ public class DriverServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void changeStatusTrip() throws DAOException {
+	public void changeStatusTrip() throws ServiceException {
 		LOGGER.debug("^^^CHANGE STATUS TRIP test");
 
 		Trip tripFromDb = driverService.getTrip(newUser);

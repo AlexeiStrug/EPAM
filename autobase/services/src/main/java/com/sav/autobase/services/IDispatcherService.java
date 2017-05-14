@@ -10,32 +10,32 @@ import com.sav.autobase.datamodel.StatusRequest;
 import com.sav.autobase.datamodel.Trip;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
-import com.sav.autobase.services.exception.DAOException;
+import com.sav.autobase.services.exception.ServiceException;
 
 public interface IDispatcherService {
 	
-	Request getRequestByStatus(Users user) throws DAOException;
+	Request getRequestByStatus(Users user) throws ServiceException;
 	
-	Request getRequest(Integer id) throws DAOException;
+	Request getRequest(Integer id) throws ServiceException;
 	
-	Trip getTrip(Integer id) throws DAOException;
+	Trip getTrip(Integer id) throws ServiceException;
 
-	List<Trip> getAllTrip() throws DAOException;
+	List<Trip> getAllTrip() throws ServiceException;
 
-	List<Vehicle> findByCriteria(VehicleSerachCriteria criteria) throws DAOException;
-
-	@Transactional
-	void modifyRequest(Request request) throws DAOException;
+	List<Vehicle> findVehicleByCriteria(VehicleSerachCriteria criteria) throws ServiceException;
 
 	@Transactional
-	void deleteTrip(Integer id) throws DAOException;
+	void modifyRequest(Request request) throws ServiceException;
 
 	@Transactional
-	Trip createTrip(Request request, Vehicle vehicle) throws DAOException;
+	void deleteTrip(Integer id) throws ServiceException;
 
 	@Transactional
-	void modifyTrip(Trip trip) throws DAOException;
+	Trip createTrip(Request request, Vehicle vehicle) throws ServiceException;
 
-	Request findByStatus(StatusRequest status) throws DAOException;
+	@Transactional
+	void modifyTrip(Trip trip) throws ServiceException;
+
+	Request findByStatus(StatusRequest status) throws ServiceException;
 
 }

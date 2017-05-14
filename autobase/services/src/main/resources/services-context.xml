@@ -19,5 +19,7 @@
 	<import resource="classpath:dao-context.xml" />
 	<context:component-scan base-package="com.sav.autobase.services.impl" />
 
-
+    <task:annotation-driven />
+	<context:component-scan base-package="com.sav.autobase.services.components" />
+	
 </beans>

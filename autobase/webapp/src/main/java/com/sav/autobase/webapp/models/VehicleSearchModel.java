@@ -6,7 +6,7 @@ public class VehicleSearchModel {
 	private String type;
 	private String nameModel;
 	private Integer countOfPassenger;
-	private Integer registerNumber;
+	private String registerNumber;
 	private Boolean readyCrashCar;
 
 	public String getBrand() {
@@ -41,12 +41,12 @@ public class VehicleSearchModel {
 		this.countOfPassenger = countOfPassenger;
 	}
 
-	public Integer getRegisterNumber() {
+	public String getRegisterNumber() {
 		return registerNumber;
 	}
 
-	public void setRegisterNumber(Integer registerNumber) {
-		this.registerNumber = registerNumber;
+	public void setRegisterNumber(String string) {
+		this.registerNumber = string;
 	}
 
 	public Boolean getReadyCrashCar() {

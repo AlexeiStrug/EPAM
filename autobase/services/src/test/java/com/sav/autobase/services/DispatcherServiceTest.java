@@ -21,7 +21,7 @@ import com.sav.autobase.datamodel.Trip;
 import com.sav.autobase.datamodel.TypeVehicle;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
-import com.sav.autobase.services.exception.DAOException;
+import com.sav.autobase.services.exception.ServiceException;
 
 public class DispatcherServiceTest extends AbstractTest {
 
@@ -56,7 +56,7 @@ public class DispatcherServiceTest extends AbstractTest {
 	private Trip newTrip3;
 
 	@Before
-	public void runBeforeMethod() throws DAOException, ParseException {
+	public void runBeforeMethod() throws ServiceException, ParseException {
 
 		LOGGER.debug("^^^CREATED necessary entities:");
 
@@ -95,14 +95,14 @@ public class DispatcherServiceTest extends AbstractTest {
 	}
 
 	@After
-	public void runAfterMethod() throws DAOException {
+	public void runAfterMethod() throws ServiceException {
 
 		LOGGER.debug("^^^DELETED created entites");
 		adminService.deleteAll();
 	}
 
 	@Test
-	public void getRequest() throws DAOException {
+	public void getRequest() throws ServiceException {
 
 		LOGGER.debug("^^^GET REQUEST BY ID TEST");
 
@@ -112,7 +112,7 @@ public class DispatcherServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void getRequestByStatusTest() throws DAOException {
+	public void getRequestByStatusTest() throws ServiceException {
 
 		LOGGER.debug("^^^GET NOT READY REQUEST FOR DISPATCHER test");
 
@@ -124,7 +124,7 @@ public class DispatcherServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void modifyRequestTest() throws DAOException {
+	public void modifyRequestTest() throws ServiceException {
 
 		LOGGER.debug("^^^UPDATED REQUEST test");
 
@@ -138,7 +138,7 @@ public class DispatcherServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void getTripTest() throws DAOException {
+	public void getTripTest() throws ServiceException {
 
 		LOGGER.debug("^^^GET TRIP test");
 
@@ -149,7 +149,7 @@ public class DispatcherServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void getAllTripTest() throws DAOException, ParseException {
+	public void getAllTripTest() throws ServiceException, ParseException {
 
 		LOGGER.debug("^^^GET ALL TRIP test");
 
@@ -172,7 +172,7 @@ public class DispatcherServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void createTripTest() throws DAOException {
+	public void createTripTest() throws ServiceException {
 
 		LOGGER.debug("^^^CREATE TRIP test");
 
@@ -185,7 +185,7 @@ public class DispatcherServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void modifyTripTest() throws DAOException, ParseException {
+	public void modifyTripTest() throws ServiceException, ParseException {
 
 		LOGGER.debug("^^^UPDATE TRIP TEST");
 
@@ -203,7 +203,7 @@ public class DispatcherServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void findByCriteria() throws DAOException {
+	public void findByCriteria() throws ServiceException {
 
 		LOGGER.debug("^^^FIND VEHICLE BY CRITERIA test");
 
@@ -216,14 +216,14 @@ public class DispatcherServiceTest extends AbstractTest {
 		criteria.setCountOfPassenger(5);
 		criteria.setReadyCrashCar(true);
 
-		List<Vehicle> vehicleCriteria = dispatcherService.findByCriteria(criteria);
+		List<Vehicle> vehicleCriteria = dispatcherService.findVehicleByCriteria(criteria);
 		LOGGER.info("{}", vehicleCriteria);
 
 		Assert.notNull(vehicleCriteria, "Method must get vehicle by CRITERIA");
 	}
 
 	@Test
-	public void deleteTripTest() throws DAOException {
+	public void deleteTripTest() throws ServiceException {
 
 		LOGGER.debug("^^^DELETED TRIP test");
 

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.api.IVehicleDao;
 import com.sav.autobase.dao.api.filter.VehicleSerachCriteria;
+import com.sav.autobase.dao.db.cache.SearchVehicleCache;
 import com.sav.autobase.dao.db.mapper.VehicleMapper;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
@@ -27,15 +28,18 @@ import com.sav.autobase.datamodel.Vehicle;
 @Repository
 public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleDao {
 
-	final String FIND_VEHICLE_BY_ID = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+	final String FIND_VEHICLE_BY_ID = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle "
+			+ "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE vehicle.id = ?";
-	final String GET_ALL_VEHICLE = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+	final String GET_ALL_VEHICLE = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle "
+			+ "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id ";
-	final String GET_ALL_READY_VEHICLE = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+	final String GET_ALL_READY_VEHICLE = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle "
+			+ "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE ready_crash_car = ?";
@@ -43,9 +47,9 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 			+ "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
-			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
-			+ "WHERE users.id = ?";
-	String FIND_CRITERIA_VEHICLE = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle " + "INNER JOIN users ON users.id=vehicle.driver_id "
+			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id " + "WHERE users.id = ?";
+	String FIND_CRITERIA_VEHICLE = "SELECT vehicle.id as vehicle_id, vehicle.driver_id, users.first_name, users.last_name, users.type, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM vehicle "
+			+ "INNER JOIN users ON users.id=vehicle.driver_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id  "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id WHERE true ";
@@ -60,17 +64,20 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 	@Inject
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+	@Inject
+	private SearchVehicleCache searchCache;
+
 	@Override
 	protected String getTableName() {
 		return "vehicle";
 	}
-	
+
 	@Override
 	public Vehicle joinGetById(Integer id) {
 		try {
 			return jdbcTemplate.queryForObject(FIND_VEHICLE_BY_ID, new Object[] { id }, new VehicleMapper());
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -117,39 +124,49 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 			List<Vehicle> rs = jdbcTemplate.query(GET_ALL_VEHICLE, new VehicleMapper());
 			return rs;
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
 
 	@Override
 	public List<Vehicle> getFiltered(VehicleSerachCriteria criteria) {
+
+		String query = FIND_CRITERIA_VEHICLE;
+		List<Vehicle> searchFromCache = searchCache.get(new Integer(criteria.hashCode()).toString());
+
+		if (searchFromCache != null) {
+			LOGGER.info("from cahce search by Filter");
+			return searchFromCache;
+		}
 		try {
 			if (criteria.isEmpty()) {
 				getAll();
 			}
 			if (criteria.getBrand() != null && criteria.getBrand().length() > 0) {
-				FIND_CRITERIA_VEHICLE += " AND brand_model=:brand";
+				query += " AND brand_model=:brand";
 			}
 			if (criteria.getType() != null && criteria.getType().length() > 0) {
-				FIND_CRITERIA_VEHICLE += " AND type_model=:type";
+				query += " AND type_model=:type";
 			}
 			if (criteria.getNameModel() != null && criteria.getNameModel().length() > 0) {
-				FIND_CRITERIA_VEHICLE += " AND name_model=:nameModel";
+				query += " AND name_model=:nameModel";
 			}
 			if (criteria.getCountOfPassenger() != null) {
-				FIND_CRITERIA_VEHICLE += " AND count_of_passenger>=:countOfPassenger";
+				query += " AND count_of_passenger>=:countOfPassenger";
 			}
-			if (criteria.getRegisterNumber() != null) {
-				FIND_CRITERIA_VEHICLE += " AND register_number=:registerNumber";
+			if (criteria.getRegisterNumber() != null && criteria.getRegisterNumber().length() > 0) {
+				query += " AND register_number=:registerNumber";
 			}
 			if (criteria.getReadyCrashCar() != null) {
-				FIND_CRITERIA_VEHICLE += " AND ready_crash_car=:readyCrashCar";
+				query += " AND ready_crash_car=:readyCrashCar";
 			}
 			BeanPropertySqlParameterSource namedParameters = new BeanPropertySqlParameterSource(criteria);
-			return namedParameterJdbcTemplate.query(FIND_CRITERIA_VEHICLE, namedParameters, new VehicleMapper());
+			List<Vehicle> vehicle = namedParameterJdbcTemplate.query(query, namedParameters, new VehicleMapper());
+			searchCache.set(new Integer(criteria.hashCode()).toString(), vehicle);
+			return vehicle;
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -170,7 +187,7 @@ public class VehicleDaoImpl extends GenericDaoImpl<Vehicle> implements IVehicleD
 		try {
 			return jdbcTemplate.queryForObject(GET_BY_USER, new Object[] { user.getId() }, new VehicleMapper());
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}

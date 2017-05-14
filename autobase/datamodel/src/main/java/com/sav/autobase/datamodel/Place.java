@@ -1,11 +1,12 @@
 package com.sav.autobase.datamodel;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Place extends AbstractData {
+public class Place extends AbstractData implements Serializable{
 
 	private String placeStart;
 	private String placeEnd;

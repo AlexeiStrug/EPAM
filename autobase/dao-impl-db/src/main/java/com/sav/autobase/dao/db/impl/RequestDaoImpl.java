@@ -31,6 +31,10 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 	final String GET_ALL_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id ";
+	final String GET_ALL_READY_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
+			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
+			+ "INNER JOIN place ON place.id = request.place_id "
+			+ "WHERE request.processed = ?";
 	final String GET_ALL_REQUEST_BY_USER = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id " + "where users.id = ?";
@@ -56,7 +60,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 		try {
 			return jdbcTemplate.queryForObject(FIND_REQUEST_BY_ID, new Object[] { id }, new RequestMapper());
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -66,7 +70,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 		try {
 			return jdbcTemplate.queryForObject(FIND_BY_PROCESSED, new Object[] { status.name() }, new RequestMapper());
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
@@ -142,11 +146,22 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 			List<Request> rs = jdbcTemplate.query(GET_ALL_REQUEST, new RequestMapper());
 			return rs;
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
 
+	@Override
+	public List<Request> joinGetAllByStatus(StatusRequest status) {
+		try {
+			List<Request> rs = jdbcTemplate.query(GET_ALL_READY_REQUEST, new RequestMapper());
+			return rs;
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Exception thrown! ", e);
+			return null;
+		}
+	}
+	
 	@Override
 	public List<Request> joinGetAllbyUser(Users user) {
 		try {
@@ -154,7 +169,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 					new RequestMapper());
 			return rs;
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}

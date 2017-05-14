@@ -6,23 +6,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.Users;
-import com.sav.autobase.services.exception.DAOException;
+import com.sav.autobase.services.exception.ServiceException;
 import com.sav.autobase.services.exception.ModifyException;
 
 public interface IClientService {
 
-	Request getRequest(Integer id) throws DAOException;
+	Request getRequest(Integer id) throws ServiceException;
 
-	List<Request> getAllRequest(Users user) throws DAOException;
+	List<Request> getAllRequest(Users user) throws ServiceException;
 	
 	@Transactional
-	void createRequest(Request request) throws DAOException, ModifyException;
+	void createRequest(Request request) throws ServiceException, ModifyException;
 
 	@Transactional
-	void modifyRequest(Request request) throws DAOException, ModifyException;
+	void modifyRequest(Request request) throws ServiceException, ModifyException;
 
 	@Transactional
-	void deleteRequest(Integer id) throws DAOException, ModifyException;
+	void deleteRequest(Integer id) throws ServiceException, ModifyException;
 
 
 }

@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sav.autobase.dao.api.filter.UserSearchCriteria;
 import com.sav.autobase.dao.api.filter.VehicleSerachCriteria;
 import com.sav.autobase.datamodel.BrandVehicle;
 import com.sav.autobase.datamodel.ModelVehicle;
@@ -20,23 +22,38 @@ import com.sav.autobase.datamodel.Place;
 import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.StatusRequest;
 import com.sav.autobase.datamodel.Trip;
-import com.sav.autobase.datamodel.TypeUsers;
 import com.sav.autobase.datamodel.TypeVehicle;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.datamodel.Vehicle;
 import com.sav.autobase.services.IAdminService;
-import com.sav.autobase.services.exception.DAOException;
 import com.sav.autobase.services.exception.ModifyException;
+import com.sav.autobase.services.exception.ServiceException;
+import com.sav.autobase.webapp.converter.entity2model.Brand2Model;
+import com.sav.autobase.webapp.converter.entity2model.ModelVehicle2Model;
+import com.sav.autobase.webapp.converter.entity2model.Place2Model;
+import com.sav.autobase.webapp.converter.entity2model.Request2Model;
+import com.sav.autobase.webapp.converter.entity2model.Trip2Model;
+import com.sav.autobase.webapp.converter.entity2model.Type2Model;
+import com.sav.autobase.webapp.converter.entity2model.User2Model;
+import com.sav.autobase.webapp.converter.entity2model.Vehicle2Model;
+import com.sav.autobase.webapp.converter.model2entity.Model2Brand;
+import com.sav.autobase.webapp.converter.model2entity.Model2ModelVehicle;
+import com.sav.autobase.webapp.converter.model2entity.Model2Place;
+import com.sav.autobase.webapp.converter.model2entity.Model2Request;
+import com.sav.autobase.webapp.converter.model2entity.Model2Trip;
+import com.sav.autobase.webapp.converter.model2entity.Model2Type;
+import com.sav.autobase.webapp.converter.model2entity.Model2User;
+import com.sav.autobase.webapp.converter.model2entity.Model2UserSearch;
+import com.sav.autobase.webapp.converter.model2entity.Model2Vehicle;
+import com.sav.autobase.webapp.converter.model2entity.Model2VehicleSearch;
 import com.sav.autobase.webapp.models.BrandVehicleModel;
-import com.sav.autobase.webapp.models.ClientUsersModel;
-import com.sav.autobase.webapp.models.DispatcherUsersModel;
-import com.sav.autobase.webapp.models.DriverUsersModel;
 import com.sav.autobase.webapp.models.IdModel;
 import com.sav.autobase.webapp.models.ModelVehicleModel;
 import com.sav.autobase.webapp.models.PlaceModel;
 import com.sav.autobase.webapp.models.RequestModel;
 import com.sav.autobase.webapp.models.TripModel;
 import com.sav.autobase.webapp.models.TypeVehicleModel;
+import com.sav.autobase.webapp.models.UserSearchModel;
 import com.sav.autobase.webapp.models.UsersModel;
 import com.sav.autobase.webapp.models.VehicleModel;
 import com.sav.autobase.webapp.models.VehicleSearchModel;
@@ -50,38 +67,60 @@ public class AdminController {
 
 	/* ----All methods on Vehicle---- */
 	@RequestMapping(value = "/vehicle/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getByIdVehicle(@PathVariable(value = "id") Integer vehicleIdParam) throws DAOException {
+	public ResponseEntity<?> getByIdVehicle(@PathVariable(value = "id") Integer vehicleIdParam)
+			throws ServiceException {
 
 		Vehicle vehicle = adminService.getVehicle(vehicleIdParam);
-		VehicleModel vehicleModel = vehicle2model(vehicle);
+		VehicleModel vehicleModel = new Vehicle2Model().convert(vehicle);
 
 		return new ResponseEntity<VehicleModel>(vehicleModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/vehicle", method = RequestMethod.GET)
-	public ResponseEntity<List<VehicleModel>> getAllVehicle() throws DAOException {
+	public ResponseEntity<List<VehicleModel>> getAllVehicle() {
 
-		List<Vehicle> getAll = adminService.getAllVehicle();
-
+		List<Vehicle> getAll;
+		try {
+			getAll = adminService.getAllVehicle();
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		List<VehicleModel> vehicleModel = new ArrayList<>();
 		for (Vehicle vehicle : getAll) {
-			vehicleModel.add(vehicle2model(vehicle));
+			vehicleModel.add(new Vehicle2Model().convert(vehicle));
 		}
 
 		return new ResponseEntity<List<VehicleModel>>(vehicleModel, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/vehicle", method = RequestMethod.PUT)
-	public ResponseEntity<?> saveVehicle(@RequestBody VehicleModel vehicleModel) throws DAOException, ModifyException {
+	@RequestMapping(value = "/vehicle/criteria", method = RequestMethod.POST)
+	public ResponseEntity<?> findVehicleByCriteria(@RequestBody VehicleSearchModel criteriaModel)
+			throws ServiceException {
 
-		Vehicle vehicle = model2vehicle(vehicleModel);
+		VehicleSerachCriteria criteria = new Model2VehicleSearch().convert(criteriaModel);
+		List<Vehicle> allCriteria = adminService.findVehicleByCriteria(criteria);
+
+		List<VehicleModel> convertCriteria = new ArrayList<>();
+		for (Vehicle vehicle : allCriteria) {
+			convertCriteria.add(new Vehicle2Model().convert(vehicle));
+		}
+
+		return new ResponseEntity<List<VehicleModel>>(convertCriteria, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/vehicle", method = RequestMethod.PUT)
+	public ResponseEntity<?> saveVehicle(@RequestBody VehicleModel vehicleModel)
+			throws ServiceException, ModifyException {
+
+		Vehicle vehicle = new Model2Vehicle().convert(vehicleModel);
 		adminService.saveVehicle(vehicle);
 
 		return new ResponseEntity<IdModel>(new IdModel(vehicle.getId()), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/vehicle/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteVehicle(@PathVariable(value = "id") Integer vehicleIdParam) throws DAOException {
+	public ResponseEntity<?> deleteVehicle(@PathVariable(value = "id") Integer vehicleIdParam) throws ServiceException {
 
 		adminService.deleteVehicle(vehicleIdParam);
 
@@ -91,22 +130,22 @@ public class AdminController {
 	/* ----All methods on Model Vehicle---- */
 	@RequestMapping(value = "/modelvehicle/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getByIdModelVehicle(@PathVariable(value = "id") Integer modelVehicleIdParam)
-			throws DAOException {
+			throws ServiceException {
 
 		ModelVehicle modelVehicle = adminService.getModelVehicle(modelVehicleIdParam);
-		ModelVehicleModel modelVehicleModel = modelVehicle2model(modelVehicle);
+		ModelVehicleModel modelVehicleModel = new ModelVehicle2Model().convert(modelVehicle);
 
 		return new ResponseEntity<ModelVehicleModel>(modelVehicleModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/modelvehicle", method = RequestMethod.GET)
-	public ResponseEntity<List<ModelVehicleModel>> getAllModelVehicle() throws DAOException {
+	public ResponseEntity<List<ModelVehicleModel>> getAllModelVehicle() throws ServiceException {
 
 		List<ModelVehicle> getAll = adminService.getAllModelVehicle();
 
 		List<ModelVehicleModel> modelVehicleModel = new ArrayList<>();
 		for (ModelVehicle modelVehicle : getAll) {
-			modelVehicleModel.add(modelVehicle2model(modelVehicle));
+			modelVehicleModel.add(new ModelVehicle2Model().convert(modelVehicle));
 		}
 
 		return new ResponseEntity<List<ModelVehicleModel>>(modelVehicleModel, HttpStatus.OK);
@@ -114,9 +153,9 @@ public class AdminController {
 
 	@RequestMapping(value = "/modelvehicle", method = RequestMethod.PUT)
 	public ResponseEntity<?> saveModelVehicle(@RequestBody ModelVehicleModel modelVehicleModel)
-			throws DAOException, ModifyException {
+			throws ServiceException, ModifyException {
 
-		ModelVehicle modelVehicle = model2modelVehicle(modelVehicleModel);
+		ModelVehicle modelVehicle = new Model2ModelVehicle().convert(modelVehicleModel);
 		adminService.saveModel(modelVehicle);
 
 		return new ResponseEntity<IdModel>(new IdModel(modelVehicle.getId()), HttpStatus.CREATED);
@@ -124,7 +163,7 @@ public class AdminController {
 
 	@RequestMapping(value = "/modelvehicle/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteModelVehicle(@PathVariable(value = "id") Integer modelVehicleIdParam)
-			throws DAOException {
+			throws ServiceException {
 
 		adminService.deleteModel(modelVehicleIdParam);
 
@@ -133,26 +172,28 @@ public class AdminController {
 
 	/* ----All methods on Brand Vehicle---- */
 	@RequestMapping(value = "/brand/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getByIdBrandVehicle(@PathVariable(value = "id") Integer brandIdParam) throws DAOException {
+	public ResponseEntity<?> getByIdBrandVehicle(@PathVariable(value = "id") Integer brandIdParam)
+			throws ServiceException {
 
 		BrandVehicle brandVehicle = adminService.getBrand(brandIdParam);
-		BrandVehicleModel brandVehicleModel = brand2model(brandVehicle);
+		BrandVehicleModel brandVehicleModel = new Brand2Model().convert(brandVehicle);
 
 		return new ResponseEntity<BrandVehicleModel>(brandVehicleModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/brand", method = RequestMethod.PUT)
 	public ResponseEntity<?> saveBrandVehicle(@RequestBody BrandVehicleModel brandVehicleModel)
-			throws DAOException, ModifyException {
+			throws ServiceException, ModifyException {
 
-		BrandVehicle brandVehicle = model2brand(brandVehicleModel);
+		BrandVehicle brandVehicle = new Model2Brand().convert(brandVehicleModel);
 		adminService.addNewBrand(brandVehicle);
 
 		return new ResponseEntity<IdModel>(new IdModel(brandVehicle.getId()), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/brand/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteBrandVehicle(@PathVariable(value = "id") Integer brandIdParam) throws DAOException {
+	public ResponseEntity<?> deleteBrandVehicle(@PathVariable(value = "id") Integer brandIdParam)
+			throws ServiceException {
 
 		adminService.deleteBrand(brandIdParam);
 
@@ -161,26 +202,28 @@ public class AdminController {
 
 	/* ----All methods on Type Vehicle---- */
 	@RequestMapping(value = "/type/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getByIdTypeVehicle(@PathVariable(value = "id") Integer typeIdParam) throws DAOException {
+	public ResponseEntity<?> getByIdTypeVehicle(@PathVariable(value = "id") Integer typeIdParam)
+			throws ServiceException {
 
 		TypeVehicle typeVehicle = adminService.getType(typeIdParam);
-		TypeVehicleModel typeVehicleModel = type2model(typeVehicle);
+		TypeVehicleModel typeVehicleModel = new Type2Model().convert(typeVehicle);
 
 		return new ResponseEntity<TypeVehicleModel>(typeVehicleModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/type", method = RequestMethod.PUT)
 	public ResponseEntity<?> saveTypeVehicle(@RequestBody TypeVehicleModel typeVehicleModel)
-			throws DAOException, ModifyException {
+			throws ServiceException, ModifyException {
 
-		TypeVehicle typeVehicle = model2type(typeVehicleModel);
+		TypeVehicle typeVehicle = new Model2Type().convert(typeVehicleModel);
 		adminService.addNewType(typeVehicle);
 
 		return new ResponseEntity<IdModel>(new IdModel(typeVehicle.getId()), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/type/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteTypeVehicle(@PathVariable(value = "id") Integer typeIdParam) throws DAOException {
+	public ResponseEntity<?> deleteTypeVehicle(@PathVariable(value = "id") Integer typeIdParam)
+			throws ServiceException {
 
 		adminService.deleteType(typeIdParam);
 
@@ -189,38 +232,52 @@ public class AdminController {
 
 	/* ----All methods on User---- */
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getByIdUser(@PathVariable(value = "id") Integer userIdParam) throws DAOException {
+	public ResponseEntity<?> getByIdUser(@PathVariable(value = "id") Integer userIdParam) throws ServiceException {
 
 		Users user = adminService.getUser(userIdParam);
-		UsersModel userModel = user2model(user);
+		UsersModel userModel = new User2Model().convert(user);
 
 		return new ResponseEntity<UsersModel>(userModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public ResponseEntity<List<UsersModel>> getAllUser() throws DAOException {
+	public ResponseEntity<List<UsersModel>> getAllUser() throws ServiceException {
 
 		List<Users> getAll = adminService.getAllUser();
 
 		List<UsersModel> userModel = new ArrayList<>();
 		for (Users user : getAll) {
-			userModel.add(user2model(user));
+			userModel.add(new User2Model().convert(user));
 		}
 
 		return new ResponseEntity<List<UsersModel>>(userModel, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/users", method = RequestMethod.PUT)
-	public ResponseEntity<?> saveUser(@RequestBody UsersModel userModel) throws DAOException, ModifyException {
+	@RequestMapping(value = "/users/criteria", method = RequestMethod.POST)
+	public ResponseEntity<?> findUserByCriteria(@RequestBody UserSearchModel criteriaModel) throws ServiceException {
 
-		Users user = model2user(userModel);
+		UserSearchCriteria criteria = new Model2UserSearch().convert(criteriaModel);
+		List<Users> allCriteria = adminService.findUserByCriteria(criteria);
+
+		List<UsersModel> convertCriteria = new ArrayList<>();
+		for (Users user : allCriteria) {
+			convertCriteria.add(new User2Model().convert(user));
+		}
+
+		return new ResponseEntity<List<UsersModel>>(convertCriteria, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/users", method = RequestMethod.PUT)
+	public ResponseEntity<?> saveUser(@RequestBody UsersModel userModel) throws ServiceException, ModifyException {
+
+		Users user = new Model2User().convert(userModel);
 		adminService.saveUser(user);
 
 		return new ResponseEntity<IdModel>(new IdModel(user.getId()), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Integer userIdParam) throws DAOException {
+	public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Integer userIdParam) throws ServiceException {
 
 		adminService.deleteUser(userIdParam);
 
@@ -229,362 +286,152 @@ public class AdminController {
 
 	/* ----All methods on Place---- */
 	@RequestMapping(value = "/place/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getByIdPlace(@PathVariable(value = "id") Integer placeIdParam) throws DAOException {
+	public ResponseEntity<?> getByIdPlace(@PathVariable(value = "id") Integer placeIdParam) throws ServiceException {
 
 		Place place = adminService.getPlace(placeIdParam);
-		PlaceModel placeModel = place2model(place);
+		PlaceModel placeModel = new Place2Model().convert(place);
 
 		return new ResponseEntity<PlaceModel>(placeModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/place", method = RequestMethod.GET)
-	public ResponseEntity<List<PlaceModel>> getAllPlace() throws DAOException {
+	public ResponseEntity<List<PlaceModel>> getAllPlace() throws ServiceException {
 
 		List<Place> getAll = adminService.getAllPlace();
 
 		List<PlaceModel> placeModel = new ArrayList<>();
 		for (Place place : getAll) {
-			placeModel.add(place2model(place));
+			placeModel.add(new Place2Model().convert(place));
 		}
 
 		return new ResponseEntity<List<PlaceModel>>(placeModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/place", method = RequestMethod.PUT)
-	public ResponseEntity<?> savePlace(@RequestBody PlaceModel placeModel) throws DAOException, ModifyException {
+	public ResponseEntity<?> savePlace(@RequestBody PlaceModel placeModel) throws ServiceException, ModifyException {
 
-		Place place = model2place(placeModel);
+		Place place = new Model2Place().convert(placeModel);
 		adminService.savePlace(place);
 
 		return new ResponseEntity<IdModel>(new IdModel(place.getId()), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/place/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deletePlace(@PathVariable(value = "id") Integer placeIdParam) throws DAOException {
+	public ResponseEntity<?> deletePlace(@PathVariable(value = "id") Integer placeIdParam) throws ServiceException {
 
 		adminService.deletePlace(placeIdParam);
 
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
-	
+
 	/* ----All methods on Trip---- */
 	@RequestMapping(value = "/trip/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getByIdTrip(@PathVariable(value = "id") Integer tripIdParam) throws DAOException {
+	public ResponseEntity<?> getByIdTrip(@PathVariable(value = "id") Integer tripIdParam) throws ServiceException {
 
 		Trip trip = adminService.getTrip(tripIdParam);
-		TripModel tripModel = trip2model(trip);
+		TripModel tripModel = new Trip2Model().convert(trip);
 
 		return new ResponseEntity<TripModel>(tripModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/trip", method = RequestMethod.GET)
-	public ResponseEntity<List<TripModel>> getAllTrip() throws DAOException {
+	public ResponseEntity<List<TripModel>> getAllTrip() throws ServiceException {
 
 		List<Trip> getAll = adminService.getAllTrip();
 
 		List<TripModel> tripModel = new ArrayList<>();
 		for (Trip trip : getAll) {
-			tripModel.add(trip2model(trip));
+			tripModel.add(new Trip2Model().convert(trip));
 		}
 
 		return new ResponseEntity<List<TripModel>>(tripModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/trip", method = RequestMethod.PUT)
-	public ResponseEntity<?> saveTrip(@RequestBody TripModel tripModel) throws DAOException, ModifyException {
+	public ResponseEntity<?> saveTrip(@RequestBody TripModel tripModel) throws ServiceException, ModifyException {
 
-		Trip trip = model2trip(tripModel);
+		Trip trip = new Model2Trip().convert(tripModel);
 		adminService.saveTrip(trip);
 
 		return new ResponseEntity<IdModel>(new IdModel(trip.getId()), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/trip/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteTrip(@PathVariable(value = "id") Integer tripIdParam) throws DAOException {
+	public ResponseEntity<?> deleteTrip(@PathVariable(value = "id") Integer tripIdParam) throws ServiceException {
 
 		adminService.deleteTrip(tripIdParam);
 
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
-	
+
 	/* ----All methods on Request---- */
 	@RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getByIdRequest(@PathVariable(value = "id") Integer requestIdParam) throws DAOException {
+	public ResponseEntity<?> getByIdRequest(@PathVariable(value = "id") Integer requestIdParam)
+			throws ServiceException {
 
 		Request request = adminService.getRequest(requestIdParam);
-		RequestModel requestModel = request2model(request);
+		RequestModel requestModel = new Request2Model().convert(request);
 
 		return new ResponseEntity<RequestModel>(requestModel, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/request", method = RequestMethod.GET)
-	public ResponseEntity<List<RequestModel>> getAllRequest() throws DAOException {
+	@RequestMapping(value = "/requests", method = RequestMethod.GET)
+	public ResponseEntity<List<RequestModel>> getAllRequest() throws ServiceException {
 
 		List<Request> getAll = adminService.getAllRequest();
 
 		List<RequestModel> requestModel = new ArrayList<>();
 		for (Request request : getAll) {
-			requestModel.add(request2model(request));
+			requestModel.add(new Request2Model().convert(request));
 		}
 
 		return new ResponseEntity<List<RequestModel>>(requestModel, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "/request/{users}", method = RequestMethod.GET)
-	public ResponseEntity<List<RequestModel>> getAllRequestByUser(@RequestBody UsersModel userModel) throws DAOException {
 
-		Users user = model2user(userModel);
+	@RequestMapping(value = "/request", method = RequestMethod.GET)
+	public ResponseEntity<List<RequestModel>> getAllByStatusRequest(@RequestParam(value = "status", required = true) StatusRequest status) throws ServiceException {
+
+		List<Request> getAllByStatus = adminService.getAllByStatusRequest(status);
+
+		List<RequestModel> requestModel = new ArrayList<>();
+		for (Request request : getAllByStatus) {
+			requestModel.add(new Request2Model().convert(request));
+		}
+
+		return new ResponseEntity<List<RequestModel>>(requestModel, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/request/{users}", method = RequestMethod.GET)
+	public ResponseEntity<List<RequestModel>> getAllRequestByUser(@RequestBody UsersModel userModel)
+			throws ServiceException {
+
+		Users user = new Model2User().convert(userModel);
 		List<Request> getAll = adminService.getAllRequestByUser(user);
 
 		List<RequestModel> requestModel = new ArrayList<>();
 		for (Request request : getAll) {
-			requestModel.add(request2model(request));
+			requestModel.add(new Request2Model().convert(request));
 		}
 
 		return new ResponseEntity<List<RequestModel>>(requestModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/request", method = RequestMethod.PUT)
-	public ResponseEntity<?> saveRequest(@RequestBody RequestModel requestModel) throws DAOException, ModifyException {
+	public ResponseEntity<?> saveRequest(@RequestBody RequestModel requestModel)
+			throws ServiceException, ModifyException {
 
-		Request reqeust = model2request(requestModel);
+		Request reqeust = new Model2Request().convert(requestModel);
 		adminService.saveRequest(reqeust);
 
 		return new ResponseEntity<IdModel>(new IdModel(reqeust.getId()), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/request/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteRequest(@PathVariable(value = "id") Integer reqeustIdParam) throws DAOException {
+	public ResponseEntity<?> deleteRequest(@PathVariable(value = "id") Integer reqeustIdParam) throws ServiceException {
 
 		adminService.deleteRequest(reqeustIdParam);
 
 		return new ResponseEntity<IdModel>(HttpStatus.OK);
 	}
-	
-	/* ---Convert model to entity and entity to model--- */
-	private RequestModel request2model(Request request) {
-		RequestModel requestModel = new RequestModel();
-		requestModel.setClient(client2model(request.getClient()));
-		requestModel.setStartDate(request.getStartDate());
-		requestModel.setEndDate(request.getEndDate());
-		requestModel.setPlace(place2model(request.getPlace()));
-		requestModel.setCountOfPassenger(request.getCountOfPassenger());
-		requestModel.setDispatcher(dispatcher2model(request.getDispatcher()));
-		requestModel.setComment(request.getComment());
-		requestModel.setProcessed(request.getProcessed().name());
-		return requestModel;
-	}
 
-	private Request model2request(RequestModel requestModel) {
-		Request request = new Request();
-		request.setClient(model2client(requestModel.getClient()));
-		request.setStartDate(requestModel.getStartDate());
-		request.setEndDate(requestModel.getEndDate());
-		request.setPlace(model2place(requestModel.getPlace()));
-		request.setCountOfPassenger(requestModel.getCountOfPassenger());
-		request.setDispatcher(model2dispatcher(requestModel.getDispatcher()));
-		request.setComment(requestModel.getComment());
-		request.setProcessed(StatusRequest.valueOf(requestModel.getProcessed()));
-
-		return request;
-	}
-
-	private UsersModel user2model(Users user) {
-		UsersModel userModel = new UsersModel();
-		userModel.setFirstName(user.getFirstName());
-		userModel.setLastName(user.getLastName());
-		userModel.setDateBirth(user.getDateBirth());
-		userModel.setLogin(user.getLogin());
-		userModel.setPassword(user.getPassword());
-		userModel.setEmail(user.getEmail());
-		userModel.setType(user.getType().name());
-		return userModel;
-
-	}
-
-	private Users model2user(UsersModel userModel) {
-		Users user = new Users();
-		user.setFirstName(userModel.getFirstName());
-		user.setLastName(userModel.getLastName());
-		user.setDateBirth(userModel.getDateBirth());
-		user.setLogin(userModel.getLogin());
-		user.setPassword(userModel.getPassword());
-		user.setEmail(userModel.getEmail());
-		user.setType(TypeUsers.valueOf(userModel.getType()));
-		return user;
-
-	}
-
-	private ClientUsersModel client2model(Users user) {
-		ClientUsersModel userModel = new ClientUsersModel();
-		userModel.setFirstName(user.getFirstName());
-		userModel.setLastName(user.getLastName());
-		userModel.setDateBirth(user.getDateBirth());
-		userModel.setLogin(user.getLogin());
-		userModel.setEmail(user.getEmail());
-		return userModel;
-
-	}
-
-	private Users model2client(ClientUsersModel userModel) {
-		Users user = new Users();
-		user.setFirstName(userModel.getFirstName());
-		user.setLastName(userModel.getLastName());
-		user.setDateBirth(userModel.getDateBirth());
-		user.setLogin(userModel.getLogin());
-		user.setEmail(userModel.getEmail());
-		return user;
-
-	}
-
-	private PlaceModel place2model(Place place) {
-		PlaceModel placeModel = new PlaceModel();
-		placeModel.setPlaceStart(place.getPlaceStart());
-		placeModel.setPlaceEnd(place.getPlaceEnd());
-		placeModel.setDistance(place.getDistance());
-		return placeModel;
-	}
-
-	private Place model2place(PlaceModel placeModel) {
-		Place place = new Place();
-		place.setPlaceStart(placeModel.getPlaceStart());
-		place.setPlaceEnd(placeModel.getPlaceEnd());
-		place.setDistance(placeModel.getDistance());
-		return place;
-	}
-
-	private DispatcherUsersModel dispatcher2model(Users user) {
-		DispatcherUsersModel userModel = new DispatcherUsersModel();
-		userModel.setFirstName(userModel.getFirstName());
-		userModel.setLogin(userModel.getLogin());
-		userModel.setEmail(userModel.getEmail());
-		userModel.setType(user.getType().name());
-		return userModel;
-
-	}
-
-	private Users model2dispatcher(DispatcherUsersModel userModel) {
-		Users user = new Users();
-		user.setFirstName(userModel.getFirstName());
-		user.setLogin(userModel.getLogin());
-		user.setEmail(userModel.getEmail());
-		user.setType(TypeUsers.valueOf(userModel.getType()));
-		return user;
-
-	}
-
-	private TripModel trip2model(Trip trip) {
-		TripModel tripModel = new TripModel();
-		tripModel.setRequest(request2model(trip.getRequest()));
-		tripModel.setVehicle(vehicle2model(trip.getVehicle()));
-		tripModel.setEndTrip(trip.isEndTrip());
-		return tripModel;
-	}
-
-	private Trip model2trip(TripModel tripModel) {
-		Trip trip = new Trip();
-		trip.setRequest(model2request(tripModel.getRequest()));
-		trip.setVehicle(model2vehicle(tripModel.getVehicle()));
-		trip.setEndTrip(tripModel.isEndTrip());
-		return trip;
-	}
-
-	private VehicleModel vehicle2model(Vehicle vehicle) {
-		VehicleModel vehicleModel = new VehicleModel();
-		vehicleModel.setDriver(driver2model(vehicle.getDriver()));
-		vehicleModel.setModel(modelVehicle2model(vehicle.getModel()));
-		vehicleModel.setReadyCrashCar(vehicle.isReadyCrashCar());
-		return vehicleModel;
-
-	}
-
-	private Vehicle model2vehicle(VehicleModel vehicleModel) {
-		Vehicle vehicle = new Vehicle();
-		vehicle.setDriver(model2driver(vehicleModel.getDriver()));
-		vehicle.setModel(model2modelVehicle(vehicleModel.getModel()));
-		vehicle.setReadyCrashCar(vehicleModel.isReadyCrashCar());
-		return vehicle;
-	}
-
-	private ModelVehicleModel modelVehicle2model(ModelVehicle modelVehicle) {
-		ModelVehicleModel modelVehicleModel = new ModelVehicleModel();
-		modelVehicleModel.setNameModel(modelVehicle.getNameModel());
-		modelVehicleModel.setRegisterNumber(modelVehicle.getRegisterNumber());
-		modelVehicleModel.setCountOfPassenger(modelVehicle.getCountOfPassenger());
-		modelVehicleModel.setBrand(brand2model(modelVehicle.getBrand()));
-		modelVehicleModel.setType(type2model(modelVehicle.getType()));
-		return modelVehicleModel;
-	}
-
-	private ModelVehicle model2modelVehicle(ModelVehicleModel modelVehicleModel) {
-		ModelVehicle modelVehicle = new ModelVehicle();
-		modelVehicle.setNameModel(modelVehicleModel.getNameModel());
-		modelVehicle.setRegisterNumber(modelVehicleModel.getRegisterNumber());
-		modelVehicle.setCountOfPassenger(modelVehicleModel.getCountOfPassenger());
-		modelVehicle.setBrand(model2brand(modelVehicleModel.getBrand()));
-		modelVehicle.setType(model2type(modelVehicleModel.getType()));
-		return modelVehicle;
-	}
-
-	private TypeVehicleModel type2model(TypeVehicle type) {
-		TypeVehicleModel typeModel = new TypeVehicleModel();
-		typeModel.setTypeName(type.getTypeName());
-		return typeModel;
-	}
-
-	private TypeVehicle model2type(TypeVehicleModel typeModel) {
-		TypeVehicle type = new TypeVehicle();
-		type.setTypeName(typeModel.getTypeName());
-		return type;
-	}
-
-	private BrandVehicleModel brand2model(BrandVehicle brand) {
-		BrandVehicleModel brandModel = new BrandVehicleModel();
-		brandModel.setBrandName(brand.getBrandName());
-		return brandModel;
-	}
-
-	private BrandVehicle model2brand(BrandVehicleModel brandModel) {
-		BrandVehicle brand = new BrandVehicle();
-		brand.setBrandName(brandModel.getBrandName());
-		return brand;
-	}
-
-	private DriverUsersModel driver2model(Users user) {
-		DriverUsersModel userModel = new DriverUsersModel();
-		userModel.setFirstName(user.getFirstName());
-		userModel.setLastName(user.getLastName());
-		userModel.setLogin(user.getLogin());
-		return userModel;
-	}
-
-	private Users model2driver(DriverUsersModel userModel) {
-		Users user = new Users();
-		user.setFirstName(userModel.getFirstName());
-		user.setLastName(userModel.getLastName());
-		user.setLogin(userModel.getLogin());
-		return user;
-	}
-
-	private VehicleSearchModel vehicleSearch2model(VehicleSerachCriteria criteria) {
-		VehicleSearchModel criteriaModel = new VehicleSearchModel();
-		criteriaModel.setBrand(criteria.getBrand());
-		criteriaModel.setType(criteria.getType());
-		criteriaModel.setNameModel(criteria.getNameModel());
-		criteriaModel.setCountOfPassenger(criteria.getCountOfPassenger());
-		criteriaModel.setRegisterNumber(criteria.getRegisterNumber());
-		criteriaModel.setReadyCrashCar(criteria.getReadyCrashCar());
-		return criteriaModel;
-	}
-
-	private VehicleSerachCriteria model2vehicleSearch(VehicleSearchModel criteriaModel) {
-		VehicleSerachCriteria criteria = new VehicleSerachCriteria();
-		criteria.setBrand(criteriaModel.getBrand());
-		criteria.setType(criteriaModel.getType());
-		criteria.setNameModel(criteriaModel.getNameModel());
-		criteria.setCountOfPassenger(criteriaModel.getCountOfPassenger());
-		criteria.setRegisterNumber(criteriaModel.getRegisterNumber());
-		criteria.setReadyCrashCar(criteriaModel.getReadyCrashCar());
-		return criteria;
-	}
 }

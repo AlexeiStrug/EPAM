@@ -1,11 +1,12 @@
 com\sav\autobase\services\impl\DispatcherService.class
+com\sav\autobase\services\components\UserDataStorage.class
 com\sav\autobase\services\IClientService.class
 com\sav\autobase\services\impl\AuthenticationServiceImpl.class
 com\sav\autobase\services\exception\ModifyException.class
 com\sav\autobase\services\impl\AdminService.class
+com\sav\autobase\services\exception\ServiceException.class
 com\sav\autobase\services\IAdminService.class
 com\sav\autobase\services\IDriverService.class
-com\sav\autobase\services\exception\DAOException.class
 com\sav\autobase\services\IDispatcherService.class
 com\sav\autobase\services\impl\ClientService.class
 com\sav\autobase\services\IAuthenticationService.class

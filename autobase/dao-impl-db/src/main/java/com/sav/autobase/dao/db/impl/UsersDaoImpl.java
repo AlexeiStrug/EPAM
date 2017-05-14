@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.api.IUsersDao;
 import com.sav.autobase.dao.api.filter.UserSearchCriteria;
+import com.sav.autobase.dao.db.cache.UserCache;
 import com.sav.autobase.datamodel.Users;
 
 @Repository
@@ -38,6 +39,9 @@ public class UsersDaoImpl extends GenericDaoImpl<Users> implements IUsersDao {
 
 	@Inject
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	@Inject
+	private UserCache userCache;
 
 	@Override
 	protected String getTableName() {
@@ -90,46 +94,60 @@ public class UsersDaoImpl extends GenericDaoImpl<Users> implements IUsersDao {
 
 	@Override
 	public List<Users> findByCriteria(UserSearchCriteria criteria) {
+		
+		String query = FIND_BY_CRITERIA;
 		try {
 			if (criteria.isEmpty()) {
 				getAll();
 			}
-			if (criteria.getFirstName() != null) {
+			if (criteria.getFirstName() != null && criteria.getFirstName().length() > 0) {
 				FIND_BY_CRITERIA += " AND first_name=:firstName";
 			}
-			if (criteria.getLastName() != null) {
+			if (criteria.getLastName() != null && criteria.getLastName().length() > 0) {
 				FIND_BY_CRITERIA += " AND last_name=:lastName";
 			}
 			if (criteria.getDateBirth() != null) {
 				FIND_BY_CRITERIA += " AND date_birth=:dateBirth";
 			}
-			if (criteria.getLogin() != null) {
+			if (criteria.getLogin() != null && criteria.getLogin().length() > 0) {
 				FIND_BY_CRITERIA += " AND login=:login";
 			}
-			if (criteria.getEmail() != null) {
+			if (criteria.getEmail() != null && criteria.getEmail().length() > 0) {
 				FIND_BY_CRITERIA += " AND email=:email";
 			}
-			if (criteria.getType() != null) {
+			if (criteria.getType() != null && criteria.getType().length() > 0) {
 				FIND_BY_CRITERIA += " AND type=:type";
 			}
 			BeanPropertySqlParameterSource namedParameters = new BeanPropertySqlParameterSource(criteria);
-			return namedParameterJdbcTemplate.query(FIND_BY_CRITERIA, namedParameters,
+			return namedParameterJdbcTemplate.query(query, namedParameters,
 					new BeanPropertyRowMapper<Users>(Users.class));
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 			return null;
 		}
 	}
 
 	@Override
 	public Users findByloginPassword(String login, String password) {
-		try {
-			return jdbcTemplate.queryForObject(FIND_LOGGIN_AND_PASSWORD, new Object[] { login, password },
-					new BeanPropertyRowMapper<Users>(Users.class));
-		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
-			return null;
-		}
+
+		Users userFromCache = userCache.get(login);
+
+		if (userFromCache != null) {
+			if (userFromCache.getPassword().equals(password)) {
+				LOGGER.info("from cache User");
+				return userFromCache;
+			} else
+				return null;
+		} else
+			try {
+				Users user = jdbcTemplate.queryForObject(FIND_LOGGIN_AND_PASSWORD, new Object[] { login, password },
+						new BeanPropertyRowMapper<Users>(Users.class));
+				userCache.set(user.getLogin(), user);
+				return user;
+			} catch (EmptyResultDataAccessException e) {
+				LOGGER.error("Exception thrown! ", e);
+				return null;
+			}
 	}
 
 }

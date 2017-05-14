@@ -1,12 +1,14 @@
 package com.sav.autobase.datamodel;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Users extends AbstractData {
+public class Users extends AbstractData implements Serializable {
+	
 
 	private String firstName;
 	private String lastName;
@@ -153,5 +155,6 @@ public class Users extends AbstractData {
 			return false;
 		return true;
 	}
+
 
 }

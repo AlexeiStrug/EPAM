@@ -1,11 +1,15 @@
+com\sav\autobase\webapp\controllers\AdminController.class
 com\sav\autobase\webapp\models\DriverTripModel.class
 com\sav\autobase\webapp\models\ClientRequestModel.class
 com\sav\autobase\webapp\models\ModelVehicleModel.class
 com\sav\autobase\webapp\models\RequestModel.class
 com\sav\autobase\webapp\models\DriverUsersModel.class
+com\sav\autobase\webapp\models\UsersModel.class
+com\sav\autobase\webapp\filter\BasicAuthFilter.class
 com\sav\autobase\webapp\models\TripModel.class
 com\sav\autobase\webapp\models\ClientUsersModel.class
 com\sav\autobase\webapp\controllers\ClientController.class
+com\sav\autobase\webapp\models\AuthUserModel.class
 com\sav\autobase\webapp\models\TypeVehicleModel.class
 com\sav\autobase\webapp\models\VehicleModel.class
 com\sav\autobase\webapp\models\BrandVehicleModel.class
@@ -14,4 +18,5 @@ com\sav\autobase\webapp\controllers\DriverController.class
 com\sav\autobase\webapp\models\DispatcherUsersModel.class
 com\sav\autobase\webapp\models\VehicleSearchModel.class
 com\sav\autobase\webapp\models\PlaceModel.class
+com\sav\autobase\webapp\controllers\AuthenticationController.class
 com\sav\autobase\webapp\controllers\DispatcherController.class

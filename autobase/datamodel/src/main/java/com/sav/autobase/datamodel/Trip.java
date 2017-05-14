@@ -1,6 +1,8 @@
 package com.sav.autobase.datamodel;
 
-public class Trip extends AbstractData {
+import java.io.Serializable;
+
+public class Trip extends AbstractData implements Serializable {
 
 	private Request request;
 	private Vehicle vehicle;

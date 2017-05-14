@@ -25,7 +25,7 @@ public class AdminUtilityProceduresDao implements IAdminUtilityProcedures {
 		try {
 			jdbcTemplate.update(DELETE);
 		} catch (EmptyResultDataAccessException e) {
-			LOGGER.debug("Exception thrown! ", e);
+			LOGGER.error("Exception thrown! ", e);
 		}
 	}
 
