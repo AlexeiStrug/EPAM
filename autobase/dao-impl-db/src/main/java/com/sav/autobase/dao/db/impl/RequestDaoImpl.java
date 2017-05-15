@@ -25,20 +25,25 @@ import com.sav.autobase.datamodel.Users;
 @Repository
 public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestDao {
 
-	final String FIND_REQUEST_BY_ID = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, users.email,  request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
-			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
+	final String FIND_REQUEST_BY_ID = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, CLIENT.first_name as client_first_name,DISPATCHER.first_name as dispatcher_first_name, CLIENT.last_name as client_last_name, DISPATCHER.email as dispatcher_email,  CLIENT.login as client_login, DISPATCHER.login as dispatcher_login, DISPATCHER.type as dispatcher_type, CLIENT.type as client_type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, request.comment FROM request "
+			+ "JOIN users as CLIENT ON (CLIENT.id = request.client_id) "
+			+ "JOIN users as DISPATCHER ON (DISPATCHER.id = request.dispatcher_id) "
 			+ "INNER JOIN place ON place.id = request.place_id WHERE request.id = ? LIMIT 1";
-	final String GET_ALL_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, users.email,  request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
-			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
+	final String GET_ALL_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, CLIENT.first_name as client_first_name,DISPATCHER.first_name as dispatcher_first_name, CLIENT.last_name as client_last_name, DISPATCHER.email as dispatcher_email,  CLIENT.login as client_login, DISPATCHER.login as dispatcher_login, DISPATCHER.type as dispatcher_type, CLIENT.type as client_type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, request.comment FROM request "
+			+ "JOIN users as CLIENT ON (CLIENT.id = request.client_id)  "
+			+ "JOIN users as DISPATCHER ON (DISPATCHER.id = request.dispatcher_id) "
 			+ "INNER JOIN place ON place.id = request.place_id ";
-	final String GET_ALL_READY_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login,users.email,   users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
-			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
+	final String GET_ALL_READY_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, CLIENT.first_name as client_first_name,DISPATCHER.first_name as dispatcher_first_name, CLIENT.last_name as client_last_name, DISPATCHER.email as dispatcher_email,  CLIENT.login as client_login, DISPATCHER.login as dispatcher_login, DISPATCHER.type as dispatcher_type, CLIENT.type as client_type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, request.comment FROM request "
+			+ "JOIN users as CLIENT ON (CLIENT.id = request.client_id)  "
+			+ "JOIN users as DISPATCHER ON (DISPATCHER.id = request.dispatcher_id) "
 			+ "INNER JOIN place ON place.id = request.place_id " + "WHERE request.processed = ?";
-	final String GET_ALL_REQUEST_BY_USER = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.email,  users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger,request.comment, request.processed FROM request "
-			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
-			+ "INNER JOIN place ON place.id = request.place_id " + "where users.id = ?";
-	final String FIND_BY_PROCESSED = "SELECT request.id as request_id, request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.email, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
-			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
+	final String GET_ALL_REQUEST_BY_USER = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, CLIENT.first_name as client_first_name,DISPATCHER.first_name as dispatcher_first_name, CLIENT.last_name as client_last_name, DISPATCHER.email as dispatcher_email,  CLIENT.login as client_login, DISPATCHER.login as dispatcher_login, DISPATCHER.type as dispatcher_type, CLIENT.type as client_type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, request.comment FROM request "
+			+ "JOIN users as CLIENT ON (CLIENT.id = request.client_id)  "
+			+ "JOIN users as DISPATCHER ON (DISPATCHER.id = request.dispatcher_id) "
+			+ "INNER JOIN place ON place.id = request.place_id " + "WHERE request.client_id = ?";
+	final String FIND_BY_PROCESSED = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, CLIENT.first_name as client_first_name,DISPATCHER.first_name as dispatcher_first_name, CLIENT.last_name as client_last_name, DISPATCHER.email as dispatcher_email,  CLIENT.login as client_login, DISPATCHER.login as dispatcher_login, DISPATCHER.type as dispatcher_type, CLIENT.type as client_type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, request.comment FROM request "
+			+ "JOIN users as CLIENT ON (CLIENT.id = request.client_id)  "
+			+ "JOIN users as DISPATCHER ON (DISPATCHER.id = request.dispatcher_id) "
 			+ "INNER JOIN place ON place.id = request.place_id WHERE request.processed = ? LIMIT 1";
 	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger,dispatcher_id, comment, processed) VALUES(?,?,?,?,?,?,?,?)";
 	final String UPDATE_REQUEST = "UPDATE request SET client_id = ?, start_date = ?, end_date = ?, place_id = ?, count_of_passenger = ?, dispatcher_id = ?, comment = ?, processed = ? where id = ?;";

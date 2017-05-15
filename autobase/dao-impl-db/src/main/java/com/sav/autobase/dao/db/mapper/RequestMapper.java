@@ -24,19 +24,19 @@ public class RequestMapper implements RowMapper<Request> {
 		{
 			dispatcher = null;
 		} else {
-		dispatcher.setFirstName(rs.getString("first_name"));
-		dispatcher.setEmail(rs.getString("email"));
-		dispatcher.setLogin(rs.getString("login"));
-		dispatcher.setType(TypeUsers.valueOf(rs.getString("type")));
+		dispatcher.setFirstName(rs.getString("dispatcher_first_name"));
+		dispatcher.setEmail(rs.getString("dispatcher_email"));
+		dispatcher.setLogin(rs.getString("dispatcher_login"));
+		dispatcher.setType(TypeUsers.valueOf(rs.getString("dispatcher_type")));
 		}
 		
 		
 		Users client = new Users();
 		client.setId(rs.getInt("client_id"));
-		client.setFirstName(rs.getString("first_name"));
-		client.setLastName(rs.getString("last_name"));
-		client.setLogin(rs.getString("login"));
-		client.setType(TypeUsers.valueOf(rs.getString("type")));
+		client.setFirstName(rs.getString("client_first_name"));
+		client.setLastName(rs.getString("client_last_name"));
+		client.setLogin(rs.getString("client_login"));
+		client.setType(TypeUsers.valueOf(rs.getString("client_type")));
 
 		Place place = new Place();
 		place.setId(rs.getInt("id"));

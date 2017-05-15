@@ -10,6 +10,26 @@
       <email>sdfsdfsd@asda.ru</email>
       <type>client</type>
     </com.sav.autobase.datamodel.Users>
+    <com.sav.autobase.datamodel.Users>
+      <id>2</id>
+      <firstName>Sasha</firstName>
+      <lastName>SSS</lastName>
+      <dateBirth>2017-05-15 22:31:49.36</dateBirth>
+      <login>dsfsdf</login>
+      <password>12345</password>
+      <email>sdfsdfsd@asda.ru</email>
+      <type>client</type>
+    </com.sav.autobase.datamodel.Users>
+    <com.sav.autobase.datamodel.Users>
+      <id>3</id>
+      <firstName>Sasha</firstName>
+      <lastName>SSS</lastName>
+      <dateBirth>2017-05-15 23:26:30.928</dateBirth>
+      <login>dsfsdf</login>
+      <password>12345</password>
+      <email>sdfsdfsd@asda.ru</email>
+      <type>client</type>
+    </com.sav.autobase.datamodel.Users>
   </rows>
-  <lastId class="int">1</lastId>
+  <lastId class="int">3</lastId>
 </com.sav.autobase.dao.xml.impl.wrapper.XmlModelWrapper>

@@ -131,6 +131,7 @@ public class ClientServiceTest extends AbstractTest {
 		clientService.createRequest(request3);
 
 		List<Request> requestFromDb = clientService.getAllRequest(newUser);
+		LOGGER.info("{}", requestFromDb);
 
 		Assert.notNull(requestFromDb, "Method must getAll requests");
 	}
