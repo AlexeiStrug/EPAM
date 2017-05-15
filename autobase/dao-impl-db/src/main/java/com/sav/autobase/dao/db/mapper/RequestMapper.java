@@ -25,7 +25,7 @@ public class RequestMapper implements RowMapper<Request> {
 			dispatcher = null;
 		} else {
 		dispatcher.setFirstName(rs.getString("first_name"));
-		dispatcher.setLastName(rs.getString("last_name"));
+		dispatcher.setEmail(rs.getString("email"));
 		dispatcher.setLogin(rs.getString("login"));
 		dispatcher.setType(TypeUsers.valueOf(rs.getString("type")));
 		}
@@ -39,7 +39,7 @@ public class RequestMapper implements RowMapper<Request> {
 		client.setType(TypeUsers.valueOf(rs.getString("type")));
 
 		Place place = new Place();
-		place.setId(rs.getInt("place_id"));
+		place.setId(rs.getInt("id"));
 		place.setPlaceStart(rs.getString("place_start"));
 		place.setPlaceEnd(rs.getString("place_end"));
 		place.setDistance(rs.getInt("distance"));

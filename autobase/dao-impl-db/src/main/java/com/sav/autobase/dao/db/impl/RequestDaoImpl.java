@@ -25,20 +25,19 @@ import com.sav.autobase.datamodel.Users;
 @Repository
 public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestDao {
 
-	final String FIND_REQUEST_BY_ID = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
+	final String FIND_REQUEST_BY_ID = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, users.email,  request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id WHERE request.id = ? LIMIT 1";
-	final String GET_ALL_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
+	final String GET_ALL_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, users.email,  request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id ";
-	final String GET_ALL_READY_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
+	final String GET_ALL_READY_REQUEST = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login,users.email,   users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
-			+ "INNER JOIN place ON place.id = request.place_id "
-			+ "WHERE request.processed = ?";
-	final String GET_ALL_REQUEST_BY_USER = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger,request.comment, request.processed FROM request "
+			+ "INNER JOIN place ON place.id = request.place_id " + "WHERE request.processed = ?";
+	final String GET_ALL_REQUEST_BY_USER = "SELECT request.id as request_id , request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.email,  users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger,request.comment, request.processed FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id " + "where users.id = ?";
-	final String FIND_BY_PROCESSED = "SELECT request.id as request_id, request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
+	final String FIND_BY_PROCESSED = "SELECT request.id as request_id, request.client_id, request.dispatcher_id, users.first_name, users.last_name, users.login, users.email, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed,request.comment FROM request "
 			+ "INNER JOIN users ON users.id = request.client_id Or request.dispatcher_id is not null "
 			+ "INNER JOIN place ON place.id = request.place_id WHERE request.processed = ? LIMIT 1";
 	final String INSERT_REQUEST = "INSERT INTO request (client_id, start_date, end_date, place_id, count_of_passenger,dispatcher_id, comment, processed) VALUES(?,?,?,?,?,?,?,?)";
@@ -88,12 +87,12 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 				ps.setTimestamp(3, request.getEndDate());
 				ps.setInt(4, request.getPlace().getId());
 				ps.setInt(5, request.getCountOfPassenger());
-				if (request.getDispatcher() == null){
-					 ps.setNull(6, java.sql.Types.INTEGER);
-				}else {
-                    ps.setInt(6, request.getDispatcher().getId());
-                }
-				
+				if (request.getDispatcher() == null) {
+					ps.setNull(6, java.sql.Types.INTEGER);
+				} else {
+					ps.setInt(6, request.getDispatcher().getId());
+				}
+
 				ps.setString(7, request.getComment());
 				ps.setString(8, request.getProcessed().name());
 				return ps;
@@ -167,7 +166,7 @@ public class RequestDaoImpl extends GenericDaoImpl<Request> implements IRequestD
 			return null;
 		}
 	}
-	
+
 	@Override
 	public List<Request> joinGetAllbyUser(Users user) {
 		try {

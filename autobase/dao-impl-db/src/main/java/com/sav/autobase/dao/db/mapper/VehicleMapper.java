@@ -22,6 +22,7 @@ public class VehicleMapper implements RowMapper<Vehicle> {
 		driver.setId(rs.getInt("driver_id"));
 		driver.setFirstName(rs.getString("first_name"));
 		driver.setLastName(rs.getString("last_name"));
+		driver.setLogin(rs.getString("login"));
 		driver.setType(TypeUsers.valueOf(rs.getString("type")));
 
 		

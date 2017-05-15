@@ -12,12 +12,16 @@ com\sav\autobase\dao\db\impl\UsersDaoImpl$2.class
 com\sav\autobase\dao\db\mapper\ModelMapper.class
 com\sav\autobase\dao\db\util\SchemaNameAwareBasicDataSource.class
 com\sav\autobase\dao\db\impl\GenericDaoImpl.class
+com\sav\autobase\dao\db\util\ConnectionFactory$1.class
 com\sav\autobase\dao\db\impl\RequestDaoImpl$3.class
 com\sav\autobase\dao\db\impl\TripDaoImpl$1.class
 com\sav\autobase\dao\db\cache\AppConfig.class
+com\sav\autobase\dao\db\cache\Cache.class
 com\sav\autobase\dao\db\impl\VehicleDaoImpl.class
+com\sav\autobase\dao\db\util\ConnectionFactory.class
 com\sav\autobase\dao\db\cache\UserCache.class
 com\sav\autobase\dao\db\impl\UsersDaoImpl.class
+com\sav\autobase\dao\db\cache\SearchVehicleCache.class
 com\sav\autobase\dao\db\impl\TripDaoImpl.class
 com\sav\autobase\dao\db\impl\TypeVehicleDaoImpl$1.class
 com\sav\autobase\dao\db\impl\PlaceDaoImpl$1.class
@@ -30,3 +34,4 @@ com\sav\autobase\dao\db\impl\UsersDaoImpl$1.class
 com\sav\autobase\dao\db\impl\ModelVehicleDaoImpl$2.class
 com\sav\autobase\dao\db\impl\TypeVehicleDaoImpl.class
 com\sav\autobase\dao\db\impl\ModelVehicleDaoImpl.class
+com\sav\autobase\dao\db\util\ConnectionFactory$Singleton.class

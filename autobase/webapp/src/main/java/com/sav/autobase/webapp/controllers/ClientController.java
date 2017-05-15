@@ -84,7 +84,7 @@ public class ClientController {
 	 *         <br>
 	 *         HttpStatus.NO_CONTENT if error with get request by "ID" <br>
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/requestGet/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getByIdRequest(@PathVariable(value = "id") Integer requestIdParam) {
 
 		if (requestIdParam == null) {
@@ -146,7 +146,7 @@ public class ClientController {
 	 *         request <br>
 	 *         HttpStatus.NO_CONTENT if error updated new request
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "request/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> updateRequest(@RequestBody ClientRequestModel requestModel,
 			@PathVariable(value = "id") Integer requestIdParam) {
 
@@ -218,7 +218,7 @@ public class ClientController {
 	 * @return HttpStatus.OK if request successfully deleted <br>
 	 *         HttpStatus.NO_CONTENT if error deleted request
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "request/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteRequest(@PathVariable(value = "id") Integer requestIdParam) {
 
 		if (requestIdParam == null) {

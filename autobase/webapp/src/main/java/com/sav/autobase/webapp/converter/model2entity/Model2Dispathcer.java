@@ -14,6 +14,7 @@ public class Model2Dispathcer implements Converter<DispatcherUsersModel, Users> 
 	
 	private Users model2dispatcher(DispatcherUsersModel userModel) {
 		Users user = new Users();
+		user.setId(userModel.getId());
 		user.setFirstName(userModel.getFirstName());
 		user.setLogin(userModel.getLogin());
 		user.setEmail(userModel.getEmail());

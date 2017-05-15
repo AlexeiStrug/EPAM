@@ -13,6 +13,7 @@ public class Type2Model implements Converter<TypeVehicle, TypeVehicleModel> {
 	
 	private TypeVehicleModel type2model(TypeVehicle type) {
 		TypeVehicleModel typeModel = new TypeVehicleModel();
+		typeModel.setId(type.getId());
 		typeModel.setTypeName(type.getTypeName());
 		return typeModel;
 	}

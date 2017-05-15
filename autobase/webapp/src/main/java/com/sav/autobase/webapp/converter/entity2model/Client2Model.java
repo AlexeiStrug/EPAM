@@ -16,9 +16,8 @@ public class Client2Model implements Converter<Users, ClientUsersModel> {
 		userModel.setId(user.getId());
 		userModel.setFirstName(user.getFirstName());
 		userModel.setLastName(user.getLastName());
-		userModel.setDateBirth(user.getDateBirth());
 		userModel.setLogin(user.getLogin());
-		userModel.setEmail(user.getEmail());
+		userModel.setType(user.getType().name());
 		return userModel;
 
 	}

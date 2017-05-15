@@ -12,14 +12,24 @@ public class DriverUsersModel extends IdModel {
 	/**
 	 * firstName - the first name user driver <br>
 	 * lastName - the second name user driver<br>
-	 * login - the login user driver
+	 * login - the login user driver <br>
+	 * type - the type user
 	 */
 	private String firstName;
 	private String lastName;
 	private String login;
+	private String type;
 
 	public String getFirstName() {
 		return firstName;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public void setFirstName(String firstName) {

@@ -61,7 +61,7 @@ public class DispatcherController {
 	 *         <br>
 	 *         HttpStatus.NO_CONTENT if error with get request by "ID" <br>
 	 */
-	@RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/requestGet/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getByIdRequest(@PathVariable(value = "id") Integer requestIdParam) {
 
 		if (requestIdParam == null) {
@@ -93,7 +93,7 @@ public class DispatcherController {
 	 *         HttpStatus.NO_CONTENT if error with get by "status notReady"
 	 *         requests <br>
 	 */
-	@RequestMapping(value = "/request/{users}", method = RequestMethod.GET)
+	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	public ResponseEntity<?> getRequestByStatus(HttpServletRequest httpServletRequest) {
 
 		Users user = (Users) httpServletRequest.getAttribute(BasicAuthFilter.userAttribute);

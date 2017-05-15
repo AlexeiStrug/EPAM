@@ -1,0 +1,15 @@
+<com.sav.autobase.dao.xml.impl.wrapper.XmlModelWrapper>
+  <rows>
+    <com.sav.autobase.datamodel.Users>
+      <id>1</id>
+      <firstName>Sasha</firstName>
+      <lastName>SSS</lastName>
+      <dateBirth>2017-05-15 22:11:28.187</dateBirth>
+      <login>dsfsdf</login>
+      <password>12345</password>
+      <email>sdfsdfsd@asda.ru</email>
+      <type>client</type>
+    </com.sav.autobase.datamodel.Users>
+  </rows>
+  <lastId class="int">1</lastId>
+</com.sav.autobase.dao.xml.impl.wrapper.XmlModelWrapper>

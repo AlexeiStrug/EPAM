@@ -27,7 +27,7 @@
 		<param name="user" value="postgres" />
 		<param name="password" value="postgres" />
 		<param name="sql"
-			value="INSERT INTO test.logs (dated, logger, level, message) VALUES (to_timestamp('%d','YYYY-MM-DD HH24:MI:SS,MS'),'%C','%p','%m')" />
+			value="INSERT INTO logs (dated, logger, level, message) VALUES (to_timestamp('%d','YYYY-MM-DD HH24:MI:SS,MS'),'%C','%p','%m')" />
 	</appender>
 
 	<appender name="ErrorEmailAppender" class="org.apache.log4j.net.SMTPAppender">
@@ -49,7 +49,7 @@
 		<param name="BufferSize" value="1" />
 		<appender-ref ref="ErrorEmailAppender" />
 	</appender>
-	
+
 	<logger name="log4j.rootLogger" additivity="false">
 		<appender-ref ref="DB" />
 	</logger>
@@ -61,5 +61,5 @@
 		<appender-ref ref="DB" />
 		<appender-ref ref="ErrorEmailAppender" />
 	</root>
-	
+
 </log4j:configuration>

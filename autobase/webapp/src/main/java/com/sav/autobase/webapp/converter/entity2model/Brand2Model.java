@@ -13,6 +13,7 @@ public class Brand2Model implements Converter<BrandVehicle, BrandVehicleModel> {
 	
 	private BrandVehicleModel brand2model(BrandVehicle brand) {
 		BrandVehicleModel brandModel = new BrandVehicleModel();
+		brandModel.setId(brand.getId());
 		brandModel.setBrandName(brand.getBrandName());
 		return brandModel;
 	}

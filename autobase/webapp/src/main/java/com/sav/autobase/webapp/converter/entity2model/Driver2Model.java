@@ -17,6 +17,7 @@ public class Driver2Model implements Converter<Users, DriverUsersModel> {
 		userModel.setFirstName(user.getFirstName());
 		userModel.setLastName(user.getLastName());
 		userModel.setLogin(user.getLogin());
+		userModel.setType(user.getType().name());
 		return userModel;
 	}
 

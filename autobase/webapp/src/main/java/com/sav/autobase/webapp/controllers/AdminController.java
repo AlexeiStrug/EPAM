@@ -1026,7 +1026,7 @@ public class AdminController {
 	 *         <br>
 	 *         HttpStatus.NO_CONTENT if error with get request by "ID" <br>
 	 */
-	@RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/requestGet/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getByIdRequest(@PathVariable(value = "id") Integer requestIdParam) {
 
 		if (requestIdParam == null) {
@@ -1088,7 +1088,7 @@ public class AdminController {
 	 *         HttpStatus.NO_CONTENT if error with get all requests by "status"
 	 *         <br>
 	 */
-	@RequestMapping(value = "/request", method = RequestMethod.GET)
+	@RequestMapping(value = "/statusRequest", method = RequestMethod.GET)
 	public ResponseEntity<List<RequestModel>> getAllByStatusRequest(
 			@RequestParam(value = "status", required = true) StatusRequest status) {
 
