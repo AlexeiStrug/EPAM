@@ -82,9 +82,9 @@ public class AdminController {
 	 * 
 	 * @param vehicleIdParam
 	 *            - transferring by "ID" for get by "ID" vehicle
-	 * @return HttpStatus.OK if successfully get by "ID" and get the vehicle
+	 * @return 200 HttpStatus.OK if successfully get by "ID" and get the vehicle
 	 *         <br>
-	 *         HttpStatus.NO_CONTENT if error with get vehicle by "ID" <br>
+	 *         204 NO_CONTENT if error with get vehicle by "ID" <br>
 	 */
 	@RequestMapping(value = "/vehicle/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getByIdVehicle(@PathVariable(value = "id") Integer vehicleIdParam) {
@@ -98,7 +98,7 @@ public class AdminController {
 			vehicle = adminService.getVehicle(vehicleIdParam);
 		} catch (ServiceException e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		if (vehicle == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

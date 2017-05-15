@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.api.IGenericDao;
 import com.sav.autobase.dao.api.IRequestDao;
@@ -16,6 +17,7 @@ import com.sav.autobase.datamodel.Users;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+@Repository
 public class RequestDaoXmlImpl implements IGenericDao<Request>, IRequestDao {
 
 	private final XStream xstream = new XStream(new DomDriver());

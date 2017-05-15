@@ -1,7 +1,20 @@
 package com.sav.autobase.webapp.models;
 
-public class TripModel  extends IdModel{
+/**
+ * This class TripModel serves to store objects with properties trip from
+ * dispatcher or administrator
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
+public class TripModel extends IdModel {
 
+	/**
+	 * request - the request information from client <br>
+	 * vehicle - the vehicle driver <br>
+	 * endTrip - status trip
+	 */
 	private RequestModel request;
 	private VehicleModel vehicle;
 	private Boolean endTrip;

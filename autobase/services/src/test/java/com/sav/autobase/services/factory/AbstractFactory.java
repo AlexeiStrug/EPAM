@@ -18,6 +18,8 @@ public abstract class AbstractFactory {
 	public abstract Place createPlace();
 
 	public abstract Request createRequest(Users user, Place place) throws ParseException;
+	
+	public abstract Request createClientRequest(Users user, Place place) throws ParseException;
 
 	public abstract BrandVehicle createBrand();
 
@@ -28,5 +30,7 @@ public abstract class AbstractFactory {
 	public abstract Vehicle createVehicle(ModelVehicle model, Users user);
 	
 	public abstract Trip createTrip(Vehicle vehicle, Request request);
+
+	
 
 }

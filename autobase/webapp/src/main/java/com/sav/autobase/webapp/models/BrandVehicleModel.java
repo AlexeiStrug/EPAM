@@ -1,7 +1,18 @@
 package com.sav.autobase.webapp.models;
 
-public class BrandVehicleModel extends IdModel{
+/**
+ * This class BrandVehicleModel serves to store objects with properties brand
+ * vehicle
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
+public class BrandVehicleModel extends IdModel {
 
+	/**
+	 * brandName - the name brand vehicle
+	 */
 	private String brandName;
 
 	public String getBrandName() {
@@ -11,5 +22,5 @@ public class BrandVehicleModel extends IdModel{
 	public void setBrandName(String brandName) {
 		this.brandName = brandName;
 	}
-	
+
 }

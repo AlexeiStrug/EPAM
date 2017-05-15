@@ -18,7 +18,7 @@ public class AdminUtilityProceduresDao implements IAdminUtilityProcedures {
 	@Inject
 	JdbcTemplate jdbcTemplate;
 
-	private final String DELETE = "TRUNCATE TABLE test.request,test.trip, test.users, test.place, test.vehicle, test.model_vehicle, test.brand_vehicle, test.type_vehicle";
+	private final String DELETE = "TRUNCATE TABLE test.request, test.trip,  test.users,  test.place,  test.vehicle,  test.model_vehicle,  test.brand_vehicle,  test.type_vehicle";
 
 	@Override
 	public void delete() {

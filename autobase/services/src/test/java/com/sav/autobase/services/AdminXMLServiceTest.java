@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
+import com.sav.autobase.dao.api.IUsersDao;
 import com.sav.autobase.datamodel.Users;
 import com.sav.autobase.services.exception.ServiceException;
 
@@ -39,7 +40,6 @@ public class AdminXMLServiceTest extends AbstractTest{
 		
 		LOGGER.debug("^^^REGISTER USER test");
 
-		adminService.saveUser(newUser);
 		Users userFromDb = adminService.getUser(newUser.getId());
 
 		Assert.notNull(userFromDb, "Method must be get new user");

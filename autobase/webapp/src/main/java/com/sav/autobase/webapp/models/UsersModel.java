@@ -2,8 +2,25 @@ package com.sav.autobase.webapp.models;
 
 import java.sql.Timestamp;
 
+/**
+ * This class UsersModel serves to store objects with properties users from
+ * administrator
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
 public class UsersModel extends IdModel {
 
+	/**
+	 * firstName - the first name user client <br>
+	 * lastName - the second name user client <br>
+	 * dateBirth - date birth user client <br>
+	 * login - the login user client <br>
+	 * password - the password user <br>
+	 * email - the email user client <br>
+	 * type - the type user
+	 */
 	private String firstName;
 	private String lastName;
 	private Timestamp DateBirth;

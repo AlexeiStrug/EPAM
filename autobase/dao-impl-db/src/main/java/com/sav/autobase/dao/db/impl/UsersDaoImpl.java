@@ -29,7 +29,7 @@ public class UsersDaoImpl extends GenericDaoImpl<Users> implements IUsersDao {
 
 	final String INSERT_USER = "INSERT INTO users (first_name, last_name, login, password, email, date_birth, type) VALUES(?,?,?,?,?,?,?)";
 	final String UPDATE_USER = "UPDATE users SET first_name = ?, last_name = ?, login = ?, password = ?, email = ?, date_birth = ?, type = ? where id = ?";
-	final String FIND_LOGGIN_AND_PASSWORD = "SELECT * FROM users WHERE login = ? AND password = ?";
+	final String FIND_LOGGIN_AND_PASSWORD = "SELECT * FROM users WHERE login = ? AND password = ? LIMIT 1";
 	String FIND_BY_CRITERIA = "SELECT * FROM users WHERE true";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(UsersDaoImpl.class);
@@ -86,6 +86,7 @@ public class UsersDaoImpl extends GenericDaoImpl<Users> implements IUsersDao {
 				ps.setString(5, user.getEmail());
 				ps.setTimestamp(6, user.getDateBirth());
 				ps.setString(7, user.getType().name());
+				ps.setInt(8, user.getId());
 				return ps;
 			}
 		});

@@ -18,7 +18,6 @@ import com.sav.autobase.dao.api.IUsersDao;
 import com.sav.autobase.dao.api.IVehicleDao;
 import com.sav.autobase.dao.api.filter.UserSearchCriteria;
 import com.sav.autobase.dao.api.filter.VehicleSerachCriteria;
-import com.sav.autobase.dao.db.cache.UserCache;
 import com.sav.autobase.datamodel.BrandVehicle;
 import com.sav.autobase.datamodel.ModelVehicle;
 import com.sav.autobase.datamodel.Place;

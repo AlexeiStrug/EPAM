@@ -1,7 +1,22 @@
 package com.sav.autobase.webapp.models;
 
-public class ModelVehicleModel extends IdModel{
+/**
+ * This class ModelVehicleModel serves to store objects with properties model
+ * vehicle
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
+public class ModelVehicleModel extends IdModel {
 
+	/**
+	 * nameModel - the name model vehicle <br>
+	 * registerNumber - the register number vehicle <br>
+	 * countOfPassenger - the count of passengers in vehicle <br>
+	 * brand - the name brand vehicle <br>
+	 * type - the name type brand vehicle
+	 */
 	private String nameModel;
 	private String registerNumber;
 	private Integer countOfPassenger;
@@ -47,6 +62,5 @@ public class ModelVehicleModel extends IdModel{
 	public void setType(TypeVehicleModel type) {
 		this.type = type;
 	}
-
 
 }

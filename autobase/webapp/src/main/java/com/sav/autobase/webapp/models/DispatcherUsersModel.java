@@ -1,7 +1,21 @@
 package com.sav.autobase.webapp.models;
 
-public class DispatcherUsersModel extends IdModel{
+/**
+ * This class ClientUsersModel serves to store objects with properties user
+ * dispatcher
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
+public class DispatcherUsersModel extends IdModel {
 
+	/**
+	 * firstName - the first name user dispatcher <br>
+	 * dateBirth - date birth user dispatcher <br>
+	 * login - the login user dispatcher <br>
+	 * type - the type user dispatcher
+	 */
 	private String firstName;
 	private String login;
 	private String email;

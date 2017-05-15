@@ -79,7 +79,7 @@ public class DispatcherService implements IDispatcherService {
 
 	@Override
 	public Trip getTrip(Integer id) throws ServiceException {
-		if (id != null) {
+		if (id == null) {
 			return null;
 		}
 		try {

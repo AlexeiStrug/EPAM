@@ -24,26 +24,44 @@ import com.sav.autobase.datamodel.Users;
 @Repository
 public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 
-	final String FIND_TRIP_BY_ID = "SELECT trip.id as trip_id, trip.end_trip, trip.vehicle_id, trip.request_id, request.id, request.dispatcher_id, request.client_id,  vehicle.driver_id, users.first_name, users.last_name,users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
-			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
+	final String FIND_TRIP_BY_ID = "SELECT trip.id as trip_id, trip.end_trip, trip.vehicle_id, trip.request_id, request.id, request.dispatcher_id, request.client_id,  vehicle.driver_id, DRIVER.first_name, DRIVER.last_name,DRIVER.login, DRIVER.type,CLIENT.first_name, CLIENT.last_name,CLIENT.login, CLIENT.type,DISPATCHER.first_name, DISPATCHER.last_name,DISPATCHER.login, DISPATCHER.type, request.place_id, place.id, place.place_start, place.place_end, "
+			+ "place.distance, request.start_date, request.end_date, request.count_of_passenger,request.comment, request.processed, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, "
+			+ "model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM trip "
+			+ "INNER JOIN request ON request.id = trip.request_id "
+			+ "INNER JOIN place ON place.id = request.place_id "
+			+ "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
-			+ "INNER JOIN users ON (users.id = vehicle.driver_id AND users.id = request.client_id ) "
+			+ "JOIN users as DRIVER ON (DRIVER.id = vehicle.driver_id) "
+			+ "JOIN users as CLIENT ON (CLIENT.id = request.client_id) "
+			+ "JOIN users as DISPATCHER ON (DISPATCHER.id = request.dispatcher_id) "
 			+ "WHERE trip.id = ?";
-	final String GET_ALL_TRIP = "SELECT trip.id as trip_id, trip.end_trip, trip.vehicle_id, trip.request_id, request.id, request.dispatcher_id, request.client_id,  vehicle.driver_id, users.first_name, users.last_name,users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
-			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
+	final String GET_ALL_TRIP = "SELECT trip.id as trip_id, trip.end_trip, trip.vehicle_id, trip.request_id, request.id, request.dispatcher_id, request.client_id,  vehicle.driver_id, DRIVER.first_name, DRIVER.last_name,DRIVER.login, DRIVER.type,CLIENT.first_name, CLIENT.last_name,CLIENT.login, CLIENT.type,DISPATCHER.first_name, DISPATCHER.last_name,DISPATCHER.login, DISPATCHER.type, request.place_id, place.id, place.place_start, place.place_end, "
+			+ "place.distance, request.start_date, request.end_date, request.count_of_passenger,request.comment, request.processed, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, "
+			+ "model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM trip "
+			+ "INNER JOIN request ON request.id = trip.request_id "
+			+ "INNER JOIN place ON place.id = request.place_id "
+			+ "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
-			+ "INNER JOIN users ON (users.id = vehicle.driver_id AND users.id = request.client_id) ";
-	final String GET_BY_USER = "SELECT trip.id as trip_id, trip.end_trip, trip.vehicle_id, trip.request_id, request.id, request.dispatcher_id, request.client_id,  vehicle.driver_id, users.first_name, users.last_name,users.login, users.type, request.place_id, place.id, place.place_start, place.place_end, place.distance, request.start_date, request.end_date, request.count_of_passenger, request.processed, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM trip " + "INNER JOIN request ON request.id = trip.request_id "
-			+ "INNER JOIN place ON place.id = request.place_id " + "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
+			+ "JOIN users as DRIVER ON (DRIVER.id = vehicle.driver_id) "
+			+ "JOIN users as CLIENT ON (CLIENT.id = request.client_id) "
+			+ "JOIN users as DISPATCHER ON (DISPATCHER.id = request.dispatcher_id) ";
+	final String GET_BY_USER = "SELECT trip.id as trip_id, trip.end_trip, trip.vehicle_id, trip.request_id, request.id, request.dispatcher_id, request.client_id,  vehicle.driver_id, DRIVER.first_name, DRIVER.last_name,DRIVER.login, DRIVER.type,CLIENT.first_name, CLIENT.last_name,CLIENT.login, CLIENT.type,DISPATCHER.first_name, DISPATCHER.last_name,DISPATCHER.login, DISPATCHER.type, request.place_id, place.id, place.place_start, place.place_end, "
+			+ "place.distance, request.start_date, request.end_date, request.count_of_passenger,request.comment, request.processed, vehicle.model_id, vehicle.ready_crash_car, model_vehicle.id, model_vehicle.brand_id, model_vehicle.name_model, model_vehicle.register_number, model_vehicle.type_id, "
+			+ "model_vehicle.count_of_passenger, brand_vehicle.brand_name, type_vehicle.type_name FROM trip "
+			+ "INNER JOIN request ON request.id = trip.request_id "
+			+ "INNER JOIN place ON place.id = request.place_id "
+			+ "INNER JOIN vehicle ON vehicle.id = trip.vehicle_id "
 			+ "INNER JOIN model_vehicle ON model_vehicle.id=vehicle.model_id "
 			+ "INNER JOIN brand_vehicle ON brand_vehicle.id=model_vehicle.brand_id "
 			+ "INNER JOIN type_vehicle  ON model_vehicle.type_id=type_vehicle.id "
-			+ "INNER JOIN users ON (users.id = vehicle.driver_id AND users.id = request.client_id ) "
-			+ "WHERE users.id = ?";
+			+ "JOIN users as DRIVER ON (DRIVER.id = vehicle.driver_id) "
+			+ "JOIN users as CLIENT ON (CLIENT.id = request.client_id) "
+			+ "JOIN users as DISPATCHER ON (DISPATCHER.id = request.dispatcher_id) "
+			+ "WHERE DRIVER.id = ?";
 	final String INSERT_TRIP = "INSERT INTO trip (request_id, vehicle_id, end_trip) VALUES(?,?,?)";
 	final String UPDATE_TRIP = "UPDATE trip SET request_id = ?, vehicle_id = ?, end_trip = ? where id = ?";
 

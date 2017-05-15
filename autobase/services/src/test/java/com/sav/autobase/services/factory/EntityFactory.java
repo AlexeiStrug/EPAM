@@ -17,6 +17,7 @@ public class EntityFactory extends AbstractFactory {
 	private PlaceFactory placeFactory;
 	private BrandFactory brandFactory;
 	private TypeFactory typeFactory;
+	
 
 	public EntityFactory() {
 		usersFactory = new UserFactory();
@@ -39,6 +40,11 @@ public class EntityFactory extends AbstractFactory {
 	@Override
 	public Request createRequest(Users user, Place place) throws ParseException {
 		return (new RequestFactory(user, place).create()); 
+	}
+	
+	@Override
+	public Request createClientRequest(Users user, Place place) throws ParseException {
+		return (new ClientRequestFactory(user, place).create()); 
 	}
 
 	@Override

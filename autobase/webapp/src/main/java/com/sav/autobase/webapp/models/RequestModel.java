@@ -2,11 +2,26 @@ package com.sav.autobase.webapp.models;
 
 import java.sql.Timestamp;
 
-public class RequestModel extends IdModel{
+/**
+ * This class RequestModel serves to store objects with properties request from
+ * user dispatcher or administrator
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
+public class RequestModel extends IdModel {
 
-	public RequestModel() {
-	}
-
+	/**
+	 * client - the user client <br>
+	 * startDate - start date trip <br>
+	 * endDate - end date trip <br>
+	 * place - the place trip <br>
+	 * countOfPassenger - count of passenger in vehicle <br>
+	 * dispatcher - the user dispatcher <br>
+	 * comment - some information about request, vehicle <br>
+	 * processed - status request
+	 */
 	private ClientUsersModel client;
 	private Timestamp startDate;
 	private Timestamp endDate;

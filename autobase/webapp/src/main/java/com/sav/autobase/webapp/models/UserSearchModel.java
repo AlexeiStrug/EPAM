@@ -2,8 +2,23 @@ package com.sav.autobase.webapp.models;
 
 import java.sql.Timestamp;
 
+/**
+ * This class UserSearchModel serves to store objects with properties search
+ * user by criteria
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
 public class UserSearchModel {
 
+	/**
+	 * firstName - the first name user client <br>
+	 * lastName - the second name user client <br>
+	 * dateBirth - date birth user client <br>
+	 * login - the login user client <br>
+	 * email - the email user client
+	 */
 	private String firstName;
 	private String lastName;
 	private String login;

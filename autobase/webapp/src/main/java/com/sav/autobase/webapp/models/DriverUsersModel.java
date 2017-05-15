@@ -1,7 +1,19 @@
 package com.sav.autobase.webapp.models;
 
-public class DriverUsersModel extends IdModel{
+/**
+ * This class DriverUsersModel serves to store objects with properties user
+ * driver
+ * 
+ * @author AlexStrug
+ * @version 1
+ */
+public class DriverUsersModel extends IdModel {
 
+	/**
+	 * firstName - the first name user driver <br>
+	 * lastName - the second name user driver<br>
+	 * login - the login user driver
+	 */
 	private String firstName;
 	private String lastName;
 	private String login;
@@ -21,7 +33,6 @@ public class DriverUsersModel extends IdModel{
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
 
 	public String getLogin() {
 		return login;

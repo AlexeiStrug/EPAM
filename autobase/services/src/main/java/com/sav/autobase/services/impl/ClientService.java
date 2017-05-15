@@ -27,6 +27,7 @@ public class ClientService implements IClientService {
 	@Override
 	public Request getRequest(Integer id) throws ServiceException {
 		if (id == null) {
+			LOGGER.error("Failed get request by id");
 			return null;
 		}
 		try {

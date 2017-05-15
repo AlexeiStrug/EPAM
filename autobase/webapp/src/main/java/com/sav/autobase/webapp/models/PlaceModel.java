@@ -1,7 +1,19 @@
 package com.sav.autobase.webapp.models;
 
+/**
+ * This class PlaceModel serves to store objects with properties place
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
 public class PlaceModel extends IdModel {
 
+	/**
+	 * placeStart - the place start <br>
+	 * placeEnd - the place end <br>
+	 * distance - the distance trip
+	 */
 	private String placeStart;
 	private String placeEnd;
 	private Integer distance;

@@ -11,13 +11,13 @@ import com.sav.autobase.datamodel.Request;
 import com.sav.autobase.datamodel.StatusRequest;
 import com.sav.autobase.datamodel.Users;
 
-public class RequestFactory implements IFactory<Request> {
+public class ClientRequestFactory implements IFactory<Request> {
 
 	Request newRequest = new Request();
 
 	ArrayList<Request> requests = new ArrayList<>();
 
-	public RequestFactory(Users user, Place place) throws ParseException {
+	public ClientRequestFactory(Users user, Place place) throws ParseException {
 		newRequest.setClient(user);
 		Date dateStart = new SimpleDateFormat("yyyy-MM-dd").parse("2017-04-14");
 		newRequest.setStartDate(new Timestamp(dateStart.getTime()));
@@ -25,7 +25,6 @@ public class RequestFactory implements IFactory<Request> {
 		newRequest.setEndDate(new Timestamp(dateEnd.getTime()));
 		newRequest.setPlace(place);
 		newRequest.setCountOfPassenger(5);
-		newRequest.setDispatcher(user);
 		newRequest.setComment("I want audi");
 		newRequest.setProcessed(StatusRequest.notReady);
 

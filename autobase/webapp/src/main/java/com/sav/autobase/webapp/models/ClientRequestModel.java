@@ -2,8 +2,25 @@ package com.sav.autobase.webapp.models;
 
 import java.sql.Timestamp;
 
-public class ClientRequestModel extends IdModel{
+/**
+ * This class ClientRequestModel serves to store objects with properties request
+ * from client or dispatcher
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
+public class ClientRequestModel extends IdModel {
 
+	/**
+	 * client - the user client <br>
+	 * startDate - start date trip <br>
+	 * endDate - end date trip <br>
+	 * place - the place trip <br>
+	 * countOfPassenger - count of passenger in vehicle <br>
+	 * comment - some information about request, vehicle <br>
+	 * processed - status request
+	 */
 	private ClientUsersModel client;
 	private Timestamp startDate;
 	private Timestamp endDate;
@@ -11,7 +28,6 @@ public class ClientRequestModel extends IdModel{
 	private Integer countOfPassenger;
 	private String comment;
 	private String processed;
-
 
 	public ClientUsersModel getClient() {
 		return client;

@@ -1,7 +1,19 @@
 package com.sav.autobase.webapp.models;
 
-public class VehicleModel extends IdModel{
+/**
+ * This class VehicleModel serves to store objects with properties vehicle
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
+public class VehicleModel extends IdModel {
 
+	/**
+	 * driver - the user driver <br>
+	 * model - the model vehicle <br>
+	 * readyCrashcar - the status vehicle
+	 */
 	private DriverUsersModel driver;
 	private ModelVehicleModel model;
 	private Boolean readyCrashCar;

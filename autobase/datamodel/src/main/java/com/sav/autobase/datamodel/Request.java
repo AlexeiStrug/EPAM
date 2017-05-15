@@ -3,7 +3,7 @@ package com.sav.autobase.datamodel;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Request extends AbstractData implements Serializable{
+public class Request extends AbstractData implements Serializable {
 
 	private Users client;
 	private Timestamp startDate;
@@ -62,20 +62,20 @@ public class Request extends AbstractData implements Serializable{
 		this.dispatcher = dispatcher;
 	}
 
-	public StatusRequest getProcessed() {
-		return processed;
-	}
-
-	public void setProcessed(StatusRequest processed) {
-		this.processed = processed;
-	}
-
 	public String getComment() {
 		return comment;
 	}
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public StatusRequest getProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(StatusRequest processed) {
+		this.processed = processed;
 	}
 
 	@Override

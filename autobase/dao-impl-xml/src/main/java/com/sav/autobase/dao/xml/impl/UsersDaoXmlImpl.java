@@ -6,16 +6,16 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import com.sav.autobase.dao.api.IGenericDao;
-import com.sav.autobase.dao.api.IUsersDao;
-import com.sav.autobase.dao.api.filter.UserSearchCriteria;
 import com.sav.autobase.dao.xml.impl.wrapper.XmlModelWrapper;
 import com.sav.autobase.datamodel.Users;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-public class UsersDaoXmlImpl implements IGenericDao<Users>, IUsersDao {
+@Repository
+public class UsersDaoXmlImpl implements IGenericDao<Users> {
 
 	private final XStream xstream = new XStream(new DomDriver());
 
@@ -25,16 +25,6 @@ public class UsersDaoXmlImpl implements IGenericDao<Users>, IUsersDao {
 	private File getFile() {
 		File file = new File(rootFolder + "users.xml");
 		return file;
-	}
-
-	@Override
-	public Users findByloginPassword(String login, String password) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public List<Users> findByCriteria(UserSearchCriteria criteria) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

@@ -1,10 +1,23 @@
 package com.sav.autobase.webapp.models;
 
-public class DriverTripModel extends IdModel{
+/**
+ * This class DriverTripModel serves to store objects with properties trip from
+ * user driver
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
+public class DriverTripModel extends IdModel {
 
+	/**
+	 * request - the request information from client <br>
+	 * vehicle - the vehicle driver <br>
+	 * endTrip - status trip
+	 */
 	private ClientRequestModel request;
 	private VehicleModel vehicle;
-	private boolean endTrip;
+	private Boolean endTrip;
 
 	public ClientRequestModel getRequest() {
 		return request;
@@ -22,11 +35,11 @@ public class DriverTripModel extends IdModel{
 		this.vehicle = vehicle;
 	}
 
-	public boolean isEndTrip() {
+	public Boolean isEndTrip() {
 		return endTrip;
 	}
 
-	public void setEndTrip(boolean endTrip) {
+	public void setEndTrip(Boolean endTrip) {
 		this.endTrip = endTrip;
 	}
 

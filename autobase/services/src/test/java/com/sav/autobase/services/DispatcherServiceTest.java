@@ -39,6 +39,7 @@ public class DispatcherServiceTest extends AbstractTest {
 	private Vehicle newVehicle;
 	private Users newUser;
 	private Request newRequest;
+	private Request newClientRequest;
 	private Place newPlace;
 	private Trip newTrip;;
 
@@ -87,6 +88,10 @@ public class DispatcherServiceTest extends AbstractTest {
 		newRequest = entityFactory.createRequest(newUser, newPlace);
 		adminService.saveRequest(newRequest);
 		LOGGER.debug("{}", newRequest);
+		
+		newClientRequest = entityFactory.createClientRequest(newUser, newPlace);
+		adminService.saveRequest(newClientRequest);
+		LOGGER.debug("{}", newClientRequest);
 
 		newTrip = entityFactory.createTrip(newVehicle, newRequest);
 		adminService.saveTrip(newTrip);

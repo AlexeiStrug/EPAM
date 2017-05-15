@@ -1,7 +1,18 @@
 package com.sav.autobase.webapp.models;
 
+/**
+ * This class AuthUserModel need for authorization user by login and password
+ * 
+ * @author AlexStrug
+ * @version 1
+ * 
+ */
 public class AuthUserModel {
 
+	/**
+	 * login - the user login <br>
+	 * password - the user password
+	 */
 	private String login;
 	private String password;
 
