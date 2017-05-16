@@ -61,7 +61,7 @@ public class TripDaoImpl extends GenericDaoImpl<Trip> implements ITripDao {
 			+ "JOIN users as DRIVER ON (DRIVER.id = vehicle.driver_id) "
 			+ "JOIN users as CLIENT ON (CLIENT.id = request.client_id) "
 			+ "JOIN users as DISPATCHER ON (DISPATCHER.id = request.dispatcher_id) "
-			+ "WHERE DRIVER.id = ?";
+			+ "WHERE DRIVER.id = ? LIMIT 1";
 	final String INSERT_TRIP = "INSERT INTO trip (request_id, vehicle_id, end_trip) VALUES(?,?,?)";
 	final String UPDATE_TRIP = "UPDATE trip SET request_id = ?, vehicle_id = ?, end_trip = ? where id = ?";
 

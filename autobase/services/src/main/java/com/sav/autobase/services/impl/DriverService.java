@@ -77,7 +77,9 @@ public class DriverService implements IDriverService {
 		}
 		try {
 			Trip trip = tripDao.getByUser(user);
-			trip.setEndTrip(!trip.isEndTrip());
+			if (trip.isEndTrip() == false) {
+				trip.setEndTrip(!trip.isEndTrip());
+			}
 			tripDao.update(trip);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
