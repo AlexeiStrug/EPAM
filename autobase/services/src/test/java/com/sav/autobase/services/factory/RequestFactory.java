@@ -25,8 +25,8 @@ public class RequestFactory implements IFactory<Request> {
 		newRequest.setEndDate(new Timestamp(dateEnd.getTime()));
 		newRequest.setPlace(place);
 		newRequest.setCountOfPassenger(5);
-		newRequest.setDispatcher(user);
 		newRequest.setComment("I want audi");
+		newRequest.setDispatcher(user);
 		newRequest.setProcessed(StatusRequest.notReady);
 
 	}

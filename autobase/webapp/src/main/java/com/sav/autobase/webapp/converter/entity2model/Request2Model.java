@@ -19,7 +19,9 @@ public class Request2Model implements Converter<Request, RequestModel> {
 		requestModel.setEndDate(request.getEndDate());
 		requestModel.setPlace(new Place2Model().convert(request.getPlace()));
 		requestModel.setCountOfPassenger(request.getCountOfPassenger());
-		requestModel.setDispatcher(new Dispatcher2Model().convert(request.getDispatcher()));
+		if (request.getDispatcher() != null) {
+			requestModel.setDispatcher(new Dispatcher2Model().convert(request.getDispatcher()));
+		}
 		requestModel.setComment(request.getComment());
 		requestModel.setProcessed(request.getProcessed().name());
 		return requestModel;

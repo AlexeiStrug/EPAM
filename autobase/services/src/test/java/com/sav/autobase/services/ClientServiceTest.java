@@ -122,9 +122,9 @@ public class ClientServiceTest extends AbstractTest {
 
 		LOGGER.debug("^^^GET ALL test");
 
-		request1 = entityFactory.createRequest(newUser, newPlace);
-		request2 = entityFactory.createRequest(newUser, newPlace);
-		request3 = entityFactory.createRequest(newUser, newPlace);
+		request1 = entityFactory.createClientRequest(newUser, newPlace);
+		request2 = entityFactory.createClientRequest(newUser, newPlace);
+		request3 = entityFactory.createClientRequest(newUser, newPlace);
 
 		clientService.createRequest(request1);
 		clientService.createRequest(request2);
