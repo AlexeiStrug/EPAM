@@ -18,6 +18,7 @@ import com.sav.autobase.webapp.converter.entity2model.DriverTrip2Model;
 import com.sav.autobase.webapp.converter.entity2model.Vehicle2Model;
 import com.sav.autobase.webapp.filter.BasicAuthFilter;
 import com.sav.autobase.webapp.models.DriverTripModel;
+import com.sav.autobase.webapp.models.IdModel;
 import com.sav.autobase.webapp.models.VehicleModel;
 
 /**
