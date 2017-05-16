@@ -39,7 +39,7 @@ public class RequestMapper implements RowMapper<Request> {
 		client.setType(TypeUsers.valueOf(rs.getString("client_type")));
 
 		Place place = new Place();
-		place.setId(rs.getInt("id"));
+		place.setId(rs.getInt("place_id"));
 		place.setPlaceStart(rs.getString("place_start"));
 		place.setPlaceEnd(rs.getString("place_end"));
 		place.setDistance(rs.getInt("distance"));

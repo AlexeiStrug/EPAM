@@ -31,6 +31,7 @@ import com.sav.autobase.webapp.converter.model2entity.Model2Request;
 import com.sav.autobase.webapp.converter.model2entity.Model2Vehicle;
 import com.sav.autobase.webapp.converter.model2entity.Model2VehicleSearch;
 import com.sav.autobase.webapp.filter.BasicAuthFilter;
+import com.sav.autobase.webapp.models.CreateTripModel;
 import com.sav.autobase.webapp.models.IdModel;
 import com.sav.autobase.webapp.models.RequestModel;
 import com.sav.autobase.webapp.models.TripModel;
@@ -258,15 +259,15 @@ public class DispatcherController {
 	 *         HttpStatus.BAD_REQUEST if error created new trip
 	 */
 	@RequestMapping(value = "/trip", method = RequestMethod.PUT)
-	public ResponseEntity<?> createTrip(@RequestBody RequestModel requestModel,
-			@RequestBody VehicleModel vehicleModel) {
+	public ResponseEntity<?> createTrip(@RequestBody CreateTripModel tripModel) {
 
-		if (requestModel == null || vehicleModel == null) {
+		
+		if (tripModel == null ) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-
-		Request request = new Model2Request().convert(requestModel);
-		Vehicle vehicle = new Model2Vehicle().convert(vehicleModel);
+		
+		Request request = new Model2Request().convert(tripModel.getRequest());
+		Vehicle vehicle = new Model2Vehicle().convert(tripModel.getVehicle());
 
 		Trip trip;
 		try {
@@ -355,6 +356,9 @@ public class DispatcherController {
 		}
 
 		VehicleSerachCriteria criteria = new Model2VehicleSearch().convert(criteriaModel);
+		
+		criteariaApplyChanges(criteria, criteriaModel);
+		
 		List<Vehicle> allCriteria;
 		try {
 			allCriteria = dispatcherService.findVehicleByCriteria(criteria);
@@ -369,6 +373,37 @@ public class DispatcherController {
 		}
 
 		return new ResponseEntity<List<VehicleModel>>(convertCriteria, HttpStatus.OK);
+	}
+
+	/**
+	 * The method is used in findVehicleByCriteria method and checks what parameters
+	 * came to update
+	 * 
+	 * @param criteriaFromDb
+	 *            - transferring the VehicleSerachCriteria for update trip from Database
+	 * @param criteriaModel
+	 *            - transferring the VehicleSearchModel for update trip from http request
+	 */
+	public void criteariaApplyChanges(VehicleSerachCriteria criteriaFromDb, VehicleSearchModel criteriaModel) {
+
+		if (criteriaModel.getBrand() != null) {
+			criteriaFromDb.setBrand(criteriaModel.getBrand());
+		}
+		if (criteriaModel.getType() != null) {
+			criteriaFromDb.setType(criteriaModel.getType());
+		}
+		if (criteriaModel.getNameModel() != null) {
+			criteriaFromDb.setNameModel(criteriaModel.getNameModel());
+		}
+		if (criteriaModel.getRegisterNumber() != null) {
+			criteriaFromDb.setRegisterNumber(criteriaModel.getRegisterNumber());
+		}
+		if (criteriaModel.getCountOfPassenger() != null) {
+			criteriaFromDb.setCountOfPassenger(criteriaModel.getCountOfPassenger());
+		}
+		if (criteriaModel.getReadyCrashCar() != null) {
+			criteriaFromDb.setReadyCrashCar(criteriaModel.getReadyCrashCar());
+		}
 	}
 
 	/**

@@ -152,6 +152,9 @@ public class AdminController {
 		}
 
 		VehicleSerachCriteria criteria = new Model2VehicleSearch().convert(criteriaModel);
+
+		criteariaApplyChanges(criteria, criteriaModel);
+
 		List<Vehicle> allCriteria;
 		try {
 			allCriteria = adminService.findVehicleByCriteria(criteria);
@@ -166,6 +169,39 @@ public class AdminController {
 		}
 
 		return new ResponseEntity<List<VehicleModel>>(convertCriteria, HttpStatus.OK);
+	}
+
+	/**
+	 * The method is used in findVehicleByCriteria method and checks what
+	 * parameters came to update
+	 * 
+	 * @param criteriaFromDb
+	 *            - transferring the VehicleSerachCriteria for update trip from
+	 *            Database
+	 * @param criteriaModel
+	 *            - transferring the VehicleSearchModel for update trip from
+	 *            http request
+	 */
+	public void criteariaApplyChanges(VehicleSerachCriteria criteriaFromDb, VehicleSearchModel criteriaModel) {
+
+		if (criteriaModel.getBrand() != null) {
+			criteriaFromDb.setBrand(criteriaModel.getBrand());
+		}
+		if (criteriaModel.getType() != null) {
+			criteriaFromDb.setType(criteriaModel.getType());
+		}
+		if (criteriaModel.getNameModel() != null) {
+			criteriaFromDb.setNameModel(criteriaModel.getNameModel());
+		}
+		if (criteriaModel.getRegisterNumber() != null) {
+			criteriaFromDb.setRegisterNumber(criteriaModel.getRegisterNumber());
+		}
+		if (criteriaModel.getCountOfPassenger() != null) {
+			criteriaFromDb.setCountOfPassenger(criteriaModel.getCountOfPassenger());
+		}
+		if (criteriaModel.getReadyCrashCar() != null) {
+			criteriaFromDb.setReadyCrashCar(criteriaModel.getReadyCrashCar());
+		}
 	}
 
 	/**
