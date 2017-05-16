@@ -30,6 +30,16 @@
       <email>sdfsdfsd@asda.ru</email>
       <type>client</type>
     </com.sav.autobase.datamodel.Users>
+    <com.sav.autobase.datamodel.Users>
+      <id>4</id>
+      <firstName>Pasha</firstName>
+      <lastName>AAA</lastName>
+      <dateBirth>2017-05-16 13:13:50.368</dateBirth>
+      <login>wwwww</login>
+      <password>54321</password>
+      <email>qwert@asda.ru</email>
+      <type>client</type>
+    </com.sav.autobase.datamodel.Users>
   </rows>
-  <lastId class="int">3</lastId>
+  <lastId class="int">4</lastId>
 </com.sav.autobase.dao.xml.impl.wrapper.XmlModelWrapper>

@@ -4,8 +4,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * This class CreateTripModel serves to store objects with properties trip
+ * 
+ * @author AlexStrug
+ * @version 1
+ *
+ */
 public class CreateTripModel {
 
+	/**
+	 * RequestModel - the request information from client <br>
+	 * VehicleModel - the vehicle driver <br>
+	 */
 	private RequestModel request;
 	private VehicleModel vehicle;
 
@@ -26,8 +37,8 @@ public class CreateTripModel {
 	}
 
 	public ResponseEntity<?> createTrip(@RequestBody CreateTripModel m) {
-		
-		if (m == null ) {
+
+		if (m == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return null;
